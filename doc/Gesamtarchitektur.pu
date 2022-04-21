@@ -1,0 +1,15 @@
+@startuml Gesamtarchitektur
+skinparam Style strictuml
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+component Server{
+
+}
+
+component Client{
+    
+}
+
+@enduml
