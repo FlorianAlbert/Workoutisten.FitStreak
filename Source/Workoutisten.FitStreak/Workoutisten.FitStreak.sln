@@ -4,6 +4,8 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak", "Workoutisten.FitStreak\Workoutisten.FitStreak.csproj", "{0CA2B928-BC3F-4DB4-AC74-40343C58DB09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server", "Workoutisten.FitStreak.Server\Workoutisten.FitStreak.Server.csproj", "{38661579-77FB-4A2C-96DF-EB42D0B7654C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -16,6 +18,10 @@ Global
 		{0CA2B928-BC3F-4DB4-AC74-40343C58DB09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CA2B928-BC3F-4DB4-AC74-40343C58DB09}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0CA2B928-BC3F-4DB4-AC74-40343C58DB09}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{38661579-77FB-4A2C-96DF-EB42D0B7654C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38661579-77FB-4A2C-96DF-EB42D0B7654C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38661579-77FB-4A2C-96DF-EB42D0B7654C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38661579-77FB-4A2C-96DF-EB42D0B7654C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
