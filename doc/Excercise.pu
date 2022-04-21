@@ -1,0 +1,26 @@
+@startuml Excercise
+skinparam Style strictuml
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+!include BaseEntity.pu
+
+abstract class Excercise<WE extends WorkoutEntry>{
+    +name: String
+    +description: String
+    +category: ExcerciseCategory
+    +workoutEntry: WE
+}
+
+'associations
+BaseEntity <|-- Excercise
+Excercise <|-- ExcerciseStrength: <<bind>>WE::WorkoutEntryStrength
+Excercise <|-- ExcerciseCardio: <<bind>>WE::WorkoutEntryCardio
+
+hide ExcerciseStrength methods
+hide ExcerciseStrength fields
+hide ExcerciseCardio methods
+hide ExcerciseCardio fields
+
+@enduml

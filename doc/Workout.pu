@@ -1,0 +1,52 @@
+@startuml Workout
+skinparam Style strictuml
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+!include BaseEntity.pu
+!include Excercise.pu
+
+class Workout{
+    +name: String
+    +description: String
+    +category: ExcerciseCategory
+    +workouts: ICollection<WorkoutEntry>
+}
+
+abstract class WorkoutEntry<E extends Excercise>{
+    +excercise: E
+    +workout: Workout
+    +category: ExcerciseCategory
+}
+
+class WorkoutEntryCardio{
+    +distance: double
+}
+
+class WorkoutEntryStrength{
+    +set: int
+}
+
+enum ExcerciseCategory<<enum>>{
+    CARDIO
+    STRENGTH
+}
+hide ExcerciseCategory methods
+
+'associations
+BaseEntity <|-- Workout
+BaseEntity <|-- WorkoutEntry
+
+WorkoutEntry <|-- WorkoutEntryCardio: <<bind>>E::ExcerciseCardio
+WorkoutEntry <|-- WorkoutEntryStrength: <<bind>>E::ExcerciseStrength
+ExcerciseCategory <--x WorkoutEntry
+
+WorkoutEntry "n" <--> "1" Workout
+
+WorkoutEntryCardio "n" <--> "1" ExcerciseCardio 
+WorkoutEntryStrength "n" <--> "1" ExcerciseStrength
+
+hide methods
+
+@enduml

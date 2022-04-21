@@ -1,0 +1,11 @@
+@startuml BaseEntity
+skinparam Style strictuml
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+abstract class BaseEntity{
+    +id: Guid
+}
+
+@enduml
