@@ -10,14 +10,12 @@ skinparam monochrome true
 class Workout{
     +name: String
     +description: String
-    +category: ExcerciseCategory
     +workouts: ICollection<WorkoutEntry>
 }
 
 abstract class WorkoutEntry<E extends Excercise>{
     +excercise: E
     +workout: Workout
-    +category: ExcerciseCategory
 }
 
 class WorkoutEntryCardio{
@@ -28,19 +26,12 @@ class WorkoutEntryStrength{
     +set: int
 }
 
-enum ExcerciseCategory<<enum>>{
-    CARDIO
-    STRENGTH
-}
-hide ExcerciseCategory methods
-
 'associations
 BaseEntity <|-- Workout
 BaseEntity <|-- WorkoutEntry
 
 WorkoutEntry <|-- WorkoutEntryCardio: <<bind>>E::ExcerciseCardio
 WorkoutEntry <|-- WorkoutEntryStrength: <<bind>>E::ExcerciseStrength
-ExcerciseCategory <--x WorkoutEntry
 
 WorkoutEntry "n" <--> "1" Workout
 
