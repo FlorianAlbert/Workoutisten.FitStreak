@@ -18,9 +18,6 @@ BaseEntity <|-- Excercise
 Excercise <|-- ExcerciseStrength: <<bind>>WE::WorkoutEntryStrength
 Excercise <|-- ExcerciseCardio: <<bind>>WE::WorkoutEntryCardio
 
-hide ExcerciseStrength methods
-hide ExcerciseStrength fields
-hide ExcerciseCardio methods
-hide ExcerciseCardio fields
+hide empty members
 
 @enduml

@@ -1,0 +1,37 @@
+@startuml Workout
+skinparam Style strictuml
+skinparam genericDisplay old
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+
+!include BaseEntity.pu
+!include Workout.pu
+
+class User{
+    +email: string
+    +passwordHash: string
+    +firstname: string
+    +lastname: string
+    +workouts: ICollection<Workout>
+    +excercises: ICollection<Excersice>
+    +groups: ICollection<TrainingGroup>
+}
+
+class TrainingGroup{
+    +creator: User
+    +members: ICollection<User>
+    +workouts: ICollection<Workout>
+    +goalWorkout: Workout
+    +workoutHistory: ICollection<WorkoutHistoryEntry>
+    'ToDo
+}
+
+class WorkoutHistoryEntry{
+    +user: User
+    +workout: Workout
+}
+
+BaseEntity <|-- User 
+'ToDo Assoziationen
+
+@enduml

@@ -10,7 +10,14 @@ skinparam monochrome true
 class Workout{
     +name: String
     +description: String
-    +workouts: ICollection<WorkoutEntry>
+    +creator: User
+    +planWorkoutEntries: ICollection<WorkoutEntry>
+    +groups: ICollection<TrainingGroup>
+}
+
+class FinishedWorkout{
+    +workout: Workout
+    +finishedWorkoutEntries: ICollection<FinishedWorkoutEntry>
 }
 
 abstract class WorkoutEntry<E extends Excercise>{
@@ -18,12 +25,30 @@ abstract class WorkoutEntry<E extends Excercise>{
     +workout: Workout
 }
 
+abstract class FinishedWorkoutEntry<WE extends WorkoutEntry<? extends Excercise>>{
+    +workoutEntry: WE
+}
+
 class WorkoutEntryCardio{
     +distance: double
+    +duration: TimeSpan
+}
+
+class FinishedWorkoutEntryCardio{
+    +distance: double
+    +duration: TimeSpan
 }
 
 class WorkoutEntryStrength{
     +set: int
+    +repetitions: int
+    +weight: double
+}
+
+class FinishedWorkoutEntryStrength{
+    +set: int
+    +repetitions: int
+    +weight: double
 }
 
 'associations
@@ -38,6 +63,13 @@ WorkoutEntry "n" <--> "1" Workout
 WorkoutEntryCardio "n" <--> "1" ExcerciseCardio 
 WorkoutEntryStrength "n" <--> "1" ExcerciseStrength
 
-hide methods
+BaseEntity <|-- FinishedWorkoutEntry
+FinishedWorkoutEntry <|-- FinishedWorkoutEntryCardio: <<bind>>WE::WorkoutEntryCardio
+FinishedWorkoutEntry <|-- FinishedWorkoutEntryStrength: <<bind>>WE::WorkoutEntryStrength
+
+BaseEntity <|-- FinishedWorkout
+'Assoziationen
+
+hide empty members
 
 @enduml
