@@ -20,7 +20,7 @@ jobs:
         dotnet-version: '6.0.x'
         include-prerelease: true
     - name: Install .NET Maui
-      run: dotnet workload install maui-android
+      run: dotnet workload install maui
     - name: Restore dependencies
       run: dotnet restore
       working-directory: ${{env.SOLUTION_PATH}}
