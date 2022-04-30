@@ -5,7 +5,11 @@ on:
     branches: [ main ]
 
 env:
-  PROJECT_PATH: Source/Workoutisten.FitStreak/Workoutisten.FitStreak/Workoutisten.FitStreak.csproj
+  PROJECT_PATH: Source/Workoutisten.FitStreak/Workoutisten.FitStreak
+  PROJECT_FILE: Workoutisten.FitStreak.csproj
+  DOTNET_NOLOGO: true                     # Disable the .NET logo
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true # Disable the .NET first time experience
+  DOTNET_CLI_TELEMETRY_OPTOUT: true       # Disable sending .NET CLI telemetry
 
 jobs:
   build:
@@ -25,6 +29,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
@@ -45,7 +50,9 @@ jobs:
       run: dotnet workload install maui --ignore-failed-sources
       
     - name: Restore dependencies
-      run: dotnet restore ${{ env.PROJECT_PATH }}
+      run: dotnet restore ${{ env.PROJECT_FILE }}
+      working-directory: ${{ env.PROJECT_PATH }}
       
     - name: Build
-      run: dotnet build ${{ env.PROJECT_PATH }} -c Release -f net6.0-${{ matrix.platform }} --no-restore
+      run: dotnet build ${{ env.PROJECT_FILE }} -c Release -f net6.0-${{ matrix.platform }} --no-restore
+      working-directory: ${{ env.PROJECT_PATH }}
