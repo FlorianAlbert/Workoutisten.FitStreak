@@ -35,6 +35,12 @@ jobs:
       with:
         dotnet-version: '6.0.x'
         include-prerelease: true
+
+    - name: Setup MSBuild
+      if: ${{ matrix.platform == 'windows10.0.19041' }}
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        vs-prerelease: true
         
     - uses: actions/setup-java@v2
       if: ${{ matrix.platform == 'android' }}
@@ -53,6 +59,12 @@ jobs:
       run: dotnet restore ${{ env.PROJECT_FILE }}
       working-directory: ${{ env.PROJECT_PATH }}
       
-    - name: Build
+    - name: Build Windows Application
+      if: ${{ matrix.platform == 'windows10.0.19041' }}
+      run: msbuild ${{ env.PROJECT_FILE }} -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041
+      working-directory: ${{ env.PROJECT_PATH }}
+      
+    - name: Build Android, iOS or MacCatalyst Application
+      if: ${{ matrix.platform != 'windows10.0.19041' }}
       run: dotnet build ${{ env.PROJECT_FILE }} -c Release -f net6.0-${{ matrix.platform }} --no-restore
       working-directory: ${{ env.PROJECT_PATH }}
