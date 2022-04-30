@@ -49,7 +49,7 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 	 
-	<ItemGroup Condition="$(!TargetFramework.Contains('-windows'))">
+	<ItemGroup Condition="!$(TargetFramework.Contains('-windows'))">
             <None Remove="Properties\launchSettings.json" />
             <Content Remove="Properties\launchSettings.json" />
         </ItemGroup>
