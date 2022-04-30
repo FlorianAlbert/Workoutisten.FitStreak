@@ -1,0 +1,51 @@
+name: .NET
+
+on:
+  pull_request:
+    branches: [ main ]
+
+env:
+  PROJECT_PATH: Source/Workoutisten.FitStreak/Workoutisten.FitStreak/Workoutisten.FitStreak.csproj
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            platform: windows10.0.19041
+          - os: windows-latest
+            platform: android
+          - os: macos-latest
+            platform: maccatalyst
+          - os: macos-latest
+            platform: ios
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.x'
+        include-prerelease: true
+        
+    - uses: actions/setup-java@v2
+      if: ${{ matrix.platform == 'android' }}
+      with:
+        distribution: 'microsoft'
+        java-version: '11'
+        
+    - name: Install MAUI Workloads for Android, iOS or MacCatalyst
+      if: ${{ (matrix.platform == 'android') || (matrix.platform == 'ios') || (matrix.platform == 'maccatalyst') }}
+      run: dotnet workload install ${{ matrix.platform }} --ignore-failed-sources
+        
+    - name: Install .NET Maui
+      run: dotnet workload install maui --ignore-failed-sources
+      
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.PROJECT_PATH }}
+      
+    - name: Build
+      run: dotnet build ${{ env.PROJECT_PATH }} -c Release -f net6.0-${{ matrix.platform }} --no-restore
