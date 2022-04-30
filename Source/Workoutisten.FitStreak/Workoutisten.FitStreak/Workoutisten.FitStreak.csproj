@@ -54,4 +54,12 @@
             <Content Remove="Properties\launchSettings.json" />
         </ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="6.0.300-rc.2.5513" />
+	  <PackageReference Include="Microsoft.Maui.Dependencies" Version="6.0.300-rc.2.5513" />
+	  <PackageReference Include="Microsoft.Maui.Extensions" Version="6.0.300-rc.2.5513" />
+	  <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22000.197" />
+	  <PackageReference Include="System.Runtime.InteropServices.NFloat.Internal" Version="6.0.1" />
+	</ItemGroup>
+
 </Project>
