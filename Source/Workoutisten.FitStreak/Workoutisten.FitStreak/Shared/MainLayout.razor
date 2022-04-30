@@ -1,17 +1,38 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-	<div class="sidebar">
-		<NavMenu />
-	</div>
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
-	<main>
-		<div class="top-row px-4">
-			<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-		</div>
+<MudLayout>
+    <MudAppBar>
+        <MudGrid>
+            <MudItem xs="6" Class="d-flex align-center">
+                <MudStack Row="true" Justify="Justify.FlexStart" AlignItems="AlignItems.Center" >
+                    <MudText Typo="Typo.h5">FitStreak</MudText>
+                </MudStack>
+            </MudItem>
+            <MudItem xs="6">
+                <MudStack Row="true" Justify="Justify.FlexEnd" AlignItems="AlignItems.Center">
+                    <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" Edge="Edge.Start" />
+                </MudStack>
+            </MudItem>
+        </MudGrid>
+    </MudAppBar>
+    @* <MudDrawer @bind-Open="@_drawerOpen">
+    <NavMenu />
+    </MudDrawer>*@
+    <MudMainContent>
+        <MudContainer>
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+@code {
+    //bool _drawerOpen = true;
 
-		<article class="content px-4">
-			@Body
-		</article>
-	</main>
-</div>
+    //void DrawerToggle()
+    //{
+    //    _drawerOpen = !_drawerOpen;
+    //}
+}

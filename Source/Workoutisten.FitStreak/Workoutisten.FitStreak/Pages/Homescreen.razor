@@ -1,0 +1,37 @@
+﻿@using Workoutisten.FitStreak.Shared.PageExclusives.HomescreenPage
+
+@page "/home"
+@page "/"
+
+
+<MudStack>
+
+    <MudItem xs="12" Class="d-flex align-center justify-center">
+        <MudText Typo="Typo.h3">Fitstreak</MudText>
+    </MudItem>
+    @*<MudItem xs="12" Class="d-flex align-center justify-center mud-width-full py-8">*@
+    <MudImage ObjectFit="ObjectFit.Cover" Height="200" Src="Images/testjpg.jpg" Alt="Your Fitstreak" Class="rounded-lg ma-4" />
+    @*</MudItem>*@
+    <MudGrid>
+        <MudItem xs="6">
+            <HomescreenButton Image="Images/testjpg.jpg" Title="Workout" Href="/workouts" />
+        </MudItem>
+        <MudItem xs="6">
+            <HomescreenButton Image="Images/testjpg.jpg" Title="Übungen" Href="/excercises" />
+        </MudItem>
+        <MudItem xs="6">
+            <HomescreenButton Image="Images/testjpg.jpg" Title="Schedule" Href="/schedule" />
+        </MudItem>
+        <MudItem xs="6">
+            <HomescreenButton Image="Images/testjpg.jpg" Title="Social" Href="/social" />
+        </MudItem>
+    </MudGrid>
+</MudStack>
+
+
+
+
+@code {
+
+
+}

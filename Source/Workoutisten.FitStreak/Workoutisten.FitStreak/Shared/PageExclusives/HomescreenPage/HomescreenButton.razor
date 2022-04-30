@@ -1,0 +1,26 @@
+﻿
+<MudLink Href="@Href">
+    <MudCard>
+        <MudCardMedia Image="@Image" Height="150"/>
+        <MudCardContent>
+            <MudText Typo="Typo.h6">@Title</MudText>
+        </MudCardContent>
+        @*<MudCardActions>
+        <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
+        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+        </MudCardActions>*@
+    </MudCard>
+</MudLink>
+
+
+@code {
+
+    [Parameter]
+    public string Image { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Href { get; set; }
+}

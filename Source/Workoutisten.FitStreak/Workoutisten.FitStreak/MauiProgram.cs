@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.WebView.Maui;
 using Workoutisten.FitStreak.Data;
+using MudBlazor.Services;
 
 namespace Workoutisten.FitStreak;
 
@@ -18,6 +19,8 @@ public static class MauiProgram
 		builder.Services.AddMauiBlazorWebView();
 
 		builder.Services.AddSingleton<WeatherForecastService>();
+		
+		builder.Services.AddMudServices();
 
 		return builder.Build();
 	}
