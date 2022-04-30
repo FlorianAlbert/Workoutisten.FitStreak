@@ -48,5 +48,10 @@
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
+	 
+	<ItemGroup Condition="$(TargetFramework.EndsWith('-ios'))">
+            <None Remove="Properties\launchSettings.json" />
+            <Content Remove="Properties\launchSettings.json" />
+        </ItemGroup>
 
 </Project>
