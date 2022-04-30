@@ -21,7 +21,10 @@ jobs:
         include-prerelease: true
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: ${{env.SOLUTION_PATH}}
     - name: Build
       run: dotnet build --no-restore
+      working-directory: ${{env.SOLUTION_PATH}}
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      working-directory: ${{env.SOLUTION_PATH}}
