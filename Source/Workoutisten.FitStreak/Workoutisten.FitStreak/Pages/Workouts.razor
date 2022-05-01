@@ -1,13 +1,33 @@
 ﻿@using Workoutisten.FitStreak.Shared.PageExclusives.WorkoutsPage
 @page "/workouts"
 
-<MudList>
-    <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-1"/>
-    <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-2"/>
-    <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-3"/>
-    <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-4" LastElement="true"/>
-</MudList>
+@inject IDialogService DialogService
+
+<MudStack>
+    <MudGrid>
+        <MudItem xs="10">
+            <MudTextField @bind-Value="SearchInput" Label="Suchen" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Dark" />
+        </MudItem>
+        <MudItem xs="2" Class="d-flex align-center justify-center">
+            <MudIconButton Variant="Variant.Filled" Icon="@Icons.Filled.Add" Color="Color.Secondary" OnClick="AddNewWorkout"></MudIconButton>
+        </MudItem>
+    </MudGrid>
+
+    <MudList>
+        <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-1" />
+        <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-2" />
+        <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-3" />
+        <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-4" LastElement="true" />
+    </MudList>
+</MudStack>
+
 
 @code {
+    public string SearchInput { get; set; }
 
+    public void AddNewWorkout()
+    {
+        //var options = new DialogOptions { CloseOnEscapeKey = true }; TODO: DialogToBeDone
+        //DialogService.Show<DialogUsageExample_Dialog>("Simple Dialog", options);
+    }
 }

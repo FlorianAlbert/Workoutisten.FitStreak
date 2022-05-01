@@ -1,0 +1,52 @@
+﻿@using Workoutisten.FitStreak.Pages.Dialogs
+@using Workoutisten.FitStreak.Shared.PageExclusives.ExercisePage
+@page "/exercises"
+
+@inject IDialogService DialogService
+
+<MudStack>
+    <MudGrid>
+        <MudItem xs="10">
+            <MudTextField @bind-Value="SearchInput" Label="Suchen" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Dark" />
+        </MudItem>
+        <MudItem xs="2" Class="d-flex align-center justify-center">
+            <MudIconButton Variant="Variant.Filled" Icon="@Icons.Filled.Add" Color="Color.Secondary" OnClick="AddNewExercise"></MudIconButton>
+        </MudItem>
+    </MudGrid>
+
+    <MudList>
+        @foreach(var exercise in UserExercises)
+        {
+            <ExerciseListElement Category="exercise.Category" Name="@exercise.Name" />
+        }
+        <ExerciseListElement Category="ExerciseCategory.Cardio" Name="Exercise 1" />
+        <ExerciseListElement Category="ExerciseCategory.Strength" Name="Exercise 2" />
+        @*<ExerciseListElement IsCardio="false" LastTraining="01.02.3333" Title="Exercise 3" />
+        <ExerciseListElement LastTraining="01.02.3333" Title="Exercise 4" />
+        <ExerciseListElement IsCardio="true" LastTraining="01.02.3333" Title="Exercise 5" />
+        <ExerciseListElement IsCardio="false" LastTraining="01.02.3333" Title="Exercise 6" />
+        <ExerciseListElement LastElement="true" IsCardio="true" LastTraining="01.02.3333" Title="Exercise 7" />*@
+    </MudList>
+
+</MudStack>
+
+@code {
+    public string SearchInput { get; set; }
+
+    public List<ExerciseModel> UserExercises { get; set; } = new List<ExerciseModel>();
+
+    public async void AddNewExercise()
+    {
+        var options = new DialogOptions { 
+            CloseOnEscapeKey = true, 
+            CloseButton = true,
+            FullWidth = true 
+        };
+        var DialogReference = DialogService.Show<AddExerciseDialog>("New Exercise: ", options);
+
+        UserExercises.Add((ExerciseModel)(await DialogReference.Result).Data);
+
+        StateHasChanged();
+
+    }
+}
