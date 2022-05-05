@@ -1,4 +1,6 @@
 ﻿@using Workoutisten.FitStreak.Shared.PageExclusives.HomescreenPage
+@using ApexCharts
+
 
 @page "/home"
 @page "/"
@@ -10,20 +12,38 @@
         <MudText Typo="Typo.h3">Fitstreak</MudText>
     </MudItem>
     @*<MudItem xs="12" Class="d-flex align-center justify-center mud-width-full py-8">*@
-    <MudImage ObjectFit="ObjectFit.Cover" Height="200" Src="Images/testjpg.jpg" Alt="Your Fitstreak" Class="rounded-lg ma-4" />
+    @*<MudImage ObjectFit="ObjectFit.Cover" Height="200" Src="Images/testjpg.jpg" Alt="Your Fitstreak" Class="rounded-lg ma-4" />*@
     @*</MudItem>*@
+
+@*    <MudChart ChartType="MudBlazor.ChartType.Donut" Width="300px" Height="300px" InputData="@data">
+	    <CustomGraphics>
+		    <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle" fill="black"  font-size="3" color="white" >Your Streak</text>
+		    <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black"  font-size="10">@data.Sum().ToString()</text>
+	    </CustomGraphics>
+    </MudChart>*@
+@*<ApexChart TItem="GaugeValue" Title="@Title"
+           
+           Options="options">
+
+    <ApexPointSeries TItem="GaugeValue"
+    SeriesType=SeriesType.RadialBar
+                Items=GetItems()
+                Name=@_label
+                XValue="@(e => e.Label)"
+                YValue="@(e => e.Precentage)" />
+</ApexChart>*@
     <MudGrid>
         <MudItem xs="6">
-            <HomescreenButton Image="Images/testjpg.jpg" Title="Workout" Href="/workouts" />
+            <HomescreenButton Image="Images/Workouts.jpg" Title="Workout" Href="/workouts" />
         </MudItem>
         <MudItem xs="6">
-            <HomescreenButton Image="Images/testjpg.jpg" Title="Übungen" Href="/exercises" />
+            <HomescreenButton Image="Images/Exercises.jpg" Title="Übungen" Href="/exercises" />
         </MudItem>
         <MudItem xs="6">
-            <HomescreenButton Image="Images/testjpg.jpg" Title="Schedule" Href="/schedule" />
+            <HomescreenButton Image="Images/History.jpg" Title="Schedule" Href="/schedule" />
         </MudItem>
         <MudItem xs="6">
-            <HomescreenButton Image="Images/testjpg.jpg" Title="Social" Href="/social" />
+            <HomescreenButton Image="Images/Social.jpg" Title="Social" Href="/social" />
         </MudItem>
     </MudGrid>
 </MudStack>
@@ -32,6 +52,45 @@
 
 
 @code {
+    //public double[] data = { 25, 77};
+    //public String[] palettes = new String[] { "#E94649", "#F6B53F", "#6FAAB0" };
 
+    //public decimal _percentage = 50;
+    //public string _label = "TestLabel";
 
+    //public string Title = "Test";
+
+    //public ApexChartOptions<GaugeValue> Options;
+
+    //private ApexChartOptions<GaugeValue> options;
+
+    //protected override void OnInitialized()
+    //{
+    //    options = new ApexChartOptions<GaugeValue>()
+    //    {
+    //        -Chart = new Chart
+    //        {
+    //            Height = 280;
+    //        },
+
+    //        //PlotOptions = new PlotOptions
+    //        //{
+    //        //    RadialBar = new PlotOptionsRadialBar()
+    //        //    {
+    //        //        Margin = 15;
+    //        //    }
+    //        //},
+
+    //        //Fill = new Fill
+    //        //{
+    //        //    Colors = new List<string>() { "#EB5E55", "#FFFFFF" },
+    //        //},
+ 
+    //    };
+    //}
+
+    //private List<GaugeValue> GetItems()
+    //{
+    //    return new List<GaugeValue> { new GaugeValue { Label = _label, Precentage = _percentage } };
+    //}
 }
