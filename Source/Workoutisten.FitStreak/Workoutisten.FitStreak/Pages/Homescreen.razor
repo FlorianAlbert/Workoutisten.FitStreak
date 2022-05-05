@@ -8,30 +8,32 @@
 
 <MudStack>
 
-    <MudItem xs="12" Class="d-flex align-center justify-center">
-        <MudText Typo="Typo.h3">Fitstreak</MudText>
+    <MudItem md="10" xs="12" Class="d-flex align-left justify-left">
+        <MudText Typo="Typo.h4">Hello, User!</MudText>
     </MudItem>
     @*<MudItem xs="12" Class="d-flex align-center justify-center mud-width-full py-8">*@
     @*<MudImage ObjectFit="ObjectFit.Cover" Height="200" Src="Images/testjpg.jpg" Alt="Your Fitstreak" Class="rounded-lg ma-4" />*@
     @*</MudItem>*@
 
-@*    <MudChart ChartType="MudBlazor.ChartType.Donut" Width="300px" Height="300px" InputData="@data">
+    <MudChart ChartType="MudBlazor.ChartType.Donut" Width="60%" Height="60%" InputData="@Counts" ChartOptions="@chartOptions">
 	    <CustomGraphics>
-		    <text class="donut-inner-text" x="47%" y="35%" dominant-baseline="middle" text-anchor="middle" fill="black"  font-size="3" color="white" >Your Streak</text>
-		    <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="black"  font-size="10">@data.Sum().ToString()</text>
+		    <text class="donut-inner-text" x="47%" y="33%" dominant-baseline="middle" text-anchor="middle" fill="white"  font-size="3" color="white" >Your Streak</text>
+		    <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#EB5E55"  font-size="10">@Counts.Sum().ToString()</text>
+            <text class="donut-inner-text" x="47%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="#838486"  font-size="2">Time till Reset:</text>
+            <text class="donut-inner-text" x="47%" y="70%" dominant-baseline="middle" text-anchor="middle" fill="#838486"  font-size="2">10:50:32</text>
 	    </CustomGraphics>
-    </MudChart>*@
-@*<ApexChart TItem="GaugeValue" Title="@Title"
+    </MudChart>
+@*    <ApexChart TItem="GaugeValue" Title="@Title"
            
-           Options="options">
+               Options="options">
 
-    <ApexPointSeries TItem="GaugeValue"
-    SeriesType=SeriesType.RadialBar
-                Items=GetItems()
-                Name=@_label
-                XValue="@(e => e.Label)"
-                YValue="@(e => e.Precentage)" />
-</ApexChart>*@
+        <ApexPointSeries TItem="GaugeValue"
+        SeriesType=SeriesType.RadialBar
+                    Items=GetItems()
+                    Name=@_label
+                    XValue="@(e => e.Label)"
+                    YValue="@(e => e.Precentage)" />
+    </ApexChart>*@
     <MudGrid>
         <MudItem xs="6">
             <HomescreenButton Image="Images/Workouts.jpg" Title="Workout" Href="/workouts" />
@@ -52,45 +54,13 @@
 
 
 @code {
-    //public double[] data = { 25, 77};
-    //public String[] palettes = new String[] { "#E94649", "#F6B53F", "#6FAAB0" };
+    public double[] Counts { get; set; } = new double[] {60, 40};
 
-    //public decimal _percentage = 50;
-    //public string _label = "TestLabel";
+    public ChartOptions chartOptions = new ChartOptions()
+        {
+            DisableLegend = true,
+            ChartPalette = new string[] { "#EB5E55", "#3C414D" },
+            LineStrokeWidth = 1
+    };
 
-    //public string Title = "Test";
-
-    //public ApexChartOptions<GaugeValue> Options;
-
-    //private ApexChartOptions<GaugeValue> options;
-
-    //protected override void OnInitialized()
-    //{
-    //    options = new ApexChartOptions<GaugeValue>()
-    //    {
-    //        -Chart = new Chart
-    //        {
-    //            Height = 280;
-    //        },
-
-    //        //PlotOptions = new PlotOptions
-    //        //{
-    //        //    RadialBar = new PlotOptionsRadialBar()
-    //        //    {
-    //        //        Margin = 15;
-    //        //    }
-    //        //},
-
-    //        //Fill = new Fill
-    //        //{
-    //        //    Colors = new List<string>() { "#EB5E55", "#FFFFFF" },
-    //        //},
- 
-    //    };
-    //}
-
-    //private List<GaugeValue> GetItems()
-    //{
-    //    return new List<GaugeValue> { new GaugeValue { Label = _label, Precentage = _percentage } };
-    //}
 }
