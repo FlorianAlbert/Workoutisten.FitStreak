@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Workoutisten.FitStreak.Server.Model.Account;
 
 namespace Workoutisten.FitStreak.Server.Database.Implementation.Configurations
@@ -11,6 +12,12 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Configurations
 
             builder.HasIndex(x => x.PasswordForgottenKey)
                    .IsUnique();
+            builder.HasMany(x => x.Exercises)
+                   .WithOne(x => x.Creator)
+                   .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(x => x.Workouts)
+                   .WithOne(x => x.Creator)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
