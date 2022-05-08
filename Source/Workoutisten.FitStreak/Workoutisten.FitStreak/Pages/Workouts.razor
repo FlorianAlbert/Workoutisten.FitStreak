@@ -7,21 +7,21 @@
 <MudStack>
     <MudGrid>
         <MudItem xs="10">
-            <MudTextField @bind-Value="SearchInput" Label="Suchen" Variant="Variant.Outlined" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" AdornmentColor="Color.Dark" />
+            <SearchBar SearchInput="@SearchInput" />
         </MudItem>
-        <MudItem xs="2" Class="d-flex align-center justify-center">
-            <MudIconButton Variant="Variant.Filled" Icon="@Icons.Filled.Add" Color="Color.Secondary" OnClick="AddNewWorkout"></MudIconButton>
+        <MudItem xs="2" Class="d-flex align-center justify-center ">
+            <AddButtonRounded ButtonClicked="@AddNewWorkout" />
         </MudItem>
     </MudGrid>
 
     <MudList>
-        <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-1" /> @*In die OnInitialized packen*@
-        <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-2" />
-        <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-3" />
-        <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-4" LastElement="true" />
+
+        @foreach (var workout in UserWorkouts)
+        {
+            <WorkoutListElement Description="@workout.Description" LastTraining="@workout.LastTraining.ToString()" Title="@workout.WorkoutName" />
+        }
     </MudList>
 </MudStack>
-
 
 @code {
 
@@ -33,21 +33,28 @@
     {
         UserWorkouts = new List<WorkoutModel>();
 
+        UserWorkouts.Add(new WorkoutModel() { Description = "Seeeeehr Lange Description oikwajdoiajwdoiawjd", WorkoutName = "Workout1" });
+        UserWorkouts.Add(new WorkoutModel() { Description = "Description", WorkoutName = "Workout2", });
+
         base.OnInitialized();
     }
 
     async void AddNewWorkout()
     {
-        var options = new DialogOptions { 
-            CloseOnEscapeKey = true, 
-            CloseButton = true,
-            FullWidth = true,
-        };
+        var options = new DialogOptions
+            {
+                CloseOnEscapeKey = true,
+                CloseButton = true,
+                FullWidth = true,
+            };
         var DialogReference = DialogService.Show<AddWorkoutDialog>("New Workout: ", options);
 
-        UserWorkouts.Add((WorkoutModel)(await DialogReference.Result).Data);
+        var result = await DialogReference.Result;
 
-        //UserExercises.Add((ExerciseModel)(await DialogReference.Result).Data); TBD
+        if (!result.Cancelled)
+        {
+            UserWorkouts.Add((WorkoutModel)result.Data);
+        }
 
         StateHasChanged();
 
