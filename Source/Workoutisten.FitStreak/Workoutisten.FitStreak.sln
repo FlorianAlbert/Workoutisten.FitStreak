@@ -4,7 +4,13 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak", "Workoutisten.FitStreak\Workoutisten.FitStreak.csproj", "{0CA2B928-BC3F-4DB4-AC74-40343C58DB09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server", "Workoutisten.FitStreak.Server\Workoutisten.FitStreak.Server.csproj", "{38661579-77FB-4A2C-96DF-EB42D0B7654C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Server", "Workoutisten.FitStreak.Server\Workoutisten.FitStreak.Server.csproj", "{38661579-77FB-4A2C-96DF-EB42D0B7654C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server.Database.Implementation", "Workoutisten.FitStreak.Server.Database\Workoutisten.FitStreak.Server.Database.Implementation.csproj", "{4593BD6C-C232-418A-91B1-D9BC58EE079E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server.Model", "Workoutisten.FitStreak.Server.Model\Workoutisten.FitStreak.Server.Model.csproj", "{DDA7CF60-EF55-4F84-9EB6-6F1E94DB0A81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server.Database.Interface", "Workoutisten.FitStreak.Server.Database.Interface\Workoutisten.FitStreak.Server.Database.Interface.csproj", "{4B3A01C9-8162-4BA5-8256-59D17CC70A65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +28,18 @@ Global
 		{38661579-77FB-4A2C-96DF-EB42D0B7654C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38661579-77FB-4A2C-96DF-EB42D0B7654C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38661579-77FB-4A2C-96DF-EB42D0B7654C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4593BD6C-C232-418A-91B1-D9BC58EE079E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4593BD6C-C232-418A-91B1-D9BC58EE079E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4593BD6C-C232-418A-91B1-D9BC58EE079E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4593BD6C-C232-418A-91B1-D9BC58EE079E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDA7CF60-EF55-4F84-9EB6-6F1E94DB0A81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDA7CF60-EF55-4F84-9EB6-6F1E94DB0A81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDA7CF60-EF55-4F84-9EB6-6F1E94DB0A81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDA7CF60-EF55-4F84-9EB6-6F1E94DB0A81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B3A01C9-8162-4BA5-8256-59D17CC70A65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B3A01C9-8162-4BA5-8256-59D17CC70A65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B3A01C9-8162-4BA5-8256-59D17CC70A65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B3A01C9-8162-4BA5-8256-59D17CC70A65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
