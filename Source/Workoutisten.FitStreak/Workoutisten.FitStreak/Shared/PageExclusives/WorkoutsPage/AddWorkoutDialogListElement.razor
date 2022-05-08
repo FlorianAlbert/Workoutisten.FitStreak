@@ -1,0 +1,24 @@
+﻿
+<style>
+    .MudTextOverflow {
+        overflow: hidden;
+    }
+</style>
+
+<MudListItem>
+    <MudGrid>
+        <MudItem xs="10" Class="d-flex align-center">
+            <MudText Class="MudTextOverflow">@this.AddWorkoutExerciseElementModel.ExerciseModel.Name</MudText>
+        </MudItem>
+        <MudItem xs="2" Class="d-flex justify-center align-center">
+            <MudCheckBox T="bool"  @bind-Checked="AddWorkoutExerciseElementModel.Checked" Color="Color.Primary"></MudCheckBox>
+        </MudItem>
+    </MudGrid>
+</MudListItem>
+
+@code {
+
+    [Parameter]
+    public AddWorkoutExerciseElementModel AddWorkoutExerciseElementModel { get; set; }
+
+}

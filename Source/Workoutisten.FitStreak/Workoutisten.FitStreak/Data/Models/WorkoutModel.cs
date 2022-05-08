@@ -14,6 +14,6 @@ namespace Workoutisten.FitStreak.Data.Models
 
         public DateOnly LastTraining { get; set; }
 
-        public List<ExerciseModel> Exercises { get; set; }
+        public List<ExerciseModel> Exercises { get; set; } = new List<ExerciseModel>();
     }
 }

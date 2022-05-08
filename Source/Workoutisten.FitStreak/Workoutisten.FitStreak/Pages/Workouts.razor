@@ -1,4 +1,5 @@
-﻿@using Workoutisten.FitStreak.Shared.PageExclusives.WorkoutsPage
+﻿@using Workoutisten.FitStreak.Pages.Dialogs
+@using Workoutisten.FitStreak.Shared.PageExclusives.WorkoutsPage
 @page "/workouts"
 
 @inject IDialogService DialogService
@@ -14,7 +15,7 @@
     </MudGrid>
 
     <MudList>
-        <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-1" />
+        <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-1" /> @*In die OnInitialized packen*@
         <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-2" />
         <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-3" />
         <WorkoutListElement Description="Lorem Ipsum" LastTraining="01.01.2022" Title="Workout-4" LastElement="true" />
@@ -23,11 +24,32 @@
 
 
 @code {
-    public string SearchInput { get; set; }
 
-    public void AddNewWorkout()
+    string SearchInput { get; set; }
+
+    List<WorkoutModel> UserWorkouts { get; set; }
+
+    protected override void OnInitialized()
     {
-        //var options = new DialogOptions { CloseOnEscapeKey = true }; TODO: DialogToBeDone
-        //DialogService.Show<DialogUsageExample_Dialog>("Simple Dialog", options);
+        UserWorkouts = new List<WorkoutModel>();
+
+        base.OnInitialized();
+    }
+
+    async void AddNewWorkout()
+    {
+        var options = new DialogOptions { 
+            CloseOnEscapeKey = true, 
+            CloseButton = true,
+            FullWidth = true,
+        };
+        var DialogReference = DialogService.Show<AddWorkoutDialog>("New Workout: ", options);
+
+        UserWorkouts.Add((WorkoutModel)(await DialogReference.Result).Data);
+
+        //UserExercises.Add((ExerciseModel)(await DialogReference.Result).Data); TBD
+
+        StateHasChanged();
+
     }
 }
