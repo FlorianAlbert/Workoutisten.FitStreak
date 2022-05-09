@@ -18,7 +18,7 @@ public class PasswordController : ControllerBase
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto changePasswordRequest)
     {
         //Unauthorized if email is inappropriate to usercontext
-        throw new NotImplementedException();
+        return BadRequest();
     }
 
     [HttpPost]
@@ -28,7 +28,7 @@ public class PasswordController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RequestPasswordReset([FromBody] ResetPasswordRequestDto resetPasswordRequest)
     {
-        throw new NotImplementedException();
+        return BadRequest();
     }
 
     [HttpPost]
@@ -38,6 +38,6 @@ public class PasswordController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPassword)
     {
-        throw new NotImplementedException();
+        return BadRequest();
     }
 }

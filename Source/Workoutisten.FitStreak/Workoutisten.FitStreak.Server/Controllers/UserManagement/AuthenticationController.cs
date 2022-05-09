@@ -15,6 +15,6 @@ public class AuthenticationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Login([FromBody] AuthenticationRequestDto authenticationRequest)
     {
-        throw new NotImplementedException();
+        return BadRequest();
     }
 }

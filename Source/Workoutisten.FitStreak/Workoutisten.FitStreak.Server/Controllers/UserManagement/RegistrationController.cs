@@ -9,12 +9,12 @@ namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 public class RegistrationController : ControllerBase
 {
     [HttpPost]
-    [Route("/request")]
+    [Route("request")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(AuthenticationResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RequestRegistration()
     {
-        throw new NotImplementedException();
+        return BadRequest();
     }
 }
