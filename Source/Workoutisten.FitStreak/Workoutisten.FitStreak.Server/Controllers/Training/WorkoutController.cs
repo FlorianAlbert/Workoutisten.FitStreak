@@ -29,11 +29,12 @@ public class WorkoutController : ControllerBase
     }
 
     [HttpDelete]
+    [Route("{workoutId}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> DeleteWorkout([FromBody] Guid workoutId)
+    public async Task<IActionResult> DeleteWorkout([FromRoute] Guid workoutId)
     {
         return BadRequest();
     }

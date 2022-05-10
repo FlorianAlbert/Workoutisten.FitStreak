@@ -31,12 +31,12 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("cardio")]
+    [Route("cardio/{doneCardioExerciseId}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> DeleteDoneCardioExercise([FromBody] Guid doneCardioExerciseId)
+    public async Task<IActionResult> DeleteDoneCardioExercise([FromRoute] Guid doneCardioExerciseId)
     {
         return BadRequest();
     }
@@ -64,12 +64,12 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("strength")]
+    [Route("strength/{doneStrengthExerciseId}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> DeleteDoneStrengthExercise([FromBody] Guid doneStrengthExerciseId)
+    public async Task<IActionResult> DeleteDoneStrengthExercise([FromRoute] Guid doneStrengthExerciseId)
     {
         return BadRequest();
     }

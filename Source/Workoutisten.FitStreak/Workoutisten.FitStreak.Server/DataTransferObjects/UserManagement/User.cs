@@ -11,4 +11,12 @@ public class User
     public string LastName { get; set; }
 
     public DateTime CreatedDate { get; set; }
+
+    public int ExerciseStreak { get; set; }
+
+    public DateTime LastExercise { get; set; }
+
+    public Guid[] FriendIds { get; set; }
+
+    public Guid[] FriendRequestIds { get; set; }
 }
