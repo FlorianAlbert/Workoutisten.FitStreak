@@ -29,6 +29,19 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WorkoutEntry",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkoutEntry", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Exercise",
                 columns: table => new
                 {
@@ -79,8 +92,8 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ExerciseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WorkoutId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderNumber = table.Column<int>(type: "int", nullable: false),
+                    WorkoutEntryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    WorkoutId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -98,6 +111,39 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         column: x => x.WorkoutId,
                         principalTable: "Workout",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_ExerciseEntry_WorkoutEntry_WorkoutEntryId",
+                        column: x => x.WorkoutEntryId,
+                        principalTable: "WorkoutEntry",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WorkoutExercise",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WorkoutId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExerciseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkoutExercise", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WorkoutExercise_Exercise_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercise",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_WorkoutExercise_Workout_WorkoutId",
+                        column: x => x.WorkoutId,
+                        principalTable: "Workout",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -112,10 +158,9 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExerciseEntry_OrderNumber_ExerciseId_WorkoutId",
+                name: "IX_ExerciseEntry_WorkoutEntryId",
                 table: "ExerciseEntry",
-                columns: new[] { "OrderNumber", "ExerciseId", "WorkoutId" },
-                unique: true);
+                column: "WorkoutEntryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExerciseEntry_WorkoutId",
@@ -133,12 +178,29 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 name: "IX_Workout_CreatorId",
                 table: "Workout",
                 column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkoutExercise_ExerciseId_WorkoutId",
+                table: "WorkoutExercise",
+                columns: new[] { "ExerciseId", "WorkoutId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WorkoutExercise_WorkoutId",
+                table: "WorkoutExercise",
+                column: "WorkoutId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "ExerciseEntry");
+
+            migrationBuilder.DropTable(
+                name: "WorkoutExercise");
+
+            migrationBuilder.DropTable(
+                name: "WorkoutEntry");
 
             migrationBuilder.DropTable(
                 name: "Exercise");

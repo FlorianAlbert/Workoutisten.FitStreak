@@ -19,6 +19,9 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Configurations
             builder.HasOne(x => x.Creator)
                    .WithMany(x => x.Exercises)
                    .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(x => x.WorkoutExercises)
+                   .WithOne(x => x.Exercise)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

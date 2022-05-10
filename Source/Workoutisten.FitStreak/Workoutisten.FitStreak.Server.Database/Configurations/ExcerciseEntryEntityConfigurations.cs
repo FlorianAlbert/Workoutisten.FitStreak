@@ -13,11 +13,12 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Configurations
             builder.HasOne(x => x.Exercise)
                    .WithMany(x => x.ExerciseEntries)
                    .OnDelete(DeleteBehavior.Restrict);
-            builder.HasOne(x => x.Workout)
+            builder.HasOne(x => x.WorkoutEntry)
                    .WithMany(x => x.ExerciseEntries)
-                   .OnDelete(DeleteBehavior.Cascade);
-            builder.HasIndex(x => new { x.OrderNumber, x.ExerciseId, x.WorkoutId })
-                   .IsUnique();
+                   .OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(x => x.Workout)
+                   .WithMany(x => x.WorkoutContextExerciseEntries)
+                   .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

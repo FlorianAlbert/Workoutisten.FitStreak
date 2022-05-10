@@ -120,20 +120,19 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderNumber")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("WorkoutEntryId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("WorkoutId")
+                    b.Property<Guid?>("WorkoutId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ExerciseId");
 
-                    b.HasIndex("WorkoutId");
+                    b.HasIndex("WorkoutEntryId");
 
-                    b.HasIndex("OrderNumber", "ExerciseId", "WorkoutId")
-                        .IsUnique();
+                    b.HasIndex("WorkoutId");
 
                     b.ToTable("ExerciseEntry");
                 });
@@ -170,6 +169,55 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                     b.ToTable("Workout");
                 });
 
+            modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Workout.WorkoutEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkoutEntry");
+                });
+
+            modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Workout.WorkoutExercise", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ExerciseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("WorkoutId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.HasIndex("ExerciseId", "WorkoutId")
+                        .IsUnique();
+
+                    b.ToTable("WorkoutExercise");
+                });
+
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Excercise.Exercise", b =>
                 {
                     b.HasOne("Workoutisten.FitStreak.Server.Model.Account.User", "Creator")
@@ -189,15 +237,21 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Workoutisten.FitStreak.Server.Model.Workout.Workout", "Workout")
+                    b.HasOne("Workoutisten.FitStreak.Server.Model.Workout.WorkoutEntry", "WorkoutEntry")
                         .WithMany("ExerciseEntries")
+                        .HasForeignKey("WorkoutEntryId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Workoutisten.FitStreak.Server.Model.Workout.Workout", "Workout")
+                        .WithMany("WorkoutContextExerciseEntries")
                         .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Exercise");
 
                     b.Navigation("Workout");
+
+                    b.Navigation("WorkoutEntry");
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Workout.Workout", b =>
@@ -211,6 +265,25 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Workout.WorkoutExercise", b =>
+                {
+                    b.HasOne("Workoutisten.FitStreak.Server.Model.Excercise.Exercise", "Exercise")
+                        .WithMany("WorkoutExercises")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Workoutisten.FitStreak.Server.Model.Workout.Workout", "Workout")
+                        .WithMany("WorkoutExercises")
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("Workout");
+                });
+
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Account.User", b =>
                 {
                     b.Navigation("Exercises");
@@ -221,9 +294,18 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Excercise.Exercise", b =>
                 {
                     b.Navigation("ExerciseEntries");
+
+                    b.Navigation("WorkoutExercises");
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Workout.Workout", b =>
+                {
+                    b.Navigation("WorkoutContextExerciseEntries");
+
+                    b.Navigation("WorkoutExercises");
+                });
+
+            modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Workout.WorkoutEntry", b =>
                 {
                     b.Navigation("ExerciseEntries");
                 });
