@@ -1,4 +1,4 @@
-﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.Training;
+﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.Training.Workout;
 
 public class Workout
 {
