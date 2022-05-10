@@ -5,8 +5,8 @@ using Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Password;
 
 namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 
-[Route("api/password")]
 [ApiController]
+[Route("api/password")]
 public class PasswordController : ControllerBase
 {
     [HttpPost]
@@ -15,7 +15,7 @@ public class PasswordController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto changePasswordRequest)
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest changePasswordRequest)
     {
         //Unauthorized if email is inappropriate to usercontext
         return BadRequest();
@@ -26,7 +26,7 @@ public class PasswordController : ControllerBase
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RequestPasswordReset([FromBody] ResetPasswordRequestDto resetPasswordRequest)
+    public async Task<IActionResult> RequestPasswordReset([FromBody] ResetPasswordRequest resetPasswordRequest)
     {
         return BadRequest();
     }
@@ -34,9 +34,9 @@ public class PasswordController : ControllerBase
     [HttpPost]
     [Route("reset")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(AuthenticationResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto resetPassword)
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPassword resetPassword)
     {
         return BadRequest();
     }

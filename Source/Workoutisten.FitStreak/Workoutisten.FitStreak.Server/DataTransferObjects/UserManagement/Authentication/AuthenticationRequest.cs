@@ -1,6 +1,6 @@
 ﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Authentication;
 
-public class AuthenticationRequestDto
+public class AuthenticationRequest
 {
     public string Email { get; set; }
 

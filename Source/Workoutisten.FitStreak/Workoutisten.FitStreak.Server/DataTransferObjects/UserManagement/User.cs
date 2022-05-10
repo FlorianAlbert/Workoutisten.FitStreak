@@ -1,6 +1,6 @@
 ﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement;
 
-public class UserDto
+public class User
 {
     public Guid UserId { get; set; }
 
@@ -9,4 +9,6 @@ public class UserDto
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
+
+    public DateTime CreatedDate { get; set; }
 }

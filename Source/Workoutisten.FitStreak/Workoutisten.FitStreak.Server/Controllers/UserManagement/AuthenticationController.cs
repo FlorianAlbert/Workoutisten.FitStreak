@@ -4,16 +4,16 @@ using Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Authentic
 
 namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 
-[Route("api/authentication")]
 [ApiController]
+[Route("api/authentication")]
 public class AuthenticationController : ControllerBase
 {
     [HttpPost]
     [Route("login")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(AuthenticationResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Login([FromBody] AuthenticationRequestDto authenticationRequest)
+    public async Task<IActionResult> Login([FromBody] AuthenticationRequest authenticationRequest)
     {
         return BadRequest();
     }

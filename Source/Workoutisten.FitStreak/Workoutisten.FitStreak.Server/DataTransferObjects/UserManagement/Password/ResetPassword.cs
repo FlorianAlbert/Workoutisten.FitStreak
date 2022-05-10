@@ -1,6 +1,6 @@
 ﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Password;
 
-public class ResetPasswordDto
+public class ResetPassword
 {
     public string NewPassword { get; set; }
 

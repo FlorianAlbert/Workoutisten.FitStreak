@@ -1,6 +1,6 @@
 ﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Registration
 {
-    public class RegistrationRequestDto
+    public class RegistrationRequest
     {
         public string Email { get; set; }
 
