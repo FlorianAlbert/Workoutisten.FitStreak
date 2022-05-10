@@ -19,6 +19,14 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Configurations
             builder.HasOne(x => x.Workout)
                    .WithMany(x => x.WorkoutContextExerciseEntries)
                    .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Property(x => x.Category)
+                   .HasConversion(v => v.ToString(),
+                                  v => (ExerciseCategory)Enum.Parse(typeof(ExerciseCategory), v));
+
+            builder.HasDiscriminator(x => x.Category)
+                   .HasValue<CardioExerciseEntry>(ExerciseCategory.Cardio)
+                   .HasValue<StrengthExerciseEntry>(ExerciseCategory.Strength);
         }
     }
 }
