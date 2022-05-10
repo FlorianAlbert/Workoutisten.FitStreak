@@ -18,6 +18,8 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Configurations
             builder.HasMany(x => x.Workouts)
                    .WithOne(x => x.Creator)
                    .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(x => x.Emails)
+                   .WithMany(x => x.Receivers);
         }
     }
 }

@@ -21,5 +21,8 @@ namespace Workoutisten.FitStreak.Server.Model.Account
 
         private ICollection<Workout.Workout> _Workouts;
         public virtual ICollection<Workout.Workout> Workouts => _Workouts ??= new List<Workout.Workout>();
+
+        private ICollection<Email> _Emails;
+        public virtual ICollection<Email> Emails => _Emails ??= new List<Email>();
     }
 }
