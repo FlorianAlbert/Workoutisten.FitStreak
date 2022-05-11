@@ -11,5 +11,5 @@ public class DoneStrengthExercise
 
     public Guid? ExerciseGroupId { get; set; }
 
-    public Set[] Sets { get; set; }
+    public Dictionary<int, Set> Sets { get; set; }
 }

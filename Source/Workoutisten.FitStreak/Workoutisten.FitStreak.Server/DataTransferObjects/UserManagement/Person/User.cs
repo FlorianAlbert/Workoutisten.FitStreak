@@ -1,4 +1,4 @@
-﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement;
+﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Person;
 
 public class User
 {
@@ -18,5 +18,5 @@ public class User
 
     public Guid[] FriendIds { get; set; }
 
-    public Guid[] FriendRequestIds { get; set; }
+    public Guid[] FriendshipRequestIds { get; set; }
 }

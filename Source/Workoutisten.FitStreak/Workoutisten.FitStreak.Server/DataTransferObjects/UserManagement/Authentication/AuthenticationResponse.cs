@@ -1,4 +1,6 @@
-﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Authentication;
+﻿using Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Person;
+
+namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Authentication;
 
 public class AuthenticationResponse
 {

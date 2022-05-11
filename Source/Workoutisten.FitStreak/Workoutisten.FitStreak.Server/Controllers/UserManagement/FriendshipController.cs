@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Friendship;
 
 namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 
@@ -7,6 +8,17 @@ namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 [Route("api/friendship")]
 public class FriendshipController : ControllerBase
 {
+    [HttpGet]
+    [Route("request")]
+    [Authorize]
+    [ProducesResponseType(typeof(FriendshipRequest[]),StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetFriendshipRequests()
+    {
+        return BadRequest();
+    }
+
     [HttpPost]
     [Route("request")]
     [Authorize]
@@ -40,13 +52,35 @@ public class FriendshipController : ControllerBase
         return BadRequest();
     }
 
+    [HttpGet]
+    [Route("friend/{friendId}")]
+    [Authorize]
+    [ProducesResponseType(typeof(Friend) ,StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetFriend([FromRoute] Guid friendId)
+    {
+       return BadRequest();
+    }
+
+    [HttpGet]
+    [Route("friend")]
+    [Authorize]
+    [ProducesResponseType(typeof(Friend[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetFriends()
+    {
+        return BadRequest();
+    }
+
     [HttpDelete]
     [Route("friend")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> DeleteFriendship([FromBody] string friendsEmail)
+    public async Task<IActionResult> DeleteFriend([FromBody] string friendsEmail)
     {
         return BadRequest();
     }
