@@ -1,4 +1,4 @@
-name: .NET
+name: Client Build
 
 on:
   pull_request:
