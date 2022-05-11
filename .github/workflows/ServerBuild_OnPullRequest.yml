@@ -3,9 +3,10 @@ name: .NET
 on:
   pull_request:
     branches: [ main ]
-    paths-ignore:
-      - 'Source/Workoutisten.FitStreak/Workoutisten.FitStreak/**'
-      - '.github/workflows/ClientBuild_OnPullRequest.yml'
+    paths:
+      - '!Source/Workoutisten.FitStreak/Workoutisten.FitStreak/**'
+      - '!.github/workflows/ClientBuild_OnPullRequest.yml'
+      - 'Source/Workoutisten.FitStreak/**'
 
 jobs:
   build:
