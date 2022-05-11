@@ -8,6 +8,28 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training;
 [Route("api/doneExercise")]
 public class DoneExerciseController : ControllerBase
 {
+    [HttpGet]
+    [Route("cardio/{doneCardioExerciseId}")]
+    [Authorize]
+    [ProducesResponseType(typeof(DoneCardioExercise), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetDoneCardioExercise([FromRoute] Guid doneCardioExerciseId)
+    {
+        return BadRequest();
+    }
+
+    [HttpGet]
+    [Route("cardio")]
+    [Authorize]
+    [ProducesResponseType(typeof(DoneCardioExercise[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetDoneCardioExercises()
+    {
+        return BadRequest();
+    }
+
     [HttpPost]
     [Route("cardio")]
     [Authorize]
@@ -37,6 +59,28 @@ public class DoneExerciseController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> DeleteDoneCardioExercise([FromRoute] Guid doneCardioExerciseId)
+    {
+        return BadRequest();
+    }
+
+    [HttpGet]
+    [Route("strength/{doneStrengthExerciseId}")]
+    [Authorize]
+    [ProducesResponseType(typeof(DoneStrengthExercise), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetDoneStrengthExercise([FromRoute] Guid doneStrengthExerciseId)
+    {
+        return BadRequest();
+    }
+
+    [HttpGet]
+    [Route("strength")]
+    [Authorize]
+    [ProducesResponseType(typeof(DoneStrengthExercise[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetDoneStrengthExercises()
     {
         return BadRequest();
     }

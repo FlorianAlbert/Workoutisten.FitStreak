@@ -8,6 +8,26 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training;
 [Route("api/exerciseGroup")]
 public class ExerciseGroupController : ControllerBase
 {
+    [HttpGet]
+    [Route("{exerciseGroupId}")]
+    [Authorize]
+    [ProducesResponseType(typeof(ExerciseGroup), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetExerciseGroup([FromRoute] Guid exerciseGroupId)
+    {
+        return BadRequest();
+    }
+
+    [HttpGet]
+    [Authorize]
+    [ProducesResponseType(typeof(ExerciseGroup[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetExerciseGroups()
+    {
+        return BadRequest();
+    }
 
     [HttpPost]
     [Authorize]
