@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ main ]
     paths:
-      - 'Source/Workoutisten.FitStreak/Workoutisten.FitStreak/**/*'
+      - 'Source/Workoutisten.FitStreak/Workoutisten.FitStreak/**'
       - '.github/workflows/ClientBuild_OnPullRequest.yml' 
 
 jobs:
