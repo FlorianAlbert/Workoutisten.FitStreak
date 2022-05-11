@@ -103,7 +103,7 @@ jobs:
 # ************************* #
 # >>>>>>> iOS Build <<<<<<< #
 # ************************* #
-  maui-ios:
+  build-ios:
     runs-on: macos-12
     env:
       DOTNET_NOLOGO: true
@@ -152,7 +152,7 @@ jobs:
 # ********************************* #
 # >>>>>>> MacCatalyst Build <<<<<<< #
 # ********************************* #
-  maui-macos:
+  build-macos:
     runs-on: macos-12
     env:
       DOTNET_NOLOGO: true
