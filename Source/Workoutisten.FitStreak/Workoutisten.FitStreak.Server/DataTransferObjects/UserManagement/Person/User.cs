@@ -15,8 +15,4 @@ public class User
     public int ExerciseStreak { get; set; }
 
     public DateTime LastExercise { get; set; }
-
-    public Guid[] FriendIds { get; set; }
-
-    public Guid[] FriendshipRequestIds { get; set; }
 }
