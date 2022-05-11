@@ -24,5 +24,17 @@ namespace Workoutisten.FitStreak.Server.Model.Account
 
         private ICollection<Email> _Emails;
         public virtual ICollection<Email> Emails => _Emails ??= new List<Email>();
+
+        private ICollection<User> _MyFriends;
+        public virtual ICollection<User> MyFriends => _MyFriends ??= new List<User>();
+
+        private ICollection<User> _UsersIAmFriendOf;
+        public virtual ICollection<User> UsersIAmFriendOf => _UsersIAmFriendOf ??= new List<User>();
+
+        private ICollection<FriendshipRequest> _OutgoingFriendshipRequests;
+        public virtual ICollection<FriendshipRequest> OutgoingFriendshipRequests => _OutgoingFriendshipRequests ??= new List<FriendshipRequest>();
+
+        private ICollection<FriendshipRequest> _IngoingFriendshipRequests;
+        public virtual ICollection<FriendshipRequest> IngoingFriendshipRequests => _IngoingFriendshipRequests ??= new List<FriendshipRequest>();
     }
 }

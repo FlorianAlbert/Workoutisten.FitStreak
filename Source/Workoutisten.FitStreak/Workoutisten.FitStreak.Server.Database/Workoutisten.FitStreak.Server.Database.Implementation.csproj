@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EntityFrameworkCore.Triggered" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
@@ -18,6 +19,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Workoutisten.FitStreak.Server.Database.Interface\Workoutisten.FitStreak.Server.Database.Interface.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Trigger\" />
   </ItemGroup>
 
 </Project>

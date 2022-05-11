@@ -18,6 +18,7 @@ builder.Services.AddDbContext<FitStreakDbContext>(options =>
     options.UseLazyLoadingProxies();
     options.UseSqlServer(builder.Configuration.GetConnectionString("FitStreakDatabase"),
         optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(FitStreakDbContext).Assembly.FullName));
+    options.UseTriggers();
 });
 
 // Add own services to the container

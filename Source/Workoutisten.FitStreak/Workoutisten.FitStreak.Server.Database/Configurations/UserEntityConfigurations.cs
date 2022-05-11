@@ -20,6 +20,16 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Configurations
                    .OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(x => x.Emails)
                    .WithMany(x => x.Receivers);
+            builder.HasMany(x => x.MyFriends)
+                   .WithMany(x => x.UsersIAmFriendOf);
+            builder.HasMany(x => x.IngoingFriendshipRequests)
+                   .WithOne(x => x.RequestedUser)
+                   .OnDelete(DeleteBehavior.Restrict)
+                   .HasForeignKey(x => x.RequestedUserId);
+            builder.HasMany(x => x.OutgoingFriendshipRequests)
+                   .WithOne(x => x.RequestingUser)
+                   .OnDelete(DeleteBehavior.Cascade)
+                   .HasForeignKey(x => x.RequestingUserId);
         }
     }
 }

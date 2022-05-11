@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Workoutisten.FitStreak.Server.Database;
 
@@ -11,9 +12,10 @@ using Workoutisten.FitStreak.Server.Database;
 namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
 {
     [DbContext(typeof(FitStreakDbContext))]
-    partial class FitStreakDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220511080113_AddedFriendships")]
+    partial class AddedFriendships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
