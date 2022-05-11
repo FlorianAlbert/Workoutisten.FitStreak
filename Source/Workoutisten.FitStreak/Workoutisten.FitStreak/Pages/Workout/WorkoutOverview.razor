@@ -1,5 +1,13 @@
-﻿<h3>WorkoutOverview</h3>
+﻿
+<MudStack>
+    <MudText Typo="Typo.h3">@Workout.WorkoutName</MudText>
+    <MudText Typo="Typo.body1">@Workout.Exercises.Count Exercises</MudText>
+    <MudText Typo="Typo.body1">@Workout.Exercises.Count Exercises</MudText>
+</MudStack>
+
+
 
 @code {
-
+    [Parameter]
+    public WorkoutModel Workout { get; set; }
 }
