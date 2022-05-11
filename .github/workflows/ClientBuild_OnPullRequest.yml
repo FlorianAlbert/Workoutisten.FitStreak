@@ -20,16 +20,16 @@ jobs:
         include:
           - os: windows-2022
             platform: windows10.0.19041
-            shell: pwsh
+            consoleType: pwsh
           - os: windows-2022
             platform: android
-            shell: pwsh
+            consoleType: pwsh
           - os: macos-11
             platform: maccatalyst
-            shell: bash
+            consoleType: bash
           - os: macos-11
             platform: ios
-            shell: bash
+            consoleType: bash
 
     steps:
     - uses: actions/checkout@v3
@@ -54,19 +54,19 @@ jobs:
       run: dotnet workload install maui --ignore-failed-sources
       
     - name: Restore dependencies
-      shell: ${{ matrix.shell }}
+      shell: ${{ matrix.consoleType }}
       run: dotnet restore ${{ env.PROJECT_FILE }}
       working-directory: ${{ env.PROJECT_PATH }}
       
     - name: Build Windows Application
       if: ${{ matrix.platform == 'windows10.0.19041' }}
-      shell: ${{ matrix.shell }}
+      shell: ${{ matrix.consoleType }}
       run: |
         msbuild ${{ env.PROJECT_FILE }} -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041
       working-directory: ${{ env.PROJECT_PATH }}
       
     - name: Build Android, iOS or MacCatalyst Application
       if: ${{ matrix.platform != 'windows10.0.19041' }}
-      shell: ${{ matrix.shell}}
+      shell: ${{ matrix.consoleType}}
       run: dotnet build ${{ env.PROJECT_FILE }} -c Release -f net6.0-${{ matrix.platform }} --no-restore
       working-directory: ${{ env.PROJECT_PATH }}
