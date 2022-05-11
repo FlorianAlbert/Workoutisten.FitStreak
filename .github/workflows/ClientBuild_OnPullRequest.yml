@@ -55,6 +55,12 @@ jobs:
     - name: Install .NET Maui
       run: dotnet workload install maui --ignore-failed-sources
       
+    - name: Install Maui-Check
+      run: dotnet tool install -g redth.net.maui.check
+      
+    - name: Run Maui-Check
+      run: maui-check
+      
     - name: Restore dependencies
       run: dotnet restore ${{ env.PROJECT_FILE }}
       working-directory: ${{ env.PROJECT_PATH }}
