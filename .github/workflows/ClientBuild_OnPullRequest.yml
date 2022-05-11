@@ -3,42 +3,45 @@ name: .NET
 on:
   pull_request:
     branches: [ main ]
+    paths:
+      - 'Source/Workoutisten.FitStreak/Workoutisten.FitStreak/**/*'
+      - '.github/workflows/ClientBuild_OnPullRequest.yml' 
 
 jobs:
 
 # ***************************** #
 # >>>>>>> Android build <<<<<<< #
 # ***************************** #
-  maui-android:
+  build-android:
     runs-on: windows-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '6.0.x'
 
-    - name: Generate version number using date and run number
+    - name: Install .NET MAUI workloads
+      shell: pwsh
+      run: dotnet workload install maui --ignore-failed-sources
+
+    - name: Generate version
       shell: pwsh
       id: version-creator
       run: |
         $buildDay = Get-Date -Format "yyyy.Mdd"
-        $ver = $buildDay + "." + $env:GITHUB_RUN_NUMBER + ".0"
+        $ver = $buildDay + "." + $GITHUB_RUN_NUMBER + ".0"
         echo "::set-output name=APP_VERSION::$ver"
 
-    - name: Install MAUI workloads (currently required for hosted runners)
-      shell: pwsh
-      run: dotnet workload install maui --ignore-failed-sources
-
-    - name: Restore NuGet packages
+    - name: Restore dependencies
       shell: pwsh
       run: dotnet restore Source/Workoutisten.FitStreak/Workoutisten.FitStreak/Workoutisten.FitStreak.csproj
 
-    - name: Build Maui Android project
+    - name: Build project
       shell: pwsh
       run: dotnet build Source/Workoutisten.FitStreak/Workoutisten.FitStreak/Workoutisten.FitStreak.csproj -c Release -f net6.0-android --no-restore
     
@@ -52,46 +55,43 @@ jobs:
 # ***************************** #
 # >>>>>>> Windows Build <<<<<<< #
 # ***************************** #
-  maui-windows:
+  build-windows:
     runs-on: windows-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '6.0.x'
 
-    # Needed for Windows build
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.1
       with:
         vs-prerelease: true
 
-    - name: Generate version number using date and run number
+    - name: Generate version
       shell: pwsh
       id: version-creator
       run: |
         $buildDay = Get-Date -Format "yyyy.Mdd"
-        $ver = $buildDay + "." + $env:GITHUB_RUN_NUMBER + ".0"
+        $ver = $buildDay + "." + $GITHUB_RUN_NUMBER + ".0"
         echo "::set-output name=APP_VERSION::$ver"
 
-    - name: Install MAUI workloads (currently required for hosted runners)
+    - name: Install .NET MAUI workloads
       shell: pwsh
       run: dotnet workload install maui --ignore-failed-sources
 
-    - name: Restore NuGet packages
+    - name: Restore dependencies
       shell: pwsh
       run: dotnet restore Source/Workoutisten.FitStreak/Workoutisten.FitStreak/Workoutisten.FitStreak.csproj
 
-    - name: Build Maui WinUI project
+    - name: Build project
       shell: pwsh
-      run: |
-        # On Windows, we use msbuild instead of dotnet build
-        msbuild Source/Workoutisten.FitStreak/Workoutisten.FitStreak/Workoutisten.FitStreak.csproj -r -p:Configuration=Release -p:TargetFramework=net6.0-windows10.0.19041
+      run: msbuild Source/Workoutisten.FitStreak/Workoutisten.FitStreak/Workoutisten.FitStreak.csproj -r -p:Configuration=Release -p:TargetFramework=net6.0-windows10.0.19041
     
     # - name: Upload build artifacts
     #   uses: actions/upload-artifact@v2
@@ -110,16 +110,16 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: true
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '6.0.x'
 
-    - name: Generate version number using date and run number
+    - name: Generate version
       id: version-creator
       shell: bash
       run: |
@@ -130,15 +130,15 @@ jobs:
         echo $ver
         echo "APP_VERSION=$ver" >> $GITHUB_ENV
 
-    - name: Install MAUI workloads
+    - name: Install .NET MAUI workloads
       shell: pwsh
       run: dotnet workload install maui --ignore-failed-sources
 
-    - name: Restore NuGet packages
+    - name: Restore dependencies
       shell: bash
       run: dotnet restore Source/Workoutisten.FitStreak/Workoutisten.FitStreak/Workoutisten.FitStreak.csproj
     
-    - name: Build MAUI iOS project
+    - name: Build project
       shell: bash
       run: dotnet build Source/Workoutisten.FitStreak/Workoutisten.FitStreak/Workoutisten.FitStreak.csproj -c Release -f net6.0-ios --no-restore
     
@@ -159,16 +159,16 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: true
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
 
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '6.0.x'
 
-    - name: Generate version number using date and run number
+    - name: Generate version
       id: version-creator
       shell: bash
       run: |
@@ -179,15 +179,15 @@ jobs:
         echo $ver
         echo "APP_VERSION=$ver" >> $GITHUB_ENV
 
-    - name: Install MAUI workloads
+    - name: Install .NET MAUI workloads
       shell: pwsh
       run: dotnet workload install maui --ignore-failed-sources
 
-    - name: Restore NuGet packages
+    - name: Restore dependencies
       shell: bash
       run: dotnet restore Source/Workoutisten.FitStreak/Workoutisten.FitStreak/Workoutisten.FitStreak.csproj
     
-    - name: Build MAUI MAcCatalyst project
+    - name: Build project
       shell: bash
       run: dotnet build Source/Workoutisten.FitStreak/Workoutisten.FitStreak/Workoutisten.FitStreak.csproj -c Release -f net6.0-maccatalyst --no-restore
     
