@@ -18,14 +18,18 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: windows-latest
+          - os: windows-2022
             platform: windows10.0.19041
-          - os: windows-latest
+            shell: pwsh
+          - os: windows-2022
             platform: android
-          - os: macos-latest
+            shell: pwsh
+          - os: macos-11
             platform: maccatalyst
-          - os: macos-latest
+            shell: bash
+          - os: macos-11
             platform: ios
+            shell: bash
 
     steps:
     - uses: actions/checkout@v3
@@ -34,7 +38,6 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '6.0.x'
-        include-prerelease: true
 
     - name: Setup MSBuild
       if: ${{ matrix.platform == 'windows10.0.19041' }}
@@ -42,35 +45,28 @@ jobs:
       with:
         vs-prerelease: true
         
-    - uses: actions/setup-java@v2
-      if: ${{ matrix.platform == 'android' }}
-      with:
-        distribution: 'microsoft'
-        java-version: '11'
-        
     - name: Install MAUI Workloads for Android, iOS or MacCatalyst
-      if: ${{ (matrix.platform == 'android') || (matrix.platform == 'ios') || (matrix.platform == 'maccatalyst') }}
+      if: ${{ (matrix.platform == 'ios') || (matrix.platform == 'maccatalyst') }}
       run: dotnet workload install ${{ matrix.platform }} --ignore-failed-sources
         
     - name: Install .NET Maui
+      shell: pwsh
       run: dotnet workload install maui --ignore-failed-sources
       
-    - name: Install Maui-Check
-      run: dotnet tool install -g redth.net.maui.check
-      
-    - name: Run Maui-Check
-      run: y | maui-check
-      
     - name: Restore dependencies
+      shell: ${{ matrix.shell }}
       run: dotnet restore ${{ env.PROJECT_FILE }}
       working-directory: ${{ env.PROJECT_PATH }}
       
     - name: Build Windows Application
       if: ${{ matrix.platform == 'windows10.0.19041' }}
-      run: msbuild ${{ env.PROJECT_FILE }} -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041
+      shell: ${{ matrix.shell }}
+      run: |
+        msbuild ${{ env.PROJECT_FILE }} -r -p:Configuration=Release -p:RestorePackages=false -p:TargetFramework=net6.0-windows10.0.19041
       working-directory: ${{ env.PROJECT_PATH }}
       
     - name: Build Android, iOS or MacCatalyst Application
       if: ${{ matrix.platform != 'windows10.0.19041' }}
+      shell: ${{ matrix.shell}}
       run: dotnet build ${{ env.PROJECT_FILE }} -c Release -f net6.0-${{ matrix.platform }} --no-restore
       working-directory: ${{ env.PROJECT_PATH }}
