@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths-ignore:
       - 'Source/Workoutisten.FitStreak/Workoutisten.FitStreak/**'
+      - '.github/workflows/ClientBuild_OnPullRequest.yml'
 
 jobs:
   build:
