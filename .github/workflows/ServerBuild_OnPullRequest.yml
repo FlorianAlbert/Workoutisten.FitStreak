@@ -1,11 +1,11 @@
-name: .NET
+name: Server Build
 
 on:
   pull_request:
     branches: [ main ]
     paths:
       - '!Source/Workoutisten.FitStreak/Workoutisten.FitStreak/**'
-      - '!.github/workflows/ClientBuild_OnPullRequest.yml'
+      - '.github/workflows/ServerBuild_OnPullRequest.yml'
       - 'Source/Workoutisten.FitStreak/**'
 
 jobs:
