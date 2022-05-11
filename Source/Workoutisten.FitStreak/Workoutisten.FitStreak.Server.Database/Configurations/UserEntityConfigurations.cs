@@ -21,7 +21,8 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Configurations
             builder.HasMany(x => x.Emails)
                    .WithMany(x => x.Receivers);
             builder.HasMany(x => x.MyFriends)
-                   .WithMany(x => x.UsersIAmFriendOf);
+                   .WithMany(x => x.UsersIAmFriendOf)
+                   .UsingEntity(join => join.ToTable("Friendships")); ;
             builder.HasMany(x => x.IngoingFriendshipRequests)
                    .WithOne(x => x.RequestedUser)
                    .OnDelete(DeleteBehavior.Restrict)
