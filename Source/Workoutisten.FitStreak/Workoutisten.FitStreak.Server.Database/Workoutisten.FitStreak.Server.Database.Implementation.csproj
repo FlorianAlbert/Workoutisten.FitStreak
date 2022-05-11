@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Workoutisten.FitStreak.Server.Database.Interface\Workoutisten.FitStreak.Server.Database.Interface.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Trigger\" />
-  </ItemGroup>
-
 </Project>
