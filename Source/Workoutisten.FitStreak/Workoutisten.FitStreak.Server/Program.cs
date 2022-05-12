@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Workoutisten.Fitstreak API",
+        Title = "Workoutisten.FitStreak API",
         Version = "v1"
     });
 
@@ -98,7 +98,10 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Workoutisten.FitStreak API");
+    });
 }
 
 app.UseHttpsRedirection();
