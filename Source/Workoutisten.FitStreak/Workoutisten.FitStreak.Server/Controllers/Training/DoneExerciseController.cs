@@ -33,7 +33,7 @@ public class DoneExerciseController : ControllerBase
     [HttpPost]
     [Route("cardio")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(DoneCardioExercise) ,StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> CreateDoneCardioExercise([FromBody] DoneCardioExercise doneCardioExercise)
@@ -44,7 +44,7 @@ public class DoneExerciseController : ControllerBase
     [HttpPut]
     [Route("cardio")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(DoneCardioExercise), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> UpdateDoneCardioExercise([FromBody] DoneCardioExercise doneCardioExercise)
@@ -88,7 +88,7 @@ public class DoneExerciseController : ControllerBase
     [HttpPost]
     [Route("strength")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(DoneStrengthExercise), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> CreateDoneStrengthExercise([FromBody] DoneStrengthExercise doneStrengthExercise)
@@ -99,7 +99,7 @@ public class DoneExerciseController : ControllerBase
     [HttpPut]
     [Route("strength")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(DoneStrengthExercise), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> UpdateDoneStrengthExercise([FromBody] DoneStrengthExercise doneStrengthExercise)

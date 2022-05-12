@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Friendship;
+using Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Person;
 
 namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 
@@ -22,7 +23,7 @@ public class FriendshipController : ControllerBase
     [HttpPost]
     [Route("request")]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(FriendshipRequest), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> CreateFriendshipRequest([FromBody] string requestedEmail)
@@ -55,7 +56,7 @@ public class FriendshipController : ControllerBase
     [HttpGet]
     [Route("friend/{friendId}")]
     [Authorize]
-    [ProducesResponseType(typeof(Friend) ,StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(User) ,StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetFriend([FromRoute] Guid friendId)
@@ -66,7 +67,7 @@ public class FriendshipController : ControllerBase
     [HttpGet]
     [Route("friend")]
     [Authorize]
-    [ProducesResponseType(typeof(Friend[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(User[]), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetFriends()
