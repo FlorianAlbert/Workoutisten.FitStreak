@@ -6,7 +6,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak", "W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Server", "Workoutisten.FitStreak.Server\Workoutisten.FitStreak.Server.csproj", "{38661579-77FB-4A2C-96DF-EB42D0B7654C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Server.Database.Implementation", "Workoutisten.FitStreak.Server.Database\Workoutisten.FitStreak.Server.Database.Implementation.csproj", "{4593BD6C-C232-418A-91B1-D9BC58EE079E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Server.Database.Implementation", "Workoutisten.FitStreak.Server.Database.Implementation\Workoutisten.FitStreak.Server.Database.Implementation.csproj", "{4593BD6C-C232-418A-91B1-D9BC58EE079E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Server.Model", "Workoutisten.FitStreak.Server.Model\Workoutisten.FitStreak.Server.Model.csproj", "{DDA7CF60-EF55-4F84-9EB6-6F1E94DB0A81}"
 EndProject
@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server.Service.Interface", "Workoutisten.FitStreak.Server.Service.Interface\Workoutisten.FitStreak.Server.Service.Interface.csproj", "{195794D3-8D1A-4AC6-A68B-33B512BC0D4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server.Service.Implementation", "Workoutisten.FitStreak.Server.Service\Workoutisten.FitStreak.Server.Service.Implementation.csproj", "{EAD3D2DD-15FB-47C1-AC22-741F8C3813FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server.Service.Implementation", "Workoutisten.FitStreak.Server.Service.Implementation\Workoutisten.FitStreak.Server.Service.Implementation.csproj", "{EAD3D2DD-15FB-47C1-AC22-741F8C3813FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
