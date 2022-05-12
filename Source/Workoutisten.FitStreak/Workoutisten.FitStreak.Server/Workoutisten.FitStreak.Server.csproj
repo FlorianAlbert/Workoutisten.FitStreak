@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Workoutisten.FitStreak.Server.Database\Workoutisten.FitStreak.Server.Database.Implementation.csproj" />
+    <ProjectReference Include="..\Workoutisten.FitStreak.Server.Database.Implementation\Workoutisten.FitStreak.Server.Database.Implementation.csproj" />
   </ItemGroup>
 
 </Project>
