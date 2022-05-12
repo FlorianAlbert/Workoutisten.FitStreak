@@ -61,11 +61,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="RestClient\" />
 	  <Folder Include="Shared\PageExclusives\ExercisePage\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <OpenApiReference Include="..\..\..\..\..\Users\Paul-\OneDrive - DHBW Stuttgart Campus Horb\Vorlesungen\Semester 6\Mobile Applikationen\REST_Documentation.json" CodeGenerator="NSwagCSharp" Namespace="Workoutisten.FitStreak.Client.RestClient" ClassName="RestClient" Link="OpenAPIs\REST_Documentation.json" />
 	</ItemGroup>
 
 </Project>

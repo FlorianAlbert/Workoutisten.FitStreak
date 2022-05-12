@@ -1,4 +1,7 @@
 ﻿@page "/workouts/overview"
+@using Workoutisten.FitStreak.Client.RestClient
+
+@*@inject IRestClient _RestClient;*@
 
 <MudStack>
     <MudText Typo="Typo.h3">@Workout.WorkoutName</MudText>
@@ -25,6 +28,7 @@
 
     protected override void OnInitialized()
     {
+
         base.OnInitialized();
     }
 
