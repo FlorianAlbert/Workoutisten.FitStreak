@@ -1,4 +1,5 @@
-﻿@using Workoutisten.FitStreak.Shared.PageExclusives.HomescreenPage
+﻿@using System.Timers
+@using Workoutisten.FitStreak.Shared.PageExclusives.HomescreenPage
 @using ApexCharts
 
 
@@ -15,12 +16,12 @@
     @*<MudImage ObjectFit="ObjectFit.Cover" Height="200" Src="Images/testjpg.jpg" Alt="Your Fitstreak" Class="rounded-lg ma-4" />*@
     @*</MudItem>*@
 
-    <MudChart ChartType="MudBlazor.ChartType.Donut" Width="60%" Height="60%" InputData="@Counts" ChartOptions="@chartOptions">
+    <MudChart ChartType="MudBlazor.ChartType.Donut" Width="70%" Height="70%" InputData="@Counts" ChartOptions="@chartOptions">
 	    <CustomGraphics>
 		    <text class="donut-inner-text" x="47%" y="33%" dominant-baseline="middle" text-anchor="middle" fill="white"  font-size="3" color="white" >Your Streak</text>
 		    <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#EB5E55"  font-size="10">@Counts.Sum().ToString()</text>
             <text class="donut-inner-text" x="47%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="#838486"  font-size="2">Time till Reset:</text>
-            <text class="donut-inner-text" x="47%" y="70%" dominant-baseline="middle" text-anchor="middle" fill="#838486"  font-size="2">10:50:32</text>
+            <text class="donut-inner-text" x="47%" y="70%" dominant-baseline="middle" text-anchor="middle" fill="#838486"  font-size="2">@remainingTimeString</text>
 	    </CustomGraphics>
     </MudChart>
 @*    <ApexChart TItem="GaugeValue" Title="@Title"
@@ -53,14 +54,4 @@
 
 
 
-@code {
-    public double[] Counts { get; set; } = new double[] {60, 40};
 
-    public ChartOptions chartOptions = new ChartOptions()
-        {
-            DisableLegend = true,
-            ChartPalette = new string[] { "#EB5E55", "#3C414D" },
-            LineStrokeWidth = 1
-    };
-
-}

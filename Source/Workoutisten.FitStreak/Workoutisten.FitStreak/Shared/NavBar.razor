@@ -3,7 +3,7 @@
         <MudText Typo="Typo.h5">FitStreak</MudText>
         <MudSpacer/>
         <MudAvatar Class="pa-4 mr-3" Color="Color.Primary"><MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" OnClick="@ToggleNotification"/></MudAvatar>
-            <MudPopover @bind-Open="@openNotification" OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.TopRight" TransformOrigin="Origin.TopLeft" Paper="false">
+            <MudPopover @bind-Open="@openNotification" OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft" Paper="false">
                 <MudPaper Outlined="true" Class="px-4 py-8">
                     <MudText>Notifications:</MudText>
                 </MudPaper>
