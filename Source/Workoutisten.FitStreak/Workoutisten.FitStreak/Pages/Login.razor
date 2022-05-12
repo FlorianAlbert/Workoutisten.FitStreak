@@ -1,0 +1,19 @@
+﻿@page "/login"
+
+<MudStack>
+    <h3>Login:</h3>
+    <MudItem xs=12>
+                <MudTextField @bind-Value="Name" Label="Name" Variant="Variant.Text" Clearable="true" />
+    </MudItem>
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Login" Href="/login">
+        <MudText Typo="Typo.button">Login</MudText>
+    </MudButton>
+</MudStack>
+
+@code {
+    string Name;
+    void login()
+    {
+        
+    }
+}
