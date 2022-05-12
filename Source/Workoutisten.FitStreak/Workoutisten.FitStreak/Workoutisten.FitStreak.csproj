@@ -51,4 +51,8 @@
 	  <PackageReference Include="MudBlazor" Version="6.0.10-dev.5" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Shared\PageExclusives\ExercisePage\" />
+	</ItemGroup>
+
 </Project>
