@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
-internal interface IPasswordService
+﻿namespace Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
+public interface IPasswordService
 {
+    Task<bool> ChangePasswordAsync(Guid userId, string oldPassword, string newPassword);
+
+    Task<bool> RequestPasswordResetAsync(string email);
+
+    Task<bool> ConfirmPasswordResetAsync(Guid passwordForgottenKey, string newPassword);
 }
