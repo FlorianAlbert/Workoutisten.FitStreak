@@ -1,0 +1,15 @@
+name: Server Build
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'Source/Workoutisten.FitStreak/Workoutisten.FitStreak/**'
+      - '!.github/workflows/ServerBuild_OnPullRequest.yml'
+      - '!Source/Workoutisten.FitStreak/**'
+
+jobs:
+  build-server:
+    runs-on: windows-latest
+    steps:
+      - run: 'echo "No build required" '
