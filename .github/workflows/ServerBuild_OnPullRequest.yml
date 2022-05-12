@@ -9,7 +9,7 @@ on:
       - 'Source/Workoutisten.FitStreak/**'
 
 jobs:
-  build:
+  build-server:
 
     runs-on: windows-latest
 
