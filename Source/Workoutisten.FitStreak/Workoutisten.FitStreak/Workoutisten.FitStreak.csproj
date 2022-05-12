@@ -48,11 +48,24 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Blazor-ApexCharts" Version="0.9.7-beta" />
+	  <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="3.0.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	  <PackageReference Include="MudBlazor" Version="6.0.10-dev.5" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	  <PackageReference Include="NSwag.ApiDescription.Client" Version="13.0.5">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Shared\PageExclusives\ExercisePage\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <OpenApiReference Include="..\..\..\..\..\Users\Paul-\OneDrive - DHBW Stuttgart Campus Horb\Vorlesungen\Semester 6\Mobile Applikationen\REST_Documentation.json" CodeGenerator="NSwagCSharp" Namespace="Workoutisten.FitStreak.Client.RestClient" ClassName="RestClient" Link="OpenAPIs\REST_Documentation.json" />
 	</ItemGroup>
 
 </Project>
