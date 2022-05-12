@@ -2,11 +2,27 @@
 
 <MudStack>
     <h3>Register:</h3>
-    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Login" Href="/login">
-        <MudText Typo="Typo.button">Login</MudText>
+    <MudItem xs=12>
+        <MudTextField @bind-Value="name" Label="name" Variant="Variant.Text" Text="Enter your name" Clearable="true" />
+    </MudItem>
+    <MudItem xs=12>
+        <MudTextField @bind-Value="email" Label="email" Variant="Variant.Text" Text="Enter your e-mail" Clearable="true" />
+    </MudItem>
+    <MudItem xs=12>
+        <MudTextField @bind-Value="password" Label="password" Variant="Variant.Text" Text="Password" Clearable="true" />
+    </MudItem>
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="SignUp_Button">
+        <MudText Typo="Typo.button">Sign Up</MudText>
     </MudButton>
 </MudStack>
 
 @code {
+    string name;
+    string email;
+    string password;
+    void SignUp_Button()
+    {
+        
+    }
 
 }
