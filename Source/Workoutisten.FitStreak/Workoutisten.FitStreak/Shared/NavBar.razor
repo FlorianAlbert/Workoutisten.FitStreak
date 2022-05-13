@@ -1,23 +1,18 @@
 ﻿<MudGrid Class="py-4 my-4">
-    <MudAppBar Elevation="1">
+    <MudAppBar Elevation="1" Color="Color.Dark">
         <MudText Typo="Typo.h5">FitStreak</MudText>
         <MudSpacer/>
-        <MudAvatar Class="pa-4 mr-3" Color="Color.Primary"><MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" OnClick="@ToggleNotification"/></MudAvatar>
-            <MudPopover @bind-Open="@openNotification" OverflowBehavior="OverflowBehavior.FlipAlways" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft" Paper="false">
-                <MudPaper Outlined="true" Class="px-4 py-8">
-                    <MudText>Notifications:</MudText>
-                </MudPaper>
-	    </MudPopover>
-        <MudAvatar Color="Color.Primary"><MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" OnClick="@ToggleDrawer" /></MudAvatar>
+        <NotificationButton/>
+        <MudAvatar Color="Color.Secondary"><MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" OnClick="@ToggleDrawer" /></MudAvatar>
     </MudAppBar>
     <MudDrawer @bind-Open="@openDrawer" Elevation="1" Anchor="Anchor.End" ClipMode="DrawerClipMode.Always">
         <MudDrawerHeader>
             <MudText Typo="Typo.h6">FitStreak</MudText>
         </MudDrawerHeader>
         <MudNavMenu>
-            <MudNavLink Match="NavLinkMatch.All">Profile</MudNavLink>
-            <MudNavLink Match="NavLinkMatch.All">Settings</MudNavLink>
-            <MudNavLink Match="NavLinkMatch.All">About</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Href="/profile">Profile</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Href="/settings">Settings</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Href="/about" >About</MudNavLink>
         </MudNavMenu>
     </MudDrawer>
 </MudGrid>
