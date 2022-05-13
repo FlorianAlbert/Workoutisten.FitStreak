@@ -7,6 +7,10 @@ using Workoutisten.FitStreak.Server.Database;
 using Workoutisten.FitStreak.Server.Database.Implementation;
 using Workoutisten.FitStreak.Server.Database.Interface;
 using Workoutisten.FitStreak.Server.Extensions;
+using Workoutisten.FitStreak.Server.Service.Implementation.Training;
+using Workoutisten.FitStreak.Server.Service.Implementation.UserManagement;
+using Workoutisten.FitStreak.Server.Service.Interface.Training;
+using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +67,17 @@ builder.Services.AddTriggers();
 
 // Add own services to the container
 builder.Services.AddScoped<IRepository, Repository>();
+//usermanagement
+builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
+builder.Services.AddSingleton<IFriendshipService, FriendshipService>(); 
+builder.Services.AddSingleton<IPasswordService, PasswordService>();
+builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
+builder.Services.AddSingleton<IUserService, UserService>();
+//training
+builder.Services.AddSingleton<IExerciseEntryService, ExerciseEntryService>();
+builder.Services.AddSingleton<IExerciseGroupService, ExerciseGroupService>();
+builder.Services.AddSingleton<IExerciseService, ExerciseService>();
+builder.Services.AddSingleton<IWorkoutService, WorkoutService>();
 
 builder.Services.AddAuthentication(options =>
 {
