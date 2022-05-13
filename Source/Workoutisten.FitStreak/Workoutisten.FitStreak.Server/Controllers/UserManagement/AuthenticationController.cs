@@ -36,16 +36,8 @@ public class AuthenticationController : ControllerBase
             case LoginResultStatus.Successful: return Ok(new AuthenticationResponse
             {
                 Token = loginResult.Token,
-                //ToDo anpassen nachdem User-Model erweitert wurde
-                User = new User
-                {
-                    CreatedDate = loginResult.User.CreatedAt,
-                    Email = loginResult.User.NormalizedEmail,
-                    FirstName = loginResult.User.FirstName,
-                    LastName = loginResult.User.LastName,
-                    ExerciseStreak = 0,
-                    LastExercise = DateTime.MinValue
-                }
+                //ToDo Converter benutzen
+                User = new User()
             });
             default: throw new ArgumentOutOfRangeException(nameof(loginResult.Status), $"Not expected login status value: {loginResult.Status}");
         }

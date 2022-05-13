@@ -6,10 +6,6 @@ public class AuthenticationService : IAuthenticationService
 {
     public async Task<LoginResult> LoginAsync(string email, string password)
     {
-        //ToDo implementieren und User-Model anpassen -> siehe Controller
-        return new LoginResult
-        {
-            Status = LoginResultStatus.BadRequest
-        };
+        throw new NotImplementedException();
     }
 }
