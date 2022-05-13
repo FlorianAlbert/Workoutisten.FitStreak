@@ -4,7 +4,17 @@ using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 namespace Workoutisten.FitStreak.Server.Service.Implementation.UserManagement;
 public class FriendshipService : IFriendshipService
 {
+    public Task<bool> AcceptFriendshipRequest(Guid friendshipRequestId)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<FriendshipRequest> CreateOrUpdateAsync(FriendshipRequest entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> DeclineFriendshipRequest(Guid friendshipRequestId)
     {
         throw new NotImplementedException();
     }
