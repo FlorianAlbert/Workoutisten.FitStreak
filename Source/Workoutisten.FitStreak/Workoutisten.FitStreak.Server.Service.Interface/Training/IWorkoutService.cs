@@ -1,4 +1,6 @@
-﻿namespace Workoutisten.FitStreak.Server.Service.Interface.Training;
-public interface IWorkoutService
+﻿using Workoutisten.FitStreak.Server.Model.Workout;
+
+namespace Workoutisten.FitStreak.Server.Service.Interface.Training;
+public interface IWorkoutService : IBaseEntityService<Workout>
 {
 }
