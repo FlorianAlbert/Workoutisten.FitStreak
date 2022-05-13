@@ -9,7 +9,7 @@ public class FriendshipService : IFriendshipService
         throw new NotImplementedException();
     }
 
-    public async Task<FriendshipRequest> CreateOrUpdateAsync(FriendshipRequest entity)
+    public Task<bool> CreateFriendshipRequest(Guid requesterId, Guid requestedId)
     {
         throw new NotImplementedException();
     }
@@ -19,27 +19,22 @@ public class FriendshipService : IFriendshipService
         throw new NotImplementedException();
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public Task<IEnumerable<User>> GetFriends(Guid userId)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<bool> DeleteAsync(FriendshipRequest entity)
+    public Task<IEnumerable<FriendshipRequest>> GetIncomingFriendshipRequests(Guid userId)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<FriendshipRequest>> GetAllAsync()
+    public Task<IEnumerable<FriendshipRequest>> GetOutgoingFriendshipRequests(Guid userId)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<FriendshipRequest>> GetAllForUserAsync(Guid userId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task<FriendshipRequest> GetAsync(Guid id)
+    public Task<bool> WithdrawFriendshipRequest(Guid friendshipRequestId)
     {
         throw new NotImplementedException();
     }

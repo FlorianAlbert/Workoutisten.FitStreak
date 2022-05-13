@@ -29,8 +29,9 @@ public class RegistrationController : ControllerBase
     {
         if(registrationRequest?.Email is null || registrationRequest?.Password is null) return BadRequest();
 
-        var users = await UserService.GetAllAsync();
-        if (users.Any(user => user.NormalizedEmail == registrationRequest.Email.Normalize())) return Conflict();
+        //ToDo UseCase auslagern
+        //var users = await UserService.GetAllUsersAsync();
+        //if (users.Any(user => user.NormalizedEmail == registrationRequest.Email.Normalize())) return Conflict();
 
         var successful = await RegistrationService.RequestRegistrationAsync(registrationRequest.Email, registrationRequest.Password);
         if (successful) return Ok();
