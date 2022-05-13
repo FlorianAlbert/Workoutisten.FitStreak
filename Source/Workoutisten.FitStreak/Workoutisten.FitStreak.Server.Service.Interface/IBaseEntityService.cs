@@ -5,6 +5,8 @@ public interface IBaseEntityService<TEntity> where TEntity : BaseEntity
 {
     Task<TEntity> GetAsync(Guid id);
 
+    Task<IEnumerable<TEntity>> GetAllForUserAsync(Guid userId);
+
     Task<IEnumerable<TEntity>> GetAllAsync();
 
     Task<TEntity> CreateOrUpdateAsync(TEntity entity);
