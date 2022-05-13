@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Person;
+using Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person;
 
 namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 

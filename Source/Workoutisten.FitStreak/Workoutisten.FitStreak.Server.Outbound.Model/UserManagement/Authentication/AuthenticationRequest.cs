@@ -1,4 +1,4 @@
-﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Authentication;
+﻿namespace Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Authentication;
 
 public class AuthenticationRequest
 {

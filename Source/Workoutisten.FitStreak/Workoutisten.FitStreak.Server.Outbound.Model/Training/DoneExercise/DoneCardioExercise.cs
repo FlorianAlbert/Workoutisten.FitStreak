@@ -1,5 +1,5 @@
-﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.Training.DoneExercise;
-public class DoneStrengthExercise
+﻿namespace Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise;
+public class DoneCardioExercise
 {
     public Guid DoneExerciseId { get; set; }
 
@@ -11,5 +11,7 @@ public class DoneStrengthExercise
 
     public Guid? ExerciseGroupId { get; set; }
 
-    public Dictionary<int, Set> Sets { get; set; }
+    public double Distance { get; set; }
+
+    public TimeSpan Duration { get; set; }
 }

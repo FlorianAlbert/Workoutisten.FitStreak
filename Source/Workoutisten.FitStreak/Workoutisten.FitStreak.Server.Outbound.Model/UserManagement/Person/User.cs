@@ -1,4 +1,4 @@
-﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Person;
+﻿namespace Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person;
 
 public class User
 {

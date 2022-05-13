@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Workoutisten.FitStreak.Server.Database.Implementation\Workoutisten.FitStreak.Server.Database.Implementation.csproj" />
+    <ProjectReference Include="..\Workoutisten.FitStreak.Server.Outbound.Model\Workoutisten.FitStreak.Server.Outbound.Model.csproj" />
     <ProjectReference Include="..\Workoutisten.FitStreak.Server.Service.Implementation\Workoutisten.FitStreak.Server.Service.Implementation.csproj" />
   </ItemGroup>
 

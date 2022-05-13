@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Registration
+namespace Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Registration
 {
     [JsonObject("RegistrationRequest")]
     public class RegistrationRequest

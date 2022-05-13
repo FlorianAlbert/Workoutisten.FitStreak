@@ -7,10 +7,15 @@ using Workoutisten.FitStreak.Server.Database;
 using Workoutisten.FitStreak.Server.Database.Implementation;
 using Workoutisten.FitStreak.Server.Database.Interface;
 using Workoutisten.FitStreak.Server.Extensions;
+using Workoutisten.FitStreak.Server.Service.Implementation.Converter;
+using Workoutisten.FitStreak.Server.Service.Implementation.Converter.User;
 using Workoutisten.FitStreak.Server.Service.Implementation.Training;
 using Workoutisten.FitStreak.Server.Service.Implementation.UserManagement;
+using Workoutisten.FitStreak.Server.Service.Interface.Converter;
 using Workoutisten.FitStreak.Server.Service.Interface.Training;
 using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
+using User = Workoutisten.FitStreak.Server.Model.Account.User;
+using UserDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,18 +72,25 @@ builder.Services.AddTriggers();
 
 // Add own services to the container
 builder.Services.AddScoped<IRepository, Repository>();
-//usermanagement
+
+// User Management
 builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
 builder.Services.AddSingleton<IFriendshipService, FriendshipService>(); 
 builder.Services.AddSingleton<IPasswordService, PasswordService>();
 builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
 builder.Services.AddSingleton<IUserService, UserService>();
-//training
+
+// Training
 builder.Services.AddSingleton<IExerciseEntryService, ExerciseEntryService>();
 builder.Services.AddSingleton<IExerciseGroupService, ExerciseGroupService>();
 builder.Services.AddSingleton<IExerciseService, ExerciseService>();
 builder.Services.AddSingleton<IWorkoutService, WorkoutService>();
 
+// Converter
+builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
+builder.Services.AddTransient<IConverter<User, UserDto>, UserConverter>();
+
+// Add authentication to the container
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

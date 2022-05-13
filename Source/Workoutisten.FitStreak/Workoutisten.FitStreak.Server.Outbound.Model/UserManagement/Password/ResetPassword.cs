@@ -1,4 +1,4 @@
-﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Password;
+﻿namespace Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Password;
 
 public class ResetPassword
 {

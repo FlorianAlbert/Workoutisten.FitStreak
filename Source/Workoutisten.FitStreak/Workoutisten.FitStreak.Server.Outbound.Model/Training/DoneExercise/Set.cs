@@ -1,4 +1,4 @@
-﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.Training.DoneExercise;
+﻿namespace Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise;
 public class Set
 {
     public double Weigth { get; set; }

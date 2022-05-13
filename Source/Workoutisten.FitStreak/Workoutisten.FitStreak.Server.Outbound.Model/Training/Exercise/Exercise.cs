@@ -1,4 +1,4 @@
-﻿namespace Workoutisten.FitStreak.Server.DataTransferObjects.Training.Exercise;
+﻿namespace Workoutisten.FitStreak.Server.Outbound.Model.Training.Exercise;
 public class Exercise
 {
     public Guid ExerciseId { get; set; }
