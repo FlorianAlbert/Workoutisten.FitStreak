@@ -17,6 +17,7 @@ public class FriendshipController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetFriendshipRequests()
     {
+        
         return BadRequest();
     }
 

@@ -32,7 +32,7 @@ public class AuthenticationService : IAuthenticationService
         {
             Status = LoginResultStatus.Successful,
             User = user,
-            Token = await TokenService.GenerateTokenAsync(user)
+            Token = await TokenService.GenerateTokensAsync(user)
         };
 
         return new LoginResult { Status = LoginResultStatus.Unauthorized };
