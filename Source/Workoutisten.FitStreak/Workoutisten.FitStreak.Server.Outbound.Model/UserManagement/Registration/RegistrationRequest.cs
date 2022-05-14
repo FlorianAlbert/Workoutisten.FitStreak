@@ -13,5 +13,13 @@ namespace Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Registrati
         [Required]
         [JsonProperty("Password")]
         public string Password { get; set; }
+
+        [Required]
+        [JsonProperty("FirstName")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [JsonProperty("LastName")]
+        public string LastName { get; set; }
     }
 }

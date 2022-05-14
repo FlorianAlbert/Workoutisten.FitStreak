@@ -24,12 +24,16 @@ public class RegistrationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> RequestRegistration([FromBody] RegistrationRequest registrationRequest)
     {
-        if(registrationRequest?.Email is null || registrationRequest?.Password is null) return BadRequest();
+        if(registrationRequest?.Email is null || registrationRequest.Password is null ||
+           registrationRequest.FirstName is null || registrationRequest.LastName is null) return BadRequest();
 
         var canRegister = await RegistrationService.CanRegisterAsync(registrationRequest.Email);
         if (!canRegister) return Conflict();
 
-        var successful = await RegistrationService.RegisterAsync(registrationRequest.Email, registrationRequest.Password);
+        var successful = await RegistrationService.RegisterAsync(registrationRequest.Email, 
+                                                                 registrationRequest.Password, 
+                                                                 registrationRequest.FirstName,
+                                                                 registrationRequest.LastName);
         if (successful) return Ok();
         else return BadRequest();
     }

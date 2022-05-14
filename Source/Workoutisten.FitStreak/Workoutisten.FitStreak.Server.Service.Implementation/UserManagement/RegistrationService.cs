@@ -32,13 +32,13 @@ public class RegistrationService : IRegistrationService
         return updatedUser.IsVerified;
     }
 
-    public async Task<bool> RegisterAsync(string email, string password)
+    public async Task<bool> RegisterAsync(string email, string password, string firstName, string lastName)
     {
         var user = new User
         {
             Id = Guid.Empty,
-            FirstName = string.Empty,
-            LastName = string.Empty,
+            FirstName = firstName,
+            LastName = lastName,
             NormalizedEmail = email.NormalizeEmail(),
             PasswordHash = await PasswordHashingService.HashPasswordForStorageAsync(password)
         };
