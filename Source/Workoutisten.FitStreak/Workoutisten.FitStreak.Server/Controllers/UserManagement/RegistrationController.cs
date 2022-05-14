@@ -35,15 +35,15 @@ public class RegistrationController : ControllerBase
     }
 
     [HttpPost]
-    [Route("confirm/{confirmationId}")]
+    [Route("confirm/{userId}")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ConfirmRegistration(Guid confirmationId)
+    public async Task<IActionResult> ConfirmRegistration(Guid userId)
     {
-        if(confirmationId == Guid.Empty) return BadRequest();
+        if(userId == Guid.Empty) return BadRequest();
 
-        var successful = await RegistrationService.ConfirmRegistrationAsync(confirmationId);
+        var successful = await RegistrationService.ConfirmRegistrationAsync(userId);
         if (successful) return Ok();
         else return BadRequest();
     }
