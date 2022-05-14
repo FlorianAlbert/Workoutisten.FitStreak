@@ -10,7 +10,6 @@ public class ExerciseGroup
     [JsonProperty("ExerciseGroupId")]
     public Guid ExerciseGroupId { get; set; }
 
-    [Required]
     [JsonProperty("CreationDate")]
     public DateTime CreationDate { get; set; }
 
@@ -18,7 +17,6 @@ public class ExerciseGroup
     [JsonProperty("GroupName")]
     public string GroupName { get; set; }
 
-    [Required]
     [JsonProperty("DoneExerciseIds")]
     public Guid[] DoneExerciseIds { get; set; }
 }

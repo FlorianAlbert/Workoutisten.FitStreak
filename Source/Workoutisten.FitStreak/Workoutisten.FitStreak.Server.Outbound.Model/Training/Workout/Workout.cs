@@ -10,7 +10,6 @@ public class Workout
     [JsonProperty("WorkoutId")]
     public Guid WorkoutId { get; set; }
 
-    [Required]
     [JsonProperty("CreationDate")]
     public DateTime CreationDate { get; set; }
 
@@ -18,11 +17,9 @@ public class Workout
     [JsonProperty("WorkoutName")]
     public string WorkoutName { get; set; }
 
-    [Required]
     [JsonProperty("ExerciseIds")]
     public Guid[] ExerciseIds { get; set; }
 
-    [Required]
     [JsonProperty("DoneExerciseIds")]
     public Guid[] DoneExerciseIds { get; set; }
 }
