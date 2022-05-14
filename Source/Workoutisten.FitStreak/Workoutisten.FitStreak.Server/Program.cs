@@ -79,6 +79,7 @@ builder.Services.AddSingleton<IFriendshipService, FriendshipService>();
 builder.Services.AddSingleton<IPasswordService, PasswordService>();
 builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
 builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IPasswordHashingService, PasswordHashingService>();
 
 // Training
 builder.Services.AddSingleton<IExerciseEntryService, ExerciseEntryService>();
