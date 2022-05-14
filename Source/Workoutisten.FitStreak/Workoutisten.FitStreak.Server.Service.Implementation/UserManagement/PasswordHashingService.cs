@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Extensions.Configuration;
 using System.Security.Cryptography;
 using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 
@@ -6,12 +7,39 @@ namespace Workoutisten.FitStreak.Server.Service.Implementation.UserManagement;
 
 public class PasswordHashingService : IPasswordHashingService
 {
+    public PasswordHashingService(IConfiguration configuration)
+    {
+        if (configuration is null)
+        {
+            throw new ArgumentNullException(nameof(configuration));
+        }
+
+        if (configuration["HashingOptions:Iterations"] is null)
+        {
+            throw new ArgumentException("HashingOptions:Iterations value is null.",
+                nameof(configuration));
+        }
+
+
+        if (int.TryParse(configuration["HashingOptions:Iterations"], out var iterations))
+        {
+            Iterations = iterations;
+        }
+        else
+        {
+            throw new ArgumentException("HashingOptions:Iterations value does not contain an integer.",
+                nameof(configuration));
+        }
+    }
+
+    private int Iterations { get; } = 100000;
+
     public Task<string> HashPasswordForStorageAsync(string password)
     {
         byte[] salt;
         RandomNumberGenerator.Create().GetBytes(salt = new byte[16]);
 
-        var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000);
+        var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Iterations);
         byte[] hash = pbkdf2.GetBytes(20);
 
         byte[] hashBytes = new byte[36];
