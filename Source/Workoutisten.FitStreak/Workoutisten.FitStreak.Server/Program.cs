@@ -80,6 +80,7 @@ builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHashingService, PasswordHashingService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Training
 builder.Services.AddScoped<IExerciseEntryService, ExerciseEntryService>();
