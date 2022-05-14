@@ -1,9 +1,9 @@
-﻿using Workoutisten.FitStreak.Server.Model.Account;
-
-namespace Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
+﻿namespace Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 public interface IRegistrationService
 {
-    Task<bool> RequestRegistrationAsync(string email, string password);
+    Task<bool> CanRegisterAsync(string email);
 
-    Task<bool> ConfirmRegistrationAsync(Guid confirmationId);
+    Task<bool> ConfirmRegistrationAsync(Guid userId);
+
+    Task<bool> RegisterAsync(string email, string password);
 }

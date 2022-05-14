@@ -74,17 +74,18 @@ builder.Services.AddTriggers();
 builder.Services.AddScoped<IRepository, Repository>();
 
 // User Management
-builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
-builder.Services.AddSingleton<IFriendshipService, FriendshipService>(); 
-builder.Services.AddSingleton<IPasswordService, PasswordService>();
-builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
-builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IFriendshipService, FriendshipService>(); 
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPasswordHashingService, PasswordHashingService>();
 
 // Training
-builder.Services.AddSingleton<IExerciseEntryService, ExerciseEntryService>();
-builder.Services.AddSingleton<IExerciseGroupService, ExerciseGroupService>();
-builder.Services.AddSingleton<IExerciseService, ExerciseService>();
-builder.Services.AddSingleton<IWorkoutService, WorkoutService>();
+builder.Services.AddScoped<IExerciseEntryService, ExerciseEntryService>();
+builder.Services.AddScoped<IExerciseGroupService, ExerciseGroupService>();
+builder.Services.AddScoped<IExerciseService, ExerciseService>();
+builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 
 // Converter
 builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();

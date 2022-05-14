@@ -10,7 +10,6 @@ public class DoneCardioExercise
     [JsonProperty("DoneExerciseId")]
     public Guid DoneExerciseId { get; set; }
 
-    [Required]
     [JsonProperty("CreationDate")]
     public DateTime CreationDate { get; set; }
 
@@ -18,11 +17,9 @@ public class DoneCardioExercise
     [JsonProperty("ExerciseId")]
     public Guid ExerciseId { get; set; }
 
-    [Required]
     [JsonProperty("WorkoutId")]
     public Guid? WorkoutId { get; set; }
 
-    [Required]
     [JsonProperty("ExerciseGroupId")]
     public Guid? ExerciseGroupId { get; set; }
 

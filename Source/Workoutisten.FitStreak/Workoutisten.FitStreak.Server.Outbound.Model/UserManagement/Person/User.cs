@@ -22,15 +22,12 @@ public class User
     [JsonProperty("LastName")]
     public string LastName { get; set; }
 
-    [Required]
     [JsonProperty("CreatedDate")]
     public DateTime CreatedDate { get; set; }
 
-    [Required]
     [JsonProperty("ExerciseStreak")]
     public int ExerciseStreak { get; set; }
 
-    [Required]
     [JsonProperty("LastExercise")]
     public DateTime LastExercise { get; set; }
 }

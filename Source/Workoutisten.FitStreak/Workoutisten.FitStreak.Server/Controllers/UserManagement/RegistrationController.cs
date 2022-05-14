@@ -9,14 +9,11 @@ namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 [Route("api/registration")]
 public class RegistrationController : ControllerBase
 {
-    private IUserService UserService { get; }
-
     private IRegistrationService RegistrationService { get; }
 
-    public RegistrationController(IUserService userService, IRegistrationService registrationService)
+    public RegistrationController(IRegistrationService registrationService)
     {
-        UserService = userService;
-        RegistrationService = registrationService;
+        RegistrationService = registrationService ?? throw new ArgumentNullException(nameof(registrationService));
     }
 
     [HttpPost]
@@ -29,25 +26,24 @@ public class RegistrationController : ControllerBase
     {
         if(registrationRequest?.Email is null || registrationRequest?.Password is null) return BadRequest();
 
-        //ToDo UseCase auslagern
-        //var users = await UserService.GetAllUsersAsync();
-        //if (users.Any(user => user.NormalizedEmail == registrationRequest.Email.Normalize())) return Conflict();
+        var canRegister = await RegistrationService.CanRegisterAsync(registrationRequest.Email);
+        if (!canRegister) return Conflict();
 
-        var successful = await RegistrationService.RequestRegistrationAsync(registrationRequest.Email, registrationRequest.Password);
+        var successful = await RegistrationService.RegisterAsync(registrationRequest.Email, registrationRequest.Password);
         if (successful) return Ok();
         else return BadRequest();
     }
 
     [HttpPost]
-    [Route("confirm/{confirmationId}")]
+    [Route("confirm/{userId}")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ConfirmRegistration(Guid confirmationId)
+    public async Task<IActionResult> ConfirmRegistration(Guid userId)
     {
-        if(confirmationId == Guid.Empty) return BadRequest();
+        if(userId == Guid.Empty) return BadRequest();
 
-        var successful = await RegistrationService.ConfirmRegistrationAsync(confirmationId);
+        var successful = await RegistrationService.ConfirmRegistrationAsync(userId);
         if (successful) return Ok();
         else return BadRequest();
     }
