@@ -1,1 +1,39 @@
+name: Server Deploy
 
+on:
+  workflow_dispatch:
+  
+env:
+  AZURE_WEBAPP_PACKAGE_PATH: '.\published'
+  AZURE_WEBAPP_NAME: 'FitStreakServer'
+  NET_VERSION: '6.0.5'
+
+jobs:
+  deploy-server:
+    runs-on: windows-latest
+    if: $GITHUB_REF == 'ref/heads/main'
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ env.NET_VERSION }}
+        
+    - name: Restore dependencies
+      run: dotnet restore Source/Workoutisten.FitStreak/Workoutisten.FitStreak.Server/Workoutisten.FitStreak.Server.csproj
+      
+    - name: Build
+      run: dotnet build Source/Workoutisten.FitStreak/Workoutisten.FitStreak.Server/Workoutisten.FitStreak.Server.csproj -c Release --no-restore
+      
+    - name: Publish
+      run: dotnet publish Source/Workoutisten.FitStreak/Workoutisten.FitStreak.Server/Workoutisten.FitStreak.Server.csproj -c Release --no-build -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH}}
+      
+    - name: Deploy to Azure
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
