@@ -18,22 +18,24 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Trigger
 
         public Task AfterSave(ITriggerContext<BaseEntity> context, CancellationToken cancellationToken)
         {
+            var entity = context.Entity ?? context.UnmodifiedEntity;
+
             switch (context.ChangeType)
             {
                 case ChangeType.Modified:
                     Logger.LogInformation("Entity in table {tableName} with Id={id} got successfully updated.",
-                        context.Entity.GetTableName(DbContext),
-                        context.Entity.Id);
+                        entity.GetTableName(DbContext),
+                        entity.Id);
                     break;
                 case ChangeType.Deleted:
                     Logger.LogInformation("Entity in table {tableName} with Id={id} got successfully deleted.",
-                        context.Entity.GetTableName(DbContext),
-                        context.Entity.Id);
+                        entity.GetTableName(DbContext),
+                        entity.Id);
                     break;
                 case ChangeType.Added:
                     Logger.LogInformation("Entity in table {tableName} with Id={id} got successfully created.",
-                        context.Entity.GetTableName(DbContext),
-                        context.Entity.Id);
+                        entity.GetTableName(DbContext),
+                        entity.Id);
                     break;
             }
 
@@ -42,22 +44,24 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Trigger
 
         public Task AfterSaveFailed(ITriggerContext<BaseEntity> context, Exception exception, CancellationToken cancellationToken)
         {
+            var entity = context.Entity ?? context.UnmodifiedEntity;
+
             switch (context.ChangeType)
             {
                 case ChangeType.Modified:
-                    Logger.LogInformation("Entity in table {tableName} with Id={id} failed to get updated.",
-                        context.Entity.GetTableName(DbContext),
-                        context.Entity.Id);
+                    Logger.LogError("Entity in table {tableName} with Id={id} failed to get updated.",
+                        entity.GetTableName(DbContext),
+                        entity.Id);
                     break;
                 case ChangeType.Deleted:
-                    Logger.LogInformation("Entity in table {tableName} with Id={id} failed to get deleted.",
-                        context.Entity.GetTableName(DbContext),
-                        context.Entity.Id);
+                    Logger.LogError("Entity in table {tableName} with Id={id} failed to get deleted.",
+                        entity.GetTableName(DbContext),
+                        entity.Id);
                     break;
                 case ChangeType.Added:
-                    Logger.LogInformation("Entity in table {tableName} with Id={id} failed to get created.",
-                        context.Entity.GetTableName(DbContext),
-                        context.Entity.Id);
+                    Logger.LogError("Entity in table {tableName} with Id={id} failed to get created.",
+                        entity.GetTableName(DbContext),
+                        entity.Id);
                     break;
             }
 
@@ -66,22 +70,24 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Trigger
 
         public Task BeforeSave(ITriggerContext<BaseEntity> context, CancellationToken cancellationToken)
         {
+            var entity = context.UnmodifiedEntity ?? context.Entity;
+
             switch (context.ChangeType)
             {
                 case ChangeType.Modified:
                     Logger.LogInformation("Entity in table {tableName} with Id={id} is getting updated.", 
-                        context.UnmodifiedEntity.GetTableName(DbContext), 
-                        context.UnmodifiedEntity.Id);
+                        entity.GetTableName(DbContext), 
+                        entity.Id);
                     break;
                 case ChangeType.Deleted:
                     Logger.LogInformation("Entity in table {tableName} with Id={id} is getting deleted.",
-                        context.UnmodifiedEntity.GetTableName(DbContext),
-                        context.UnmodifiedEntity.Id);
+                        entity.GetTableName(DbContext),
+                        entity.Id);
                     break;
                 case ChangeType.Added:
                     Logger.LogInformation("Entity in table {tableName} with Id={id} is getting created.",
-                        context.UnmodifiedEntity.GetTableName(DbContext),
-                        context.UnmodifiedEntity.Id);
+                        entity.GetTableName(DbContext),
+                        entity.Id);
                     break;
             }
 

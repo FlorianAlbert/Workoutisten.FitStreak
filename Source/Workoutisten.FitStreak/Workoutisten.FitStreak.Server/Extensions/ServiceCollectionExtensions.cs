@@ -1,5 +1,6 @@
 ﻿using EntityFrameworkCore.Triggered;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Workoutisten.FitStreak.Server.Database.Implementation.Trigger;
 
 namespace Workoutisten.FitStreak.Server.Extensions
 {
@@ -7,7 +8,7 @@ namespace Workoutisten.FitStreak.Server.Extensions
     {
         public static void AddTriggers(this IServiceCollection services)
         {
-            var triggerCandidates = typeof(Program)
+            var triggerCandidates = typeof(OnModifiedBaseEntity)
                 .Assembly
                 .GetTypes()
                 .Where(x => x.IsClass);

@@ -21,8 +21,6 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation
 
             try
             {
-                await using var transaction = await DbContext.Database.BeginTransactionAsync();
-
                 var searchedEntity = await DbContext.Set<TEntity>().FindAsync(entity.Id);
 
                 if (searchedEntity is not null)
@@ -35,8 +33,6 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation
                 }
 
                 await DbContext.SaveChangesAsync();
-
-                await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -52,24 +48,18 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation
         {
             try
             {
-                await using var transaction = await DbContext.Database.BeginTransactionAsync();
-
                 var entity = await DbContext.Set<TEntity>().FindAsync(id);
 
                 if (entity is not null)
                 {
                     DbContext.Set<TEntity>().Remove(entity);
+
+                    await DbContext.SaveChangesAsync();
                 }
                 else
                 {
-                    await transaction.RollbackAsync();
-
                     throw new EntryNotFoundException(id, typeof(TEntity), DbContext.Database.GetDbConnection().Database);
                 }
-
-                await DbContext.SaveChangesAsync();
-
-                await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
@@ -83,22 +73,16 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation
         {
             try
             {
-                await using var transaction = await DbContext.Database.BeginTransactionAsync();
-
                 if (DbContext.Set<TEntity>().Contains(entity))
                 {
                     DbContext.Set<TEntity>().Remove(entity);
+
+                    await DbContext.SaveChangesAsync();
                 }
                 else
                 {
-                    await transaction.RollbackAsync();
-
                     throw new EntryNotFoundException(entity.Id, typeof(TEntity), DbContext.Database.GetDbConnection().Database);
                 }
-
-                await DbContext.SaveChangesAsync();
-
-                await transaction.CommitAsync();
             }
             catch (Exception ex)
             {
