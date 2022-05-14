@@ -1,7 +1,6 @@
 name: Server Deploy
 
-on:
-  workflow_dispatch:
+on: workflow_dispatch
   
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.\published'
