@@ -20,11 +20,7 @@ namespace Workoutisten.FitStreak.Shared
     public partial class NotificationButton : MudComponentBase
     {
         private bool _newNotificationsAvailable = false;
-        private IDictionary<string, bool> _messages = new Dictionary<string, bool>() {
-            {"test", true },
-            {"Notification 1", false },
-            {"Notification 2", false }
-        };
+        private IDictionary<string, bool> _messages = new Dictionary<string, bool>();
 
         private DateTime notificationTime = new DateTime(2022, 5, 12, 20, 51, 0);
         private async Task MarkNotificationAsRead()
@@ -36,5 +32,15 @@ namespace Workoutisten.FitStreak.Shared
             _newNotificationsAvailable = false;
         }
 
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            _messages = new Dictionary<string, bool>() {
+                {"test", true },
+                {"Notification 1", false },
+                {"Notification 2", false }
+            };
+            _newNotificationsAvailable = true;
+        }
     }
 }
