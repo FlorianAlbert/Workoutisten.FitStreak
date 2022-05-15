@@ -8,8 +8,12 @@ namespace Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Authentica
 public class AuthenticationResponse
 {
     [Required]
-    [JsonProperty("Token")]
-    public string Token { get; set; }
+    [JsonProperty("RefreshToken")]
+    public string RefreshToken { get; set; }
+
+    [Required]
+    [JsonProperty("Jwt")]
+    public string Jwt { get; set; }
 
 
     [Required]

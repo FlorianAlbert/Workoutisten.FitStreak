@@ -13,6 +13,11 @@ namespace Workoutisten.FitStreak.Server.Extensions
                 throw new ArgumentNullException(nameof(principal));
             }
 
+            if (repository is null)
+            {
+                throw new ArgumentNullException(nameof(repository));
+            }
+
             var userIdString = principal.Claims.SingleOrDefault(c => c.Type == "UserId")?.Value;
 
             if (userIdString is null) return null;
@@ -20,6 +25,15 @@ namespace Workoutisten.FitStreak.Server.Extensions
             if (!Guid.TryParse(userIdString, out var userId)) return null;
 
             return await repository.GetAsync<User>(userId);
+        }
+
+        public static async Task<bool> IsUserAllowedTo(this ClaimsPrincipal principal, IRepository repository, Func<User, IRepository, bool> isAllowed)
+        {
+            var user = await principal.GetDbUserAsync(repository);
+
+            if (user is null) return false;
+
+            return isAllowed(user, repository);
         }
     }
 }

@@ -40,7 +40,8 @@ public class AuthenticationController : ControllerBase
             case LoginResultStatus.Unauthorized: return Unauthorized();
             case LoginResultStatus.Successful: return Ok(new AuthenticationResponse
             {
-                Token = loginResult.Token,
+                RefreshToken = loginResult.RefreshToken,
+                Jwt = loginResult.Jwt,
                 User = await Converter.ToDto<User, UserDto>(loginResult.User)
             });
             default: throw new ArgumentOutOfRangeException(nameof(loginResult.Status), $"Not expected login status value: {loginResult.Status}");

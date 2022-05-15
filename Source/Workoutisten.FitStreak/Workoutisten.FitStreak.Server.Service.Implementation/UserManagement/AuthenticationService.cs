@@ -28,12 +28,18 @@ public class AuthenticationService : IAuthenticationService
         if (user is null || !user.IsVerified) return new LoginResult { Status = LoginResultStatus.BadRequest };
 
         var successful = await PasswordHashingService.VerifyPasswordAsync(password, user.PasswordHash);
-        if (successful) return new LoginResult
+        if (successful) 
         {
-            Status = LoginResultStatus.Successful,
-            User = user,
-            Token = await TokenService.GenerateTokensAsync(user)
-        };
+            var tokens = await TokenService.GenerateTokensAsync(user);
+
+            return new LoginResult
+            {
+                Status = LoginResultStatus.Successful,
+                User = user,
+                RefreshToken = tokens.RefreshToken,
+                Jwt = tokens.Jwt
+            }; 
+        }
 
         return new LoginResult { Status = LoginResultStatus.Unauthorized };
     }
