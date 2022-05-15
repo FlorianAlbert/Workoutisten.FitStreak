@@ -1,0 +1,23 @@
+﻿@page "/social"
+
+
+<MudStack>
+    <MudGrid>
+        <MudItem xs="10">
+            <SearchBar SearchInput="@SearchInput" />
+        </MudItem>
+        <MudItem xs="2" Class="d-flex align-center justify-center ">
+            <AddButtonRounded/>
+        </MudItem>
+    </MudGrid>
+    <MudPaper Class="rounded-xl p-2" MinHeight="600px">
+        <MudText Class=" " Typo="Typo.h5" Align="Align.Center">Friends</MudText>
+        <MudDivider/>
+    </MudPaper>
+
+</MudStack>
+
+
+@code {
+    private string SearchInput;
+}

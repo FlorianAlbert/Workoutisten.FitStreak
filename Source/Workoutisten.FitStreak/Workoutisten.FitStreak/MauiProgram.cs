@@ -43,6 +43,10 @@ public static class MauiProgram
         builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
         builder.Services.AddSingleton<IConverter<RegisterModel, RegistrationRequest>, RegisterConverter>();
 
+#if DEBUG
+        builder.Services.AddBlazorWebViewDeveloperTools();
+#endif
+
 #if WINDOWS
         builder.ConfigureLifecycleEvents(events =>
         {
