@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workoutisten.FitStreak.Server.DataTransferObjects.Training.Workout;
+using Workoutisten.FitStreak.Server.Outbound.Model.Training.Workout;
 
 namespace Workoutisten.FitStreak.Server.Controllers.Training;
 

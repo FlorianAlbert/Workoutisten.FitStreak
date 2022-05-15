@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
-internal interface IRegistrationService
+﻿namespace Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
+public interface IRegistrationService
 {
+    Task<bool> CanRegisterAsync(string email);
+
+    Task<bool> ConfirmRegistrationAsync(Guid userId);
+
+    Task<bool> RegisterAsync(string email, string password, string firstName, string lastName);
 }

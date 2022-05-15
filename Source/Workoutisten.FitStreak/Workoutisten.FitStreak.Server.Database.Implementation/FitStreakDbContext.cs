@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Workoutisten.FitStreak.Server.Database.Implementation.Configurations;
+using Workoutisten.FitStreak.Server.Model;
 
 namespace Workoutisten.FitStreak.Server.Database
 {
@@ -34,6 +35,35 @@ namespace Workoutisten.FitStreak.Server.Database
             }
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var selectedEntities = ChangeTracker.Entries()
+            .Where(x => (x.Entity is BaseEntity) &&
+                        (x.State == EntityState.Added || x.State == EntityState.Modified));
+
+            foreach (var entity in selectedEntities)
+            {
+                if (entity.State == EntityState.Added)
+                {
+                    if (entity.Entity is BaseEntity baseEntity)
+                    {
+                        baseEntity.CreatedAt = DateTime.UtcNow;
+                        baseEntity.LastUpdated = DateTime.UtcNow;
+                    }
+                }
+
+                if (entity.State == EntityState.Modified)
+                {
+                    if (entity.Entity is BaseEntity baseEntity)
+                    {
+                        baseEntity.LastUpdated = DateTime.UtcNow;
+                    }
+                }
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }

@@ -7,6 +7,15 @@ using Workoutisten.FitStreak.Server.Database;
 using Workoutisten.FitStreak.Server.Database.Implementation;
 using Workoutisten.FitStreak.Server.Database.Interface;
 using Workoutisten.FitStreak.Server.Extensions;
+using Workoutisten.FitStreak.Server.Service.Implementation.Converter;
+using Workoutisten.FitStreak.Server.Service.Implementation.Converter.User;
+using Workoutisten.FitStreak.Server.Service.Implementation.Training;
+using Workoutisten.FitStreak.Server.Service.Implementation.UserManagement;
+using Workoutisten.FitStreak.Server.Service.Interface.Converter;
+using Workoutisten.FitStreak.Server.Service.Interface.Training;
+using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
+using User = Workoutisten.FitStreak.Server.Model.Account.User;
+using UserDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +73,26 @@ builder.Services.AddTriggers();
 // Add own services to the container
 builder.Services.AddScoped<IRepository, Repository>();
 
+// User Management
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IFriendshipService, FriendshipService>(); 
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IRegistrationService, RegistrationService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPasswordHashingService, PasswordHashingService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+
+// Training
+builder.Services.AddScoped<IExerciseEntryService, ExerciseEntryService>();
+builder.Services.AddScoped<IExerciseGroupService, ExerciseGroupService>();
+builder.Services.AddScoped<IExerciseService, ExerciseService>();
+builder.Services.AddScoped<IWorkoutService, WorkoutService>();
+
+// Converter
+builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
+builder.Services.AddTransient<IConverter<User, UserDto>, UserConverter>();
+
+// Add authentication to the container
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

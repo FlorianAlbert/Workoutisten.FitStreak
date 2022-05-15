@@ -9,10 +9,6 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Configurations
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.CreatedAt)
-                   .ValueGeneratedOnAdd();
-            builder.Property(x => x.LastUpdated)
-                   .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

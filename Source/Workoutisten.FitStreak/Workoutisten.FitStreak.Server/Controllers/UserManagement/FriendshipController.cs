@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Friendship;
-using Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Person;
+using Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Friendship;
+using Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person;
 
 namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 
@@ -17,6 +17,7 @@ public class FriendshipController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetFriendshipRequests()
     {
+        
         return BadRequest();
     }
 

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Workoutisten.FitStreak.Server.Model.Account;
+using Workoutisten.FitStreak.Server.Service.Interface.Data;
 
 namespace Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
-internal interface IAuthenticationService
+public interface IAuthenticationService
 {
+    Task<LoginResult> LoginAsync(string email, string password);
 }

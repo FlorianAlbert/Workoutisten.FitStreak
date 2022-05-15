@@ -12,9 +12,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Server.Database.Interface", "Workoutisten.FitStreak.Server.Database.Interface\Workoutisten.FitStreak.Server.Database.Interface.csproj", "{4B3A01C9-8162-4BA5-8256-59D17CC70A65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server.Service.Interface", "Workoutisten.FitStreak.Server.Service.Interface\Workoutisten.FitStreak.Server.Service.Interface.csproj", "{195794D3-8D1A-4AC6-A68B-33B512BC0D4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Server.Service.Interface", "Workoutisten.FitStreak.Server.Service.Interface\Workoutisten.FitStreak.Server.Service.Interface.csproj", "{195794D3-8D1A-4AC6-A68B-33B512BC0D4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server.Service.Implementation", "Workoutisten.FitStreak.Server.Service.Implementation\Workoutisten.FitStreak.Server.Service.Implementation.csproj", "{EAD3D2DD-15FB-47C1-AC22-741F8C3813FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Server.Service.Implementation", "Workoutisten.FitStreak.Server.Service.Implementation\Workoutisten.FitStreak.Server.Service.Implementation.csproj", "{EAD3D2DD-15FB-47C1-AC22-741F8C3813FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server.Outbound.Model", "Workoutisten.FitStreak.Server.Outbound.Model\Workoutisten.FitStreak.Server.Outbound.Model.csproj", "{15E4412A-D9C7-4F59-B9B6-B75F1AA8CCCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{EAD3D2DD-15FB-47C1-AC22-741F8C3813FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAD3D2DD-15FB-47C1-AC22-741F8C3813FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAD3D2DD-15FB-47C1-AC22-741F8C3813FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15E4412A-D9C7-4F59-B9B6-B75F1AA8CCCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15E4412A-D9C7-4F59-B9B6-B75F1AA8CCCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15E4412A-D9C7-4F59-B9B6-B75F1AA8CCCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15E4412A-D9C7-4F59-B9B6-B75F1AA8CCCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

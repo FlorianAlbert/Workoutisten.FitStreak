@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Workoutisten.FitStreak.Server.Model.Workout;
 
 namespace Workoutisten.FitStreak.Server.Service.Interface.Training;
-internal interface IWorkoutService
+public interface IWorkoutService
 {
 }
