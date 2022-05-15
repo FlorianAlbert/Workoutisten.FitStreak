@@ -2,7 +2,7 @@
 
 namespace Workoutisten.FitStreak.Data.Enums
 {
-    public enum ExerciseCategory: int
+    public enum ExerciseCategoryEnum: int
     {
         Cardio = 0,
         Strength = 1

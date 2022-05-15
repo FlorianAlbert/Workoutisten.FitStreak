@@ -1,6 +1,7 @@
 ﻿
-<MudTextField @bind-Value="SearchInput" Label="Search" Variant="Variant.Filled" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" Class="rounded-pill"/>
-
+<MudPaper Class="rounded-pill pl-5 pr-5 pb-3">
+    <MudTextField @bind-Value="SearchInput" Label="Search" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" Class="rounded-pill"/>
+</MudPaper>
 @code {
     [Parameter]
     public string SearchInput { get; set; }

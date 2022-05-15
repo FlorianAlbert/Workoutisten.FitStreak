@@ -11,7 +11,7 @@ namespace Workoutisten.FitStreak.Data.Models.Workout
     {
         public string Name { get; set; }
 
-        public ExerciseCategory Category { get; set; }
+        public ExerciseCategoryEnum Category { get; set; }
 
     }
 }

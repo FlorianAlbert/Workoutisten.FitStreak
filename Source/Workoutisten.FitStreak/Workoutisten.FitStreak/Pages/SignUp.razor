@@ -1,0 +1,36 @@
+﻿@page "/signup"
+
+@using Workoutisten.FitStreak.Converter
+
+@using Workoutisten.FitStreak.Data.Models.User
+
+@inject IRestClient _RestClient
+@inject IConverterWrapper _Converter
+
+<MudStack>
+    <h3>Register:</h3>
+    <MudItem xs=12>
+        <MudTextField @bind-Value="@registerModel.FirstName" Label="First Name" Variant="Variant.Text" Clearable="true" />
+    </MudItem>
+    <MudItem xs=12>
+        <MudTextField @bind-Value="@registerModel.LastName" Label="Last Name" Variant="Variant.Text" Clearable="true" />
+    </MudItem>
+    <MudItem xs=12>
+        <MudTextField @bind-Value="@registerModel.Email" Label="email" Variant="Variant.Text" Clearable="true" />
+    </MudItem>
+    <MudItem xs=12>
+        <MudTextField @bind-Value="@registerModel.Password" Label="password" Variant="Variant.Text" Clearable="true" />
+    </MudItem>
+    <FitStreakButton Label="Sign Up" OnClick="(() => SignUp_Button())"/>
+</MudStack>
+
+@code {
+
+    public RegisterModel registerModel { get; set; } = new RegisterModel();
+
+    async Task SignUp_Button()
+    {
+        await _RestClient.RequestPOST3Async(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel));
+    }
+
+}

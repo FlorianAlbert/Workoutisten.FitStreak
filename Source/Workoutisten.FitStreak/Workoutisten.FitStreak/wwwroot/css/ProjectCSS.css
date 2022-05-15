@@ -5,3 +5,12 @@
 
 }
 
+
+
+.mud-chart-donut .mud-donut-ring {
+    stroke: transparent !important;
+}
+
+.mud-chart-donut .mud-donut-segment {
+    stroke-width: 2 !important;
+}
