@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Workoutisten.FitStreak.Data.Models
+namespace Workoutisten.FitStreak.Data.Models.Workout
 {
     public class WorkoutModel
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Workoutisten.FitStreak.Data.Enums;
 
-namespace Workoutisten.FitStreak.Data.Models
+namespace Workoutisten.FitStreak.Data.Models.Workout
 {
     public class ExerciseModel
     {
