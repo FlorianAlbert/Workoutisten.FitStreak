@@ -9,23 +9,29 @@
 <MudStack>
     <h3>Register:</h3>
     <MudItem xs=12>
-        <MudTextField @bind-Value="@registerModel.FirstName" Label="First Name" Variant="Variant.Text" Text="Enter your name" Clearable="true" />
+        <MudTextField @bind-Value="@registerModel.FirstName" Label="First Name" Variant="Variant.Text" Clearable="true" />
     </MudItem>
     <MudItem xs=12>
-        <MudTextField @bind-Value="@registerModel.LastName" Label="Last Name" Variant="Variant.Text" Text="Enter your name" Clearable="true" />
+        <MudTextField @bind-Value="@registerModel.LastName" Label="Last Name" Variant="Variant.Text" Clearable="true" />
     </MudItem>
     <MudItem xs=12>
-        <MudTextField @bind-Value="@registerModel.Email" Label="email" Variant="Variant.Text" Text="Enter your e-mail" Clearable="true" />
+        <MudTextField @bind-Value="@registerModel.Email" Label="email" Variant="Variant.Text" Clearable="true" />
     </MudItem>
     <MudItem xs=12>
-        <MudTextField @bind-Value="@registerModel.Password" Label="password" Variant="Variant.Text" Text="Password" Clearable="true" />
+        <MudTextField @bind-Value="@registerModel.Password" Label="password" Variant="Variant.Text" Clearable="true" />
     </MudItem>
-    <FitStreakButton Label="Sign Up" OnClick="SignUp_Button"/>
+    <FitStreakButton Label="Sign Up" OnClick="(() => SignUp_Button())"/>
 </MudStack>
 
 @code {
 
-    public RegisterModel registerModel { get; set; }
+    //[Inject]
+    //IRestClient _RestClient { get; set; }
+
+    //[Inject]
+    //IConverter<RegisterModel, RegistrationRequest> _Converter { get; set; }
+
+    public RegisterModel registerModel { get; set; } = new RegisterModel();
 
     async Task SignUp_Button()
     {

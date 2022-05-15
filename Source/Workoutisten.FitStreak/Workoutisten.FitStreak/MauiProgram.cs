@@ -17,23 +17,28 @@ namespace Workoutisten.FitStreak;
 
 public static class MauiProgram
 {
-	public static MauiApp CreateMauiApp()
-	{
-		var builder = MauiApp.CreateBuilder();
-		builder
-			.UseMauiApp<App>()
-			.ConfigureFonts(fonts =>
-			{
-				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-			});
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            });
 
-		builder.Services.AddMauiBlazorWebView();
-		
-		builder.Services.AddMudServices();
+        builder.Services.AddMauiBlazorWebView();
 
-        builder.Services.AddScoped<IRestClient, RestClient>();
+        builder.Services.AddMudServices();
 
-        builder.Services.AddScoped<IConverter<RegisterModel, RegistrationRequest>, RegisterConverter>();
+        builder.Services.AddHttpClient();
+
+        builder.Services.AddSingleton<IRestClient, RestClient>(Services => 
+        {
+            return new RestClient("https://localhost:7228", Services.GetRequiredService<IHttpClientFactory>().CreateClient());
+        });
+
+        builder.Services.AddSingleton<IConverter<RegisterModel, RegistrationRequest>, RegisterConverter>();
 
 #if WINDOWS
         builder.ConfigureLifecycleEvents(events =>
