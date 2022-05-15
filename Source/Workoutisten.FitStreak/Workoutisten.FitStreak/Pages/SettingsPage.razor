@@ -1,0 +1,68 @@
+﻿@page "/settings"
+
+<MudStack>
+    <MudText Typo="Typo.h5">Settings</MudText>
+    <MudText Typo="Typo.h6">Schedule Notifications:</MudText>
+    <MudContainer Class="pl-3 pr-3">
+        <MudGrid>
+            <MudItem>
+                <MudText Typo="Typo.body1">Activate Push-Notifications</MudText>
+            </MudItem>
+            <MudItem>
+                <MudSwitch @bind-Checked="@NotificationActive" Color="Color.Primary" />
+            </MudItem>
+        </MudGrid>
+        <MudGrid>
+            <MudItem>
+                <MudText Typo="Typo.body1">Remind me every:</MudText>
+            </MudItem>
+            <MudItem>
+                <MudSelect @bind-Value="NotificationOption" Label="Select" Placeholder="Please Select">
+                    <MudSelectItem Value="@(0)">Custom Weekdays</MudSelectItem>
+                    <MudSelectItem Value="@(1)">Every other day</MudSelectItem>
+                    <MudSelectItem Value="@(2)">Everyday</MudSelectItem>
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+        @if (NotificationOption == 0)
+        {
+            <MudSimpleTable Dense="true" Class="mt-5">
+                <thead>
+                    <tr style="padding:0">
+                        <th style="text-align:center">M</th>
+                        <th style="text-align:center">T</th>
+                        <th style="text-align:center">W</th>
+                        <th style="text-align:center">T</th>
+                        <th style="text-align:center">F</th>
+                        <th style="text-align:center">S</th>
+                        <th style="text-align:center">S</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckMonday"  Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckTuesday"  Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckWednesday"  Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckThursday"  Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckFriday"  Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckSaturday" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckSunday"  Color="Color.Primary"></MudCheckBox></td>
+                    </tr>
+                </tbody>
+            </MudSimpleTable>
+        }
+    </MudContainer>
+
+</MudStack>
+@code {
+    public bool NotificationActive = true;
+    public int NotificationOption = 0;
+
+    public bool CheckMonday = true;
+    public bool CheckTuesday = true;
+    public bool CheckWednesday = true;
+    public bool CheckThursday = true;
+    public bool CheckFriday = true;
+    public bool CheckSaturday = true;
+    public bool CheckSunday = true;
+}
