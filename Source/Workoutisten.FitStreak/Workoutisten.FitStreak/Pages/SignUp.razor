@@ -1,15 +1,24 @@
 ﻿@page "/signup"
 
+@using Workoutisten.FitStreak.Converter
+@using Workoutisten.FitStreak.Data.Models.User
+
+@inject IRestClient _RestClient
+@inject IConverter<RegisterModel, RegistrationRequest> _Converter
+
 <MudStack>
     <h3>Register:</h3>
     <MudItem xs=12>
-        <MudTextField @bind-Value="name" Label="name" Variant="Variant.Text" Text="Enter your name" Clearable="true" />
+        <MudTextField @bind-Value="@registerModel.FirstName" Label="First Name" Variant="Variant.Text" Text="Enter your name" Clearable="true" />
     </MudItem>
     <MudItem xs=12>
-        <MudTextField @bind-Value="email" Label="email" Variant="Variant.Text" Text="Enter your e-mail" Clearable="true" />
+        <MudTextField @bind-Value="@registerModel.LastName" Label="Last Name" Variant="Variant.Text" Text="Enter your name" Clearable="true" />
     </MudItem>
     <MudItem xs=12>
-        <MudTextField @bind-Value="password" Label="password" Variant="Variant.Text" Text="Password" Clearable="true" />
+        <MudTextField @bind-Value="@registerModel.Email" Label="email" Variant="Variant.Text" Text="Enter your e-mail" Clearable="true" />
+    </MudItem>
+    <MudItem xs=12>
+        <MudTextField @bind-Value="@registerModel.Password" Label="password" Variant="Variant.Text" Text="Password" Clearable="true" />
     </MudItem>
     <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="SignUp_Button">
         <MudText Typo="Typo.button">Sign Up</MudText>
@@ -17,12 +26,13 @@
 </MudStack>
 
 @code {
-    string name;
-    string email;
-    string password;
-    void SignUp_Button()
+
+    public RegisterModel registerModel { get; set; }
+
+    async Task SignUp_Button()
     {
-        
+        await _RestClient.RequestPOST3Async(await _Converter.ToDto(registerModel));
+
     }
 
 }

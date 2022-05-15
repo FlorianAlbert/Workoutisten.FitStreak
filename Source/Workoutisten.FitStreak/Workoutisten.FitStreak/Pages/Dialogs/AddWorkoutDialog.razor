@@ -56,9 +56,9 @@
     protected override void OnInitialized()
     {
         //Laden der Excerices aus dem Backend ODER per Übergabeparameter
-        UsersExercises.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = new ExerciseModel() { Category = ExerciseCategory.Cardio, Name = "ExerciseBla1" }, Checked = false });
-        UsersExercises.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = new ExerciseModel() { Category = ExerciseCategory.Cardio, Name = "Exwdawdawdwadawdwafawedawtgawdawdawedage2" }, Checked = false });
-        UsersExercises.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = new ExerciseModel() { Category = ExerciseCategory.Cardio, Name = "Ex3" }, Checked = false });
+        UsersExercises.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = new ExerciseModel() { Category = ExerciseCategoryEnum.Cardio, Name = "ExerciseBla1" }, Checked = false });
+        UsersExercises.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = new ExerciseModel() { Category = ExerciseCategoryEnum.Cardio, Name = "Exwdawdawdwadawdwafawedawtgawdawdawedage2" }, Checked = false });
+        UsersExercises.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = new ExerciseModel() { Category = ExerciseCategoryEnum.Cardio, Name = "Ex3" }, Checked = false });
 
         base.OnInitialized();
     }

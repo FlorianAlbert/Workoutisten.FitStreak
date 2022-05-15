@@ -11,8 +11,8 @@
             </MudItem>
             <MudItem xs="9">
                 <MudRadioGroup @bind-SelectedOption="@NewExercise.Category">
-                    <MudRadio Color="Color.Primary" Option="@(ExerciseCategory.Cardio)" Placement="@Placement.Bottom" Dense="true">Cardio</MudRadio>
-                    <MudRadio Color="Color.Primary" Option="@(ExerciseCategory.Strength)" Placement="@Placement.Bottom" Dense="true">Strength</MudRadio>
+                    <MudRadio Color="Color.Primary" Option="@(ExerciseCategoryEnum.Cardio)" Placement="@Placement.Bottom" Dense="true">Cardio</MudRadio>
+                    <MudRadio Color="Color.Primary" Option="@(ExerciseCategoryEnum.Strength)" Placement="@Placement.Bottom" Dense="true">Strength</MudRadio>
                 </MudRadioGroup>
             </MudItem>
         </MudGrid>
