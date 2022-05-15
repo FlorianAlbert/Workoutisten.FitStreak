@@ -29,6 +29,10 @@ public static class MauiProgram
 		
 		builder.Services.AddMudServices();
 
+#if DEBUG
+        builder.Services.AddBlazorWebViewDeveloperTools();
+#endif
+
 #if WINDOWS
         builder.ConfigureLifecycleEvents(events =>
         {
