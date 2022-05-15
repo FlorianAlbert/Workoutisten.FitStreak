@@ -3,13 +3,13 @@ name: Server Deploy
 on: workflow_dispatch
   
 env:
-  AZURE_WEBAPP_PACKAGE_PATH: '.\published'
-  AZURE_WEBAPP_NAME: 'FitStreakServer'
+  PUBLISH_PATH: '.\published'
   NET_VERSION: '6.0.5'
+  PROJECT_PATH: 'Source\Workoutisten.FitStreak\Workoutisten.FitStreak.Server\Workoutisten.FitStreak.Server.csproj'
 
 jobs:
   deploy-server:
-    runs-on: windows-latest
+    runs-on: self-hosted
     if: $GITHUB_REF == 'ref/heads/main'
     
     steps:
@@ -22,17 +22,22 @@ jobs:
         dotnet-version: ${{ env.NET_VERSION }}
         
     - name: Restore dependencies
-      run: dotnet restore Source/Workoutisten.FitStreak/Workoutisten.FitStreak.Server/Workoutisten.FitStreak.Server.csproj
+      run: dotnet restore ${{ env.PROJECT_PATH }}
       
     - name: Build
-      run: dotnet build Source/Workoutisten.FitStreak/Workoutisten.FitStreak.Server/Workoutisten.FitStreak.Server.csproj -c Release --no-restore
+      run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
       
     - name: Publish
-      run: dotnet publish Source/Workoutisten.FitStreak/Workoutisten.FitStreak.Server/Workoutisten.FitStreak.Server.csproj -c Release --no-build -o ${{ env.AZURE_WEBAPP_PACKAGE_PATH}}
+      run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --no-build -o ${{ env.PUBLISH_PATH}}
       
-    - name: Deploy to Azure
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+    - name: Stop Website
+      run: appcmd stop site /site.name:FitStreakApi
+      
+    - name: Delete all files from old Website
+      run: rm -r ..\..\inetpub\wwwroot\*
+      
+    - name: Copy published files to Website
+      run: cp -a ${{ env.PUBLISH_PATH }}\. ..\..inetpub\wwwroot
+      
+    - name: Restart Website
+      run: appcmd start site /site.name:FitStreakApi
