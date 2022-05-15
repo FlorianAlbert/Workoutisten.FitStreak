@@ -1,0 +1,22 @@
+﻿
+<MudLink Href="@Href">
+    <MudCard Class="rounded">
+        <MudCardMedia Image="@Image" Height="100"/>
+        <MudCardContent>
+            <MudText Align="Align.Center" Typo="Typo.h6">@Title</MudText>
+        </MudCardContent>
+    </MudCard>
+</MudLink>
+
+
+@code {
+
+    [Parameter]
+    public string Image { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Href { get; set; }
+}

@@ -1,0 +1,62 @@
+﻿@using Workoutisten.FitStreak.Data.Models.Workout
+@using Workoutisten.FitStreak.Pages.Dialogs
+@using Workoutisten.FitStreak.Shared.PageExclusives.WorkoutsPage
+@page "/workouts"
+
+@inject IDialogService DialogService
+
+<MudStack>
+    <MudGrid>
+        <MudItem xs="10">
+            <SearchBar SearchInput="@SearchInput" />
+        </MudItem>
+        <MudItem xs="2" Class="d-flex align-center justify-center ">
+            <AddButtonRounded ButtonClicked="@AddNewWorkout" />
+        </MudItem>
+    </MudGrid>
+
+    <MudList>
+        @foreach (var workout in UserWorkouts)
+        {
+            <WorkoutListElement Description="@workout.Description" LastTraining="@workout.LastTraining.ToString()" Title="@workout.WorkoutName" />
+        }
+    </MudList>
+</MudStack>
+
+@code {
+
+    string SearchInput { get; set; }
+
+    List<WorkoutModel> UserWorkouts { get; set; }
+
+    protected override void OnInitialized()
+    {
+        UserWorkouts = new List<WorkoutModel>();
+
+        UserWorkouts.Add(new WorkoutModel() { Description = "Seeeeehr Lange Description oikwajdoiajwdoiawjd", WorkoutName = "Workout1" });
+        UserWorkouts.Add(new WorkoutModel() { Description = "Description", WorkoutName = "Workout2", });
+
+        base.OnInitialized();
+    }
+
+    async void AddNewWorkout()
+    {
+        var options = new DialogOptions
+            {
+                CloseOnEscapeKey = true,
+                CloseButton = true,
+                FullWidth = true,
+            };
+        var DialogReference = DialogService.Show<AddWorkoutDialog>("New Workout: ", options);
+
+        var result = await DialogReference.Result;
+
+        if (!result.Cancelled)
+        {
+            UserWorkouts.Add((WorkoutModel)result.Data);
+        }
+
+        StateHasChanged();
+
+    }
+}

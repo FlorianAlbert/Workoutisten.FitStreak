@@ -1,0 +1,76 @@
+﻿@using Workoutisten.FitStreak.Data.Models.Frontend
+@using Workoutisten.FitStreak.Data.Models.Workout
+@using Workoutisten.FitStreak.Shared.PageExclusives.WorkoutsPage
+
+
+<style>
+    .DialogContentMaxHeight {
+        max-height: 85%;
+    }
+
+    .MudListMaxHeight {
+        max-height: 400px;
+        overflow: auto;
+    }
+</style>
+
+
+<MudDialog Class="MudDialogMaxHeight">
+    <DialogContent>
+        <MudGrid Class="GridMaxHeight">
+            <MudItem xs=12>
+                <MudTextField @bind-Value="NewWorkout.WorkoutName" Label="Name" Variant="Variant.Text" Clearable="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="NewWorkout.Description" Label="Description" Variant="Variant.Text" Clearable="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudText Typo="Typo.h6">Select Exercises: </MudText>
+            </MudItem>
+            <MudItem xs="12">
+                <MudList Clickable="true" Dense="true" Class="MudListMaxHeight">
+                    @foreach (var exerciseListElement in UsersExercises)
+                    {
+                        <AddWorkoutDialogListElement AddWorkoutExerciseElementModel="exerciseListElement" />
+                    }
+                </MudList>
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudContainer Class="d-flex justify-center my-3 ">
+            <FitStreakButton OnClick="Submit" Icon="@Icons.Filled.Add" Label="CREATE" />
+        </MudContainer>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    WorkoutModel NewWorkout = new WorkoutModel();
+
+    List<AddWorkoutExerciseElementModel> UsersExercises { get; set; } = new List<AddWorkoutExerciseElementModel>();
+
+    protected override void OnInitialized()
+    {
+        //Laden der Excerices aus dem Backend ODER per Übergabeparameter
+        UsersExercises.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = new ExerciseModel() { Category = ExerciseCategory.Cardio, Name = "ExerciseBla1" }, Checked = false });
+        UsersExercises.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = new ExerciseModel() { Category = ExerciseCategory.Cardio, Name = "Exwdawdawdwadawdwafawedawtgawdawdawedage2" }, Checked = false });
+        UsersExercises.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = new ExerciseModel() { Category = ExerciseCategory.Cardio, Name = "Ex3" }, Checked = false });
+
+        base.OnInitialized();
+    }
+
+    void Submit()
+    {
+            NewWorkout.Exercises.AddRange(UsersExercises.Where(ue => ue.Checked).Select(ue => ue.ExerciseModel));
+        MudDialog.Close(DialogResult.Ok<WorkoutModel>(NewWorkout));
+
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+
+}

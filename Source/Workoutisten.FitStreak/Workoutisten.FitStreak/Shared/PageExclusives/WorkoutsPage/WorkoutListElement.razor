@@ -1,0 +1,41 @@
+﻿
+<MudLink Href="@OverviewHref">
+    <MudListItem Avatar="@Icons.Material.Filled.Sports">
+        <MudCard>
+            <MudCardContent>
+                <MudText Typo="Typo.caption">Zuletzt trainiert: @LastTraining</MudText>
+                <MudText>@Title</MudText>
+                <MudText Class="MudTextHiddenOverflow" Typo="Typo.body2">@Description</MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudListItem>
+</MudLink>
+@if (!LastElement)
+{
+    <MudDivider />
+}
+
+@code {
+
+    [Parameter]
+    public string LastTraining { get; set; } //TODO: Prüfen wie hier DateOnly gehen würde
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Description { get; set; }
+
+    [Parameter]
+    public bool LastElement { get; set; }
+
+    string OverviewHref;
+
+    protected override void OnInitialized()
+    {
+        OverviewHref = $"/workouts/overview?workoutname={Title}";
+        //OverviewHref = "/exercises";
+        base.OnInitialized();
+    }
+
+}

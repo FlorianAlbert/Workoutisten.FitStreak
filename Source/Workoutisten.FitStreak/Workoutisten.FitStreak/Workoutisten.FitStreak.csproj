@@ -30,10 +30,7 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon
-			Include="Resources\appicon.svg"
-			ForegroundFile="Resources\appiconfg.svg"
-			Color="#512BD4" />
+		<MauiIcon Include="Resources\appicon.svg" ForegroundFile="Resources\appiconfg.svg" Color="#512BD4" />
 
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\appiconfg.svg" Color="#512BD4" BaseSize="128,128" />
@@ -47,6 +44,25 @@
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Blazor-ApexCharts" Version="0.9.7-beta" />
+	  <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="3.0.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="MudBlazor" Version="6.0.10-dev.5" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	  <PackageReference Include="NSwag.ApiDescription.Client" Version="13.0.5">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="RestClient\" />
+	  <Folder Include="Shared\PageExclusives\ExercisePage\" />
 	</ItemGroup>
 
 </Project>

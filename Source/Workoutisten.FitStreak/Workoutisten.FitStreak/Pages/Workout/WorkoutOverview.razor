@@ -1,0 +1,40 @@
+﻿@page "/workouts/overview"
+@using Workoutisten.FitStreak.Client.RestClient
+@using Workoutisten.FitStreak.Data.Models.Workout
+
+@*@inject IRestClient _RestClient;*@
+
+<MudStack>
+    <MudText Typo="Typo.h3">@Workout.WorkoutName</MudText>
+    <MudText Typo="Typo.body1">@Workout.Exercises.Count Exercises</MudText>
+    <FitStreakButton Label="START" OnClick="StartWorkout" />
+</MudStack>
+<MudDivider DividerType="DividerType.Middle" />
+<MudList>
+    @foreach (var exercise in Workout.Exercises)
+    {
+        <ExerciseListElement Category="exercise.Category" Name="@exercise.Name" />
+    }
+</MudList>
+
+
+
+@code {
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "workoutname")]
+    public string WorkoutName { get; set; }
+
+    public WorkoutModel Workout { get; set; }
+
+    protected override void OnInitialized()
+    {
+
+        base.OnInitialized();
+    }
+
+    void StartWorkout()
+    {
+
+    }
+}
