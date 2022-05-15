@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Authentication;
+using Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Registration;
+using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 
 namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 
@@ -8,13 +9,48 @@ namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 [Route("api/registration")]
 public class RegistrationController : ControllerBase
 {
+    private IRegistrationService RegistrationService { get; }
+
+    public RegistrationController(IRegistrationService registrationService)
+    {
+        RegistrationService = registrationService ?? throw new ArgumentNullException(nameof(registrationService));
+    }
+
     [HttpPost]
     [Route("request")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RequestRegistration()
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> RequestRegistration([FromBody] RegistrationRequest registrationRequest)
     {
-        return BadRequest();
+        if(string.IsNullOrEmpty(registrationRequest?.Email) ||
+           string.IsNullOrEmpty(registrationRequest.Password) ||
+           string.IsNullOrEmpty(registrationRequest.FirstName) ||
+           string.IsNullOrEmpty(registrationRequest.LastName)) return BadRequest();
+
+        var canRegister = await RegistrationService.CanRegisterAsync(registrationRequest.Email);
+        if (!canRegister) return Conflict();
+
+        var successful = await RegistrationService.RegisterAsync(registrationRequest.Email, 
+                                                                 registrationRequest.Password, 
+                                                                 registrationRequest.FirstName,
+                                                                 registrationRequest.LastName);
+        if (successful) return Ok();
+        else return BadRequest();
+    }
+
+    [HttpPost]
+    [Route("confirm/{userId}")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ConfirmRegistration(Guid userId)
+    {
+        if(userId == Guid.Empty) return BadRequest();
+
+        var successful = await RegistrationService.ConfirmRegistrationAsync(userId);
+        if (successful) return Ok();
+        else return BadRequest();
     }
 }

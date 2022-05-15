@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workoutisten.FitStreak.Server.DataTransferObjects.Training.Exercise;
+using Workoutisten.FitStreak.Server.Outbound.Model.Training.Exercise;
 
 namespace Workoutisten.FitStreak.Server.Controllers.Training;
 
@@ -31,7 +31,7 @@ public class ExerciseController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(Exercise) ,StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> CreateExercise([FromBody] Exercise exercise)
@@ -41,7 +41,7 @@ public class ExerciseController : ControllerBase
 
     [HttpPut]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(Exercise), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> UpdateExercise([FromBody] Exercise exercise)

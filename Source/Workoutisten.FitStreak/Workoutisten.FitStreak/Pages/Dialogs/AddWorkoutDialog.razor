@@ -1,4 +1,6 @@
-﻿@using Workoutisten.FitStreak.Shared.PageExclusives.WorkoutsPage
+﻿@using Workoutisten.FitStreak.Data.Models.Frontend
+@using Workoutisten.FitStreak.Data.Models.Workout
+@using Workoutisten.FitStreak.Shared.PageExclusives.WorkoutsPage
 
 
 <style>
@@ -37,7 +39,7 @@
     </DialogContent>
     <DialogActions>
         <MudContainer Class="d-flex justify-center my-3 ">
-            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Submit" StartIcon="@Icons.Filled.Add"><MudText Typo="Typo.button">CREATE</MudText></MudButton>
+            <FitStreakButton OnClick="Submit" Icon="@Icons.Filled.Add" Label="CREATE" />
         </MudContainer>
     </DialogActions>
 </MudDialog>

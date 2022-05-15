@@ -1,4 +1,5 @@
-﻿
+﻿@using Workoutisten.FitStreak.Data.Models.Workout
+
 <MudDialog Class="style: MaxHeight: ">
     <DialogContent>
         <MudGrid>
@@ -18,8 +19,7 @@
     </DialogContent>
     <DialogActions>
         <MudContainer Class="d-flex justify-center my-3 ">
-            @*<MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Submit" StartIcon="@Icons.Filled.Add"><MudText Typo="Typo.button">CREATE</MudText></MudButton>*@
-            <FitStreakButton Label="CREATE" OnClick="Submit" />
+            <FitStreakButton Label="CREATE" OnClick="Submit" Icon="@Icons.Filled.Add"/>
         </MudContainer>
     </DialogActions>
 </MudDialog>
@@ -32,6 +32,11 @@
     void Submit() => MudDialog.Close(DialogResult.Ok<ExerciseModel>(NewExercise));
 
     void Cancel() => MudDialog.Cancel();
+
+    void Test()
+    {
+        
+    }
 
     public ExerciseModel NewExercise { get; set; } = new ExerciseModel();
 }
