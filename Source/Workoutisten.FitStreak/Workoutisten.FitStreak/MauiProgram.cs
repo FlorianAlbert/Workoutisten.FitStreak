@@ -6,6 +6,7 @@ using Workoutisten.FitStreak.Client.RestClient;
 using Workoutisten.FitStreak.Converter;
 using Workoutisten.FitStreak.Data.Models.User;
 using Workoutisten.FitStreak.Converter.User;
+using Workoutisten.FitStreak.Data.Converter;
 
 #if WINDOWS
 using Microsoft.UI;
@@ -31,13 +32,15 @@ public static class MauiProgram
 
         builder.Services.AddMudServices();
 
+        //RestClient
         builder.Services.AddHttpClient();
-
         builder.Services.AddSingleton<IRestClient, RestClient>(Services => 
         {
             return new RestClient("https://localhost:7228", Services.GetRequiredService<IHttpClientFactory>().CreateClient());
         });
 
+        //Converters
+        builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
         builder.Services.AddSingleton<IConverter<RegisterModel, RegistrationRequest>, RegisterConverter>();
 
 #if WINDOWS

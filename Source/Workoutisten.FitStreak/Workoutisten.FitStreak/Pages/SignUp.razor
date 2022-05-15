@@ -1,10 +1,11 @@
 ﻿@page "/signup"
 
 @using Workoutisten.FitStreak.Converter
+
 @using Workoutisten.FitStreak.Data.Models.User
 
 @inject IRestClient _RestClient
-@inject IConverter<RegisterModel, RegistrationRequest> _Converter
+@inject IConverterWrapper _Converter
 
 <MudStack>
     <h3>Register:</h3>
@@ -25,18 +26,11 @@
 
 @code {
 
-    //[Inject]
-    //IRestClient _RestClient { get; set; }
-
-    //[Inject]
-    //IConverter<RegisterModel, RegistrationRequest> _Converter { get; set; }
-
     public RegisterModel registerModel { get; set; } = new RegisterModel();
 
     async Task SignUp_Button()
     {
-        await _RestClient.RequestPOST3Async(await _Converter.ToDto(registerModel));
-
+        await _RestClient.RequestPOST3Async(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel));
     }
 
 }
