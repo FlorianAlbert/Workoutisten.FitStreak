@@ -11,9 +11,7 @@
     <MudItem xs=12>
         <MudTextField @bind-Value="password" Label="password" Variant="Variant.Text" Text="Password" Clearable="true" />
     </MudItem>
-    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="SignUp_Button">
-        <MudText Typo="Typo.button">Sign Up</MudText>
-    </MudButton>
+    <FitStreakButton Color="Color.Primary" Label="Sign Up" OnClick="SignUp_Button"/>
 </MudStack>
 
 @code {
