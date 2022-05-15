@@ -1,14 +1,11 @@
 ﻿@page "/"
 
 <MudStack>
-    <MudText Typo="Typo.h5">FitStreak</MudText>
-
-    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Login" Href="/login">
-        <MudText Typo="Typo.button">Login</MudText>
-    </MudButton>
-    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="SignUp" Href="/signup">
-        <MudText Typo="Typo.button">SignUp</MudText>
-    </MudButton>
+    <MudText Typo="Typo.h3">FitStreak</MudText>
+    <MudText Typo="Typo.h5">Welcome</MudText>
+    <MudText>Track your Progress and competete with your friends. Don't lose your Streak!</MudText>
+    <FitStreakButton Label="Login" OnClick="Login" Href="/login" />
+    <FitStreakButton Label="Sign Up" OnClick="SignUp" Href="/signup" />
 </MudStack>
 
 @code{

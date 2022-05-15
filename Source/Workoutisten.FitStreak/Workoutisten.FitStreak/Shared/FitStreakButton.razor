@@ -1,11 +1,11 @@
 ﻿
 @if (Icon is not null)
 {
-    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="OnClick" StartIcon="@Icon"><MudText Typo="Typo.button">@Label</MudText></MudButton>
+    <MudButton Href="@Href" Color="Color.Primary" Variant="Variant.Filled" OnClick="OnClick" StartIcon="@Icon"><MudText Typo="Typo.button">@Label</MudText></MudButton>
 }
 else
 {
-    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="OnClick"><MudText Typo="Typo.button">@Label</MudText></MudButton>
+    <MudButton Href="@Href" Color="Color.Primary" Variant="Variant.Filled" OnClick="OnClick"><MudText Typo="Typo.button">@Label</MudText></MudButton>
 }
 
 @code {
@@ -17,4 +17,8 @@ else
 
     [Parameter]
     public string Label { get; set; }
+
+    [Parameter]
+     public string Href { get; set; }
+
 }
