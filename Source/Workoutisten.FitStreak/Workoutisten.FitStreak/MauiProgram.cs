@@ -7,6 +7,8 @@ using Workoutisten.FitStreak.Converter;
 using Workoutisten.FitStreak.Data.Models.User;
 using Workoutisten.FitStreak.Converter.User;
 using Workoutisten.FitStreak.Data.Converter;
+using System.Reflection;
+using Microsoft.Extensions.Configuration;
 
 #if WINDOWS
 using Microsoft.UI;
@@ -32,11 +34,20 @@ public static class MauiProgram
 
         builder.Services.AddMudServices();
 
+        //Load Configuration
+        var assembly = Assembly.GetExecutingAssembly();
+        using var stream = assembly.GetManifestResourceStream("Workoutisten.FitStreak.Properties.launchSettings.json");
+        var config = new ConfigurationBuilder()
+                        .AddJsonStream(stream)
+                        .Build();
+        builder.Configuration.AddConfiguration(config);
+
         //RestClient
         builder.Services.AddHttpClient();
-        builder.Services.AddSingleton<IRestClient, RestClient>(Services => 
+        builder.Services.AddSingleton<IRestClient, RestClient>(Services =>
         {
-            return new RestClient("https://localhost:7228", Services.GetRequiredService<IHttpClientFactory>().CreateClient());
+            var configSection = builder.Configuration.GetRequiredSection("LoginConfiguration");
+            return new RestClient($"{configSection.GetSection("BaseUri")}:{configSection.GetSection("Port")}", Services.GetRequiredService<IHttpClientFactory>().CreateClient());
         });
 
         //Converters
@@ -67,5 +78,5 @@ public static class MauiProgram
 #endif
 
         return builder.Build();
-	}
+    }
 }

@@ -4,5 +4,9 @@
       "commandName": "MsixPackage",
       "nativeDebugging": false
     }
+  },
+  "LoginConfiguration": {
+    "BaseUri": "http://localhost",
+    "Port": "7228"
   }
 }

@@ -47,6 +47,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="Properties\launchSettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Properties\launchSettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <PackageReference Include="Blazor-ApexCharts" Version="0.9.7-beta" />
 	  <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="3.0.0">
 	    <PrivateAssets>all</PrivateAssets>
