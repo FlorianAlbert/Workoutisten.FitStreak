@@ -10,7 +10,7 @@ env:
 jobs:
   deploy-server:
     runs-on: self-hosted
-    if: $GITHUB_REF == 'ref/heads/main'
+    if: ${{ env.GITHUB_REF_NAME == 'main' }}
     
     steps:
     - name: Checkout
