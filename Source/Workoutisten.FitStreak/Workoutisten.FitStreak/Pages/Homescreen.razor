@@ -1,7 +1,5 @@
 ﻿@using System.Timers
 @using Workoutisten.FitStreak.Shared.PageExclusives.HomescreenPage
-@using ApexCharts
-
 
 @page "/home"
 @page "/"
@@ -9,13 +7,9 @@
 
 <MudStack>
 
-    <MudItem md="10" xs="12" Class="d-flex align-left justify-left">
+    <MudItem md="10" xs="12" Class="d-flex align-left justify-left mt-5">
         <MudText Typo="Typo.h4">Hello, User!</MudText>
     </MudItem>
-    @*<MudItem xs="12" Class="d-flex align-center justify-center mud-width-full py-8">*@
-    @*<MudImage ObjectFit="ObjectFit.Cover" Height="200" Src="Images/testjpg.jpg" Alt="Your Fitstreak" Class="rounded-lg ma-4" />*@
-    @*</MudItem>*@
-
     <MudChart ChartType="MudBlazor.ChartType.Donut" Width="70%" Height="70%" InputData="@Counts" ChartOptions="@chartOptions">
 	    <CustomGraphics>
 		    <text class="donut-inner-text" x="47%" y="33%" dominant-baseline="middle" text-anchor="middle" fill="white"  font-size="3" color="white" >Your Streak</text>
@@ -24,17 +18,6 @@
             <text class="donut-inner-text" x="47%" y="70%" dominant-baseline="middle" text-anchor="middle" fill="#838486"  font-size="2">@remainingTimeString</text>
 	    </CustomGraphics>
     </MudChart>
-@*    <ApexChart TItem="GaugeValue" Title="@Title"
-           
-               Options="options">
-
-        <ApexPointSeries TItem="GaugeValue"
-        SeriesType=SeriesType.RadialBar
-                    Items=GetItems()
-                    Name=@_label
-                    XValue="@(e => e.Label)"
-                    YValue="@(e => e.Precentage)" />
-    </ApexChart>*@
     <MudGrid>
         <MudItem xs="6">
             <HomescreenButton Image="Images/Workouts.jpg" Title="Workout" Href="/workouts" />
@@ -43,7 +26,7 @@
             <HomescreenButton Image="Images/Exercises.jpg" Title="Übungen" Href="/exercises" />
         </MudItem>
         <MudItem xs="6">
-            <HomescreenButton Image="Images/History.jpg" Title="Schedule" Href="/schedule" />
+            <HomescreenButton Image="Images/History.jpg" Title="History" Href="/history" />
         </MudItem>
         <MudItem xs="6">
             <HomescreenButton Image="Images/Social.jpg" Title="Social" Href="/social" />

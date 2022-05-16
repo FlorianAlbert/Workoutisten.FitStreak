@@ -1,5 +1,7 @@
-﻿@page "/social"
+﻿@using Workoutisten.FitStreak.Pages.Dialogs
 
+@page "/social"
+@inject IDialogService DialogService
 
 <MudStack>
     <MudGrid>
@@ -7,12 +9,53 @@
             <SearchBar SearchInput="@SearchInput" />
         </MudItem>
         <MudItem xs="2" Class="d-flex align-center justify-center ">
-            <AddButtonRounded/>
+            <AddButtonRounded ButtonClicked="AddNewFriend"/>
         </MudItem>
     </MudGrid>
     <MudPaper Class="rounded-xl p-2" MinHeight="600px">
-        <MudText Class=" " Typo="Typo.h5" Align="Align.Center">Friends</MudText>
-        <MudDivider/>
+        <MudText Class="mt-2 mb-3" Typo="Typo.h5" Align="Align.Center"><b>Friends</b></MudText>
+        <MudDivider DividerType="DividerType.Middle" Class="Foreground: white"/>
+            @if (pendingFriendRequests)
+            {
+                <MudText Class="ml-3 mt-3">Pending Friend Requests:</MudText>
+                for (var i = 0; i < 2; i++)
+                {
+                    <MudListItem>
+                        <MudStack Row="true" AlignItems="AlignItems.Center">
+                            <MudAvatar Color="Color.Warning">
+                                <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
+                            </MudAvatar>
+                            <MudText>Friend</MudText>
+                            <MudSpacer/>
+                            <MudAvatar Class="mr-3" Color="Color.Success" Variant="Variant.Outlined">
+                                <MudIconButton Icon="@Icons.Material.Filled.Check" Color="Color.Inherit" />
+                            </MudAvatar>
+                            <MudAvatar Color="Color.Error" Variant="Variant.Outlined">
+                                <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Inherit" />
+                            </MudAvatar>
+                        </MudStack>
+                    </MudListItem>
+                    <MudDivider/>
+                }
+            }
+        <MudDivider DividerType="DividerType.Middle" Class="Foreground: white"/>
+        <MudList Clickable="true">
+            @for (int i = 0; i < 10; i++)
+            {
+                <MudListItem>
+                    <MudStack Row="true" AlignItems="AlignItems.Center">
+                        <MudAvatar Color="Color.Secondary">
+                            <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
+                        </MudAvatar>
+                        <MudText>Friend</MudText>
+                        <MudSpacer/>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit"/>
+                    </MudStack>
+                </MudListItem>
+                <MudDivider/>
+            }
+
+        </MudList>
     </MudPaper>
 
 </MudStack>
@@ -20,4 +63,26 @@
 
 @code {
     private string SearchInput;
+    private bool pendingFriendRequests = true;
+
+    async void AddNewFriend()
+    {
+        var options = new DialogOptions
+            {
+                CloseOnEscapeKey = true,
+                CloseButton = true,
+                FullWidth = true,
+            };
+        var DialogReference = DialogService.Show<AddFriendDialog>("Add new Friend: ", options);
+
+        var result = await DialogReference.Result;
+
+        if (!result.Cancelled)
+        {
+            //UserFriends.Add((WorkoutModel)result.Data);
+        }
+
+        StateHasChanged();
+
+    }
 }
