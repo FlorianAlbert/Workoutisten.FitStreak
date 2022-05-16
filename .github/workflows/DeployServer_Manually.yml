@@ -13,6 +13,8 @@ jobs:
     if: ${{ github.ref_name == 'main' }}
     
     steps:
+    - run: echo %USERNAME%
+    
     - name: Checkout
       uses: actions/checkout@v3
     
