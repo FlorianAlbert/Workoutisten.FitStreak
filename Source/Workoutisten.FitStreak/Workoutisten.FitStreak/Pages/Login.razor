@@ -1,0 +1,22 @@
+﻿@page "/login"
+
+<MudStack>
+    <h3>Login:</h3>
+    <MudItem xs=12>
+        <MudTextField @bind-Value="email" Label="email" Variant="Variant.Text" Text="Enter your e-mail" Clearable="true" />
+    </MudItem>
+    <MudItem xs=12>
+        <MudTextField @bind-Value="password" Label="password" Variant="Variant.Text" Text="Password" Clearable="true" />
+    </MudItem>
+    <FitStreakButton  Label="Login" OnClick="Login_Button"/>
+</MudStack>
+
+@code {
+    string email;
+    string password;
+
+    void Login_Button()
+    {
+        
+    }
+}

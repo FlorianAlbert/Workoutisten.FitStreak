@@ -1,0 +1,52 @@
+﻿@using Workoutisten.FitStreak.Pages.Dialogs
+@page "/exercises"
+@using Workoutisten.FitStreak.Data.Models.Workout
+
+@inject IDialogService DialogService
+
+<MudStack>
+    <MudGrid>
+        <MudItem xs="10">
+            <SearchBar SearchInput="@SearchInput" />
+        </MudItem>
+        <MudItem xs="2" Class="d-flex align-center justify-center">
+            <MudIconButton Variant="Variant.Filled" Icon="@Icons.Filled.Add" Color="Color.Secondary" OnClick="AddNewExercise"></MudIconButton>
+        </MudItem>
+    </MudGrid>
+
+    <MudList>
+        @foreach (var exercise in UserExercises)
+        {
+            <ExerciseListElement Category="exercise.Category" Name="@exercise.Name" />
+        }
+        <ExerciseListElement Category="ExerciseCategoryEnum.Cardio" Name="Exercise 1" />
+        <ExerciseListElement Category="ExerciseCategoryEnum.Strength" Name="Exercise 2" />
+    </MudList>
+
+</MudStack>
+
+@code {
+    public string SearchInput { get; set; }
+
+    public List<ExerciseModel> UserExercises { get; set; } = new List<ExerciseModel>();
+
+    public async void AddNewExercise()
+    {
+        var options = new DialogOptions
+            {
+                CloseOnEscapeKey = true,
+                CloseButton = true,
+                FullWidth = true
+            };
+        var DialogReference = DialogService.Show<AddExerciseDialog>("New Exercise: ", options);
+
+        var result = await DialogReference.Result;
+
+        if (!result.Cancelled)
+        {
+            UserExercises.Add((ExerciseModel)result.Data);
+        }
+
+        StateHasChanged();
+    }
+}

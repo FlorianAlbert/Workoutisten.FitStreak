@@ -49,11 +49,37 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <Compile Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <Content Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <EmbeddedResource Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <MauiXaml Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <None Remove="Shared\PageExclusives\ExercisePage\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="Properties\launchSettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Properties\launchSettings.json" />
 	  <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.5" />
 	  <PackageReference Include="MudBlazor" Version="6.0.10" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Blazor-ApexCharts" Version="0.9.7-beta" />
+	  <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="3.0.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-preview.4.22229.4" />
+	  <PackageReference Include="MudBlazor" Version="6.0.10-dev.5" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	  <PackageReference Include="NSwag.ApiDescription.Client" Version="13.0.5">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	  <Folder Include="Shared\PageExclusives\ExercisePage\" />
 	  <Folder Include="Shared\PageExclusives\SocialPage\" />
 	</ItemGroup>

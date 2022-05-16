@@ -9,7 +9,7 @@
 </MudListItem>
 @if (!LastElement)
 {
-    <MudDivider />
+    <MudDivider Class="mud-theme-primary" DividerType="DividerType.Middle"/>
 }
 
 @code {
@@ -21,7 +21,7 @@
     public bool LastElement { get; set; }
 
     [Parameter]
-    public ExerciseCategory Category { get; set; }
+    public Data.Enums.ExerciseCategoryEnum Category { get; set; }
 
     [Parameter]
     public MudIcon Icon { get; set; }
@@ -34,7 +34,7 @@
             {
                 return Icon.ToString();
             }
-            return Category == ExerciseCategory.Cardio ? Icons.Material.Filled.Kitesurfing : Icons.Material.Filled.FitnessCenter;
+            return Category == Data.Enums.ExerciseCategoryEnum.Cardio ? Icons.Material.Filled.Kitesurfing : Icons.Material.Filled.FitnessCenter;
         }
     }
 

@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Workoutisten.FitStreak.Server.DataTransferObjects.UserManagement.Authentication;
+using Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Authentication;
+using Workoutisten.FitStreak.Server.Service.Interface.Converter;
+using Workoutisten.FitStreak.Server.Service.Interface.Data;
+using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
+using User = Workoutisten.FitStreak.Server.Model.Account.User;
+using UserDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person.User;
 
 namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 
@@ -8,6 +13,16 @@ namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 [Route("api/authentication")]
 public class AuthenticationController : ControllerBase
 {
+    private IAuthenticationService AuthenticationService { get; }
+
+    private IConverterWrapper Converter { get; }
+
+    public AuthenticationController(IAuthenticationService authenticationService, IConverterWrapper converter)
+    {
+        AuthenticationService = authenticationService ?? throw new ArgumentNullException(nameof(authenticationService));
+        Converter = converter ?? throw new ArgumentNullException(nameof(converter));
+    }
+
     [HttpPost]
     [Route("login")]
     [AllowAnonymous]
@@ -15,6 +30,20 @@ public class AuthenticationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Login([FromBody] AuthenticationRequest authenticationRequest)
     {
-        return BadRequest();
+        if (authenticationRequest?.Email is null || authenticationRequest.Password is null) return BadRequest();
+
+        var loginResult = await AuthenticationService.LoginAsync(authenticationRequest.Email, authenticationRequest.Password);
+
+        switch (loginResult.Status)
+        {
+            case LoginResultStatus.BadRequest: return BadRequest();
+            case LoginResultStatus.Unauthorized: return Unauthorized();
+            case LoginResultStatus.Successful: return Ok(new AuthenticationResponse
+            {
+                Token = loginResult.Token,
+                User = await Converter.ToDto<User, UserDto>(loginResult.User)
+            });
+            default: throw new ArgumentOutOfRangeException(nameof(loginResult.Status), $"Not expected login status value: {loginResult.Status}");
+        }
     }
 }
