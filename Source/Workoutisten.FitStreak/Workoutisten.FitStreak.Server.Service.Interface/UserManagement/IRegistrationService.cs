@@ -7,5 +7,5 @@ public interface IRegistrationService
 
     Task<Result<bool>> ConfirmRegistrationAsync(Guid userId);
 
-    Task<Result<bool>> RegisterAsync(string email, string password, string firstName, string lastName);
+    Task<Result> RegisterAsync(string email, string password, string firstName, string lastName);
 }

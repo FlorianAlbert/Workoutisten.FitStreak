@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -65,16 +66,38 @@ public class TokenService : ITokenService
 
         var userIdString = principal.Claims.SingleOrDefault(c => c.Type == "UserId")?.Value;
 
-        if (userIdString is null || 
-            !Guid.TryParse(userIdString, out var userId)) return new Result<User> { Status = ResultStatus.BadRequest };
+        if (userIdString is null)
+        {
+            return new Result<User> 
+            { 
+                StatusCode = StatusCodes.Status404NotFound,
+                Detail = "There was no userId in the claim!"
+            };
+        }
+        if (!Guid.TryParse(userIdString, out var userId))
+        {
+            return new Result<User>
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Detail = "The userId was not a Guid!"
+            };
+        }
 
         try
         {
             var user =  await Repository.GetAsync<User>(userId);
-            return new Result<User> { Data = user, Status = ResultStatus.Successful };
+            return new Result<User> 
+            { 
+                Value = user, 
+                StatusCode = StatusCodes.Status200OK 
+            };
         } catch
         {
-            return new Result<User> { Status = ResultStatus.ServerError };
+            return new Result<User>
+            {
+                StatusCode = StatusCodes.Status503ServiceUnavailable,
+                Detail = "The Database - Service couldn't connect to the Database."
+            };
         }
     }
 

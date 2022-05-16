@@ -1,4 +1,5 @@
-﻿using Workoutisten.FitStreak.Server.Database.Implementation.Exceptions;
+﻿using Microsoft.AspNetCore.Http;
+using Workoutisten.FitStreak.Server.Database.Implementation.Exceptions;
 using Workoutisten.FitStreak.Server.Database.Interface;
 using Workoutisten.FitStreak.Server.Model.Account;
 using Workoutisten.FitStreak.Server.Service.Implementation.Extension;
@@ -21,35 +22,62 @@ public class AuthenticationService : IAuthenticationService
         TokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
     }
 
-    public async Task<LoginResult> LoginAsync(string email, string password)
+    public async Task<Result<LoginResult>> LoginAsync(string email, string password)
     {
         IEnumerable<User> users;
 
         try
         {
             users = await Repository.GetAllAsync<User>();
-        } catch (DatabaseRepositoryException)
+        } 
+        catch (DatabaseRepositoryException)
         {
-            return new LoginResult { Status = ResultStatus.ServerError };
+            return new Result<LoginResult> 
+            { 
+                StatusCode = StatusCodes.Status503ServiceUnavailable ,
+                Detail = "The Database-Service couldn't connect to the Database."
+            };
         }
 
         var user = users.FirstOrDefault(user => user.NormalizedEmail == email.NormalizeEmail());
-        if (user is null || !user.IsVerified) return new LoginResult { Status = ResultStatus.BadRequest };
+        if (user is null)
+        {
+            return new Result<LoginResult>
+            {
+                StatusCode = StatusCodes.Status404NotFound,
+                Detail = $"There is no registered user with the email {email}."
+            };
+        }
+
+        if (!user.IsVerified)
+        {
+            return new Result<LoginResult>
+            {
+                StatusCode = StatusCodes.Status403Forbidden,
+                Detail = $"The user with the email {email} first has to be verified!"
+            };
+        }
 
         var successful = await PasswordHashingService.VerifyPasswordAsync(password, user.PasswordHash);
         if (successful) 
         {
             var tokens = await TokenService.GenerateTokensAsync(user);
-
-            return new LoginResult
+            
+            return new Result<LoginResult>
             {
-                Status = ResultStatus.Successful,
-                User = user,
-                RefreshToken = tokens.RefreshToken,
-                Jwt = tokens.Jwt
+                StatusCode = StatusCodes.Status200OK,
+                Value = new LoginResult
+                {
+                    User = user,
+                    Tokens = tokens
+                }
             }; 
         }
 
-        return new LoginResult { Status = ResultStatus.Unauthorized };
+        return new Result<LoginResult> 
+        {
+            StatusCode = StatusCodes.Status401Unauthorized,
+            Detail = $"The password for the user with the email {email} was wrong!"
+        };
     }
 }

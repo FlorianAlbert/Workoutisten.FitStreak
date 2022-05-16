@@ -1,4 +1,5 @@
-﻿using Workoutisten.FitStreak.Server.Database.Implementation.Exceptions;
+﻿using Microsoft.AspNetCore.Http;
+using Workoutisten.FitStreak.Server.Database.Implementation.Exceptions;
 using Workoutisten.FitStreak.Server.Database.Interface;
 using Workoutisten.FitStreak.Server.Model.Account;
 using Workoutisten.FitStreak.Server.Service.Implementation.Extension;
@@ -23,11 +24,32 @@ public class RegistrationService : IRegistrationService
         try
         {
             var users = await Repository.GetAllAsync<User>();
-            var userWithEmailExists = !users.Any(user => user.NormalizedEmail.Equals(email, StringComparison.InvariantCultureIgnoreCase));
-            return new Result<bool> { Data = userWithEmailExists, Status = ResultStatus.Successful };
-        } catch (DatabaseRepositoryException)
+            var userWithEmailExists = users.Any(user => user.NormalizedEmail.Equals(email, StringComparison.InvariantCultureIgnoreCase));
+            if (userWithEmailExists)
+            {
+                return new Result<bool>
+                {
+                    StatusCode = StatusCodes.Status409Conflict,
+                    Detail = $"There exists already a user with the email {email}!"
+                };
+            }
+            else
+            {
+                return new Result<bool>
+                {
+                    Value = userWithEmailExists,
+                    StatusCode = StatusCodes.Status200OK
+                };
+            }
+            
+        }
+        catch (DatabaseRepositoryException)
         {
-            return new Result<bool> { Status = ResultStatus.ServerError};
+            return new Result<bool>
+            {
+                StatusCode = StatusCodes.Status503ServiceUnavailable,
+                Detail = "The Database - Service couldn't connect to the Database."
+            };
         }
     }
 
@@ -36,18 +58,33 @@ public class RegistrationService : IRegistrationService
         try
         {
             var user = await Repository.GetAsync<User>(userId);
-            if (user is null) return new Result<bool> { Status = ResultStatus.BadRequest };
+            if (user is null) { 
+                return new Result<bool> 
+                { 
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Detail = $"There is no registered user with this id to register."
+                }; 
+            }
 
             user.IsVerified = true;
             var updatedUser = await Repository.CreateOrUpdateAsync(user);
-            return new Result<bool> { Data = updatedUser.IsVerified, Status = ResultStatus.Successful };
-        } catch (DatabaseRepositoryException)
+            return new Result<bool> 
+            { 
+                Value = updatedUser.IsVerified, 
+                StatusCode = StatusCodes.Status200OK 
+            };
+        }
+        catch (DatabaseRepositoryException)
         {
-            return new Result<bool> { Status = ResultStatus.ServerError };
+            return new Result<bool> 
+            { 
+                StatusCode = StatusCodes.Status503ServiceUnavailable,
+                Detail = "The Database - Service couldn't connect to the Database."
+            };
         }
     }
 
-    public async Task<Result<bool>> RegisterAsync(string email, string password, string firstName, string lastName)
+    public async Task<Result> RegisterAsync(string email, string password, string firstName, string lastName)
     {
         var user = new User
         {
@@ -61,10 +98,18 @@ public class RegistrationService : IRegistrationService
         try
         {
             var storedUser = await Repository.CreateOrUpdateAsync(user);
-            return new Result<bool> { Data = storedUser.Id != Guid.Empty, Status = ResultStatus.Successful };
-        } catch (DatabaseRepositoryException)
+            return new Result 
+            { 
+                StatusCode = StatusCodes.Status200OK 
+            };
+        }
+        catch (DatabaseRepositoryException)
         {
-            return new Result<bool> { Status = ResultStatus.ServerError };
+            return new Result
+            {
+                StatusCode = StatusCodes.Status503ServiceUnavailable,
+                Detail = "The Database - Service couldn't connect to the Database."
+            };
         }
     }
 }

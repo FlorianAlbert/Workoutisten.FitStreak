@@ -59,7 +59,7 @@ public class PasswordHashingService : IPasswordHashingService
         Array.Copy(hashBytes, 0, salt, 0, 16);
 
         /* Compute the hash on the password the user entered */
-        var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000);
+        var pbkdf2 = new Rfc2898DeriveBytes(password, salt, Iterations);
         byte[] generatedHash = pbkdf2.GetBytes(20);
 
         /* Compare the results */

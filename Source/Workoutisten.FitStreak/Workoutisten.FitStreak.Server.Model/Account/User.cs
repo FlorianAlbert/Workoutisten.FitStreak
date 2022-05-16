@@ -1,7 +1,9 @@
-﻿using Workoutisten.FitStreak.Server.Model.Excercise;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Workoutisten.FitStreak.Server.Model.Excercise;
 
 namespace Workoutisten.FitStreak.Server.Model.Account
 {
+    [Table("User")]
     public class User : BaseEntity
     {
         public string NormalizedEmail { get; set; }

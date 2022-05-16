@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Registration;
-using Workoutisten.FitStreak.Server.Service.Interface.Data;
 using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 
 namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
@@ -29,23 +28,19 @@ public class RegistrationController : ControllerBase
         if(string.IsNullOrEmpty(registrationRequest?.Email) ||
            string.IsNullOrEmpty(registrationRequest.Password) ||
            string.IsNullOrEmpty(registrationRequest.FirstName) ||
-           string.IsNullOrEmpty(registrationRequest.LastName)) return BadRequest();
+           string.IsNullOrEmpty(registrationRequest.LastName)) 
+            return Problem(statusCode: StatusCodes.Status400BadRequest, detail: 
+                $"One or more of the following values were empty: email, password, firstname, lastname !");
 
         var canRegisterResult = await RegistrationService.CanRegisterAsync(registrationRequest.Email);
-        if (canRegisterResult.Status == ResultStatus.ServerError) return Problem(statusCode: StatusCodes.Status503ServiceUnavailable);
-        if (canRegisterResult.Status != ResultStatus.Successful) 
-            throw new NotImplementedException($"{nameof(RegistrationService.CanRegisterAsync)} should not produce ResultStatus {canRegisterResult.Status}!");
-        if (!canRegisterResult.Data) return Conflict();
+        if (canRegisterResult.Unsccessful) return Problem(statusCode: canRegisterResult.StatusCode, detail: canRegisterResult.Detail);
 
-        var registrationResult = await RegistrationService.RegisterAsync(registrationRequest.Email, 
+        var result = await RegistrationService.RegisterAsync(registrationRequest.Email, 
                                                                  registrationRequest.Password, 
                                                                  registrationRequest.FirstName,
                                                                  registrationRequest.LastName);
-        if (registrationResult.Status == ResultStatus.ServerError) return Problem(statusCode: StatusCodes.Status503ServiceUnavailable);
-        if (registrationResult.Status != ResultStatus.Successful) 
-            throw new NotImplementedException($"{nameof(RegistrationService.RegisterAsync)} should not produce ResultStatus {registrationResult.Status}!");
-        if (registrationResult.Data) return Ok();
-        else return BadRequest();
+        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        else return Ok();
     }
 
     [HttpPost]
@@ -56,20 +51,8 @@ public class RegistrationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> ConfirmRegistration(Guid userId)
     {
-        if(userId == Guid.Empty) return BadRequest();
-
-        var confirmationResult = await RegistrationService.ConfirmRegistrationAsync(userId);
-        switch (confirmationResult.Status)
-        {
-            case ResultStatus.BadRequest:
-                return BadRequest();
-            case ResultStatus.ServerError:
-                return Problem(statusCode: StatusCodes.Status503ServiceUnavailable);
-            case ResultStatus.Successful:
-                if (confirmationResult.Data) return Ok();
-                else return BadRequest();
-            default:
-                throw new NotImplementedException($"{nameof(RegistrationService.ConfirmRegistrationAsync)} should not produce ResultStatus {confirmationResult.Status}!");
-        }
+        var result = await RegistrationService.ConfirmRegistrationAsync(userId);
+        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        else return Ok();
     }
 }
