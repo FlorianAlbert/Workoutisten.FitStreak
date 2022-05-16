@@ -47,6 +47,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <Compile Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <Content Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <EmbeddedResource Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <MauiXaml Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <None Remove="Shared\PageExclusives\ExercisePage\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Content Remove="Properties\launchSettings.json" />
 	</ItemGroup>
 
@@ -67,10 +76,6 @@
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Shared\PageExclusives\ExercisePage\" />
 	</ItemGroup>
 
 </Project>
