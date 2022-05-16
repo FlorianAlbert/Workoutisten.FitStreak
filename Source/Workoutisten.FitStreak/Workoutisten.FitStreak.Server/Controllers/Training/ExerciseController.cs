@@ -9,7 +9,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training;
 public class ExerciseController : ControllerBase
 {
     [HttpGet]
-    [Route("{exerciseId}")]
+    [Route("{exerciseId}", Name = nameof(GetExercise))]
     [Authorize]
     [ProducesResponseType(typeof(Exercise), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -21,6 +21,7 @@ public class ExerciseController : ControllerBase
 
     [HttpGet]
     [Authorize]
+    [Route("", Name = nameof(GetExercises))]
     [ProducesResponseType(typeof(Exercise[]), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -30,6 +31,7 @@ public class ExerciseController : ControllerBase
     }
 
     [HttpPost]
+    [Route("", Name = nameof(CreateExercise))]
     [Authorize]
     [ProducesResponseType(typeof(Exercise) ,StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -40,6 +42,7 @@ public class ExerciseController : ControllerBase
     }
 
     [HttpPut]
+    [Route("", Name = nameof(UpdateExercise))]
     [Authorize]
     [ProducesResponseType(typeof(Exercise), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -50,7 +53,7 @@ public class ExerciseController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("{exerciseId}")]
+    [Route("{exerciseId}", Name = nameof(DeleteExercise))]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

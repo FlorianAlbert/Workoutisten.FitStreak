@@ -24,7 +24,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost]
-    [Route("login")]
+    [Route("login", Name = nameof(Login))]
     [AllowAnonymous]
     [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

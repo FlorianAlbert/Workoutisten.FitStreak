@@ -10,7 +10,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 public class PasswordController : ControllerBase
 {
     [HttpPost]
-    [Route("change")]
+    [Route("change", Name = nameof(ChangePassword))]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -22,7 +22,7 @@ public class PasswordController : ControllerBase
     }
 
     [HttpPost]
-    [Route("requestReset")]
+    [Route("requestReset", Name = nameof(RequestPasswordReset))]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -32,7 +32,7 @@ public class PasswordController : ControllerBase
     }
 
     [HttpPost]
-    [Route("reset")]
+    [Route("reset", Name = nameof(ResetPassword))]
     [AllowAnonymous]
     [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Registration;
 using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 
@@ -17,7 +18,7 @@ public class RegistrationController : ControllerBase
     }
 
     [HttpPost]
-    [Route("request")]
+    [Route("request", Name = nameof(RequestRegistration))]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -41,7 +42,7 @@ public class RegistrationController : ControllerBase
     }
 
     [HttpPost]
-    [Route("confirm/{userId}")]
+    [Route("confirm/{userId}", Name = nameof(ConfirmRegistration))]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
