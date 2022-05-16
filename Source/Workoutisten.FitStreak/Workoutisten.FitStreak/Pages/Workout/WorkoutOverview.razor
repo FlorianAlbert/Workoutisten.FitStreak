@@ -1,22 +1,27 @@
-﻿@page "/workouts/overview"
-@page "/"
-@using Workoutisten.FitStreak.Client.RestClient
+﻿@using Workoutisten.FitStreak.Client.RestClient
 @using Workoutisten.FitStreak.Data.Models.Workout
+
+@page "/workouts/overview"
+@*@page "/"*@
 
 @*@inject IRestClient _RestClient;*@
 
-<MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
-    <MudText  Typo="Typo.h4">@Workout.WorkoutName</MudText>
-    <MudText Align="Align.Start" Typo="Typo.subtitle2">@Workout.Exercises.Count Exercises</MudText>
-    <FitStreakButton Label="START" OnClick="StartWorkout" />
-</MudStack>
-<MudDivider Class="mb-1 mt-3" DividerType="DividerType.FullWidth" />
-<MudList>
-    @foreach (var exercise in Workout.Exercises)
-    {
-        <ExerciseListElement Category="exercise.Category" Name="@exercise.Name" />
-    }
-</MudList>
+<MudPaper Class="rounded-xl p-2 my-3">
+    <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
+        <MudText Typo="Typo.h4">@Workout.WorkoutName</MudText>
+        <MudText Align="Align.Start" Typo="Typo.subtitle2">@Workout.Exercises.Count Exercises</MudText>
+        <FitStreakButton Label="START" OnClick="StartWorkout" />
+    </MudStack>
+    <MudDivider Class="mb-1 mt-3" DividerType="DividerType.FullWidth" />
+
+
+    <MudList>
+        @foreach (var exercise in Workout.Exercises)
+        {
+            <ExerciseListElement Category="exercise.Category" Name="@exercise.Name" />
+        }
+    </MudList>
+</MudPaper>
 
 
 
@@ -34,10 +39,10 @@
         for (int i = 0; i < 5; i++)
         {
             Workout.Exercises.Add(new ExerciseModel()
-            {
-                Name = $"Exercise {i}",
-                Category = ExerciseCategoryEnum.Strength
-            });
+                {
+                    Name = $"Exercise {i}",
+                    Category = ExerciseCategoryEnum.Strength
+                });
         }
         base.OnInitialized();
     }

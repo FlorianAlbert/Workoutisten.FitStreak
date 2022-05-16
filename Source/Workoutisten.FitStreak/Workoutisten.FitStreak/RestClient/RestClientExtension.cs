@@ -26,5 +26,6 @@ namespace Workoutisten.FitStreak.Client.RestClient
                 //Wie refreshen wir den Token?
             }
         }
+
     }
 }
