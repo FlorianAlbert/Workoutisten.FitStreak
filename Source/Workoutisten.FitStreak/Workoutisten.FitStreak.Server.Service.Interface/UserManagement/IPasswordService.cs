@@ -1,9 +1,11 @@
-﻿namespace Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
+﻿using Workoutisten.FitStreak.Server.Service.Interface.Data;
+
+namespace Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 public interface IPasswordService
 {
-    Task<bool> ChangePasswordAsync(Guid userId, string oldPassword, string newPassword);
+    Task<Result<bool>> ChangePasswordAsync(Guid userId, string oldPassword, string newPassword);
 
-    Task<bool> RequestPasswordResetAsync(string email);
+    Task<Result<bool>> RequestPasswordResetAsync(string email);
 
-    Task<bool> ConfirmPasswordResetAsync(Guid passwordForgottenKey, string newPassword);
+    Task<Result<bool>> ConfirmPasswordResetAsync(Guid passwordForgottenKey, string newPassword);
 }

@@ -9,5 +9,5 @@ public class LoginResult
 
     public User User { get; set; }
 
-    public LoginResultStatus Status { get; set; }
+    public ResultStatus Status { get; set; }
 }

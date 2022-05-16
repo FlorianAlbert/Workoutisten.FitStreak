@@ -1,4 +1,5 @@
-﻿using Workoutisten.FitStreak.Server.Database.Interface;
+﻿using Workoutisten.FitStreak.Server.Database.Implementation.Exceptions;
+using Workoutisten.FitStreak.Server.Database.Interface;
 using Workoutisten.FitStreak.Server.Model.Account;
 using Workoutisten.FitStreak.Server.Service.Implementation.Extension;
 using Workoutisten.FitStreak.Server.Service.Interface.Data;
@@ -22,10 +23,18 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<LoginResult> LoginAsync(string email, string password)
     {
-        var users = await Repository.GetAllAsync<User>();
+        IEnumerable<User> users;
+
+        try
+        {
+            users = await Repository.GetAllAsync<User>();
+        } catch (DatabaseRepositoryException)
+        {
+            return new LoginResult { Status = ResultStatus.ServerError };
+        }
 
         var user = users.FirstOrDefault(user => user.NormalizedEmail == email.NormalizeEmail());
-        if (user is null || !user.IsVerified) return new LoginResult { Status = LoginResultStatus.BadRequest };
+        if (user is null || !user.IsVerified) return new LoginResult { Status = ResultStatus.BadRequest };
 
         var successful = await PasswordHashingService.VerifyPasswordAsync(password, user.PasswordHash);
         if (successful) 
@@ -34,13 +43,13 @@ public class AuthenticationService : IAuthenticationService
 
             return new LoginResult
             {
-                Status = LoginResultStatus.Successful,
+                Status = ResultStatus.Successful,
                 User = user,
                 RefreshToken = tokens.RefreshToken,
                 Jwt = tokens.Jwt
             }; 
         }
 
-        return new LoginResult { Status = LoginResultStatus.Unauthorized };
+        return new LoginResult { Status = ResultStatus.Unauthorized };
     }
 }

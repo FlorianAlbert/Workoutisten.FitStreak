@@ -7,7 +7,7 @@ public interface ITokenService
 {
     Task<TokenResult> GenerateTokensAsync(User user);
 
-    Task<User?> GetUserFromJwtAsync(string token);
+    Task<Result<User>> GetUserFromJwtAsync(string token);
 
     Task<bool> IsRefreshTokenValidAsync(User user, string refreshToken);
 }

@@ -28,23 +28,25 @@ public class AuthenticationController : ControllerBase
     [AllowAnonymous]
     [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> Login([FromBody] AuthenticationRequest authenticationRequest)
     {
         if (authenticationRequest?.Email is null || authenticationRequest.Password is null) return BadRequest();
 
         var loginResult = await AuthenticationService.LoginAsync(authenticationRequest.Email, authenticationRequest.Password);
 
-        switch (loginResult.Status)
+        return loginResult.Status switch
         {
-            case LoginResultStatus.BadRequest: return BadRequest();
-            case LoginResultStatus.Unauthorized: return Unauthorized();
-            case LoginResultStatus.Successful: return Ok(new AuthenticationResponse
+            ResultStatus.BadRequest => BadRequest(),
+            ResultStatus.Unauthorized => Unauthorized(),
+            ResultStatus.ServerError => Problem(statusCode: StatusCodes.Status503ServiceUnavailable),
+            ResultStatus.Successful => Ok(new AuthenticationResponse
             {
                 RefreshToken = loginResult.RefreshToken,
                 Jwt = loginResult.Jwt,
                 User = await Converter.ToDto<User, UserDto>(loginResult.User)
-            });
-            default: throw new ArgumentOutOfRangeException(nameof(loginResult.Status), $"Not expected login status value: {loginResult.Status}");
-        }
+            }),
+            _ => throw new ArgumentOutOfRangeException(nameof(loginResult.Status), $"Not expected login status value: {loginResult.Status}")
+        };
     }
 }

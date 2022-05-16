@@ -47,7 +47,7 @@ public class TokenService : ITokenService
         return Task.FromResult(tokenResult);
     }
 
-    public async Task<User?> GetUserFromJwtAsync(string token)
+    public async Task<Result<User>> GetUserFromJwtAsync(string token)
     {
         var tokenValidationParameters = new TokenValidationParameters
         {
@@ -65,11 +65,17 @@ public class TokenService : ITokenService
 
         var userIdString = principal.Claims.SingleOrDefault(c => c.Type == "UserId")?.Value;
 
-        if (userIdString is null) return null;
+        if (userIdString is null || 
+            !Guid.TryParse(userIdString, out var userId)) return new Result<User> { Status = ResultStatus.BadRequest };
 
-        if (!Guid.TryParse(userIdString, out var userId)) return null;
-
-        return await Repository.GetAsync<User>(userId);
+        try
+        {
+            var user =  await Repository.GetAsync<User>(userId);
+            return new Result<User> { Data = user, Status = ResultStatus.Successful };
+        } catch
+        {
+            return new Result<User> { Status = ResultStatus.ServerError };
+        }
     }
 
     public Task<bool> IsRefreshTokenValidAsync(User user, string refreshToken)
