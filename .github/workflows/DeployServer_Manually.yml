@@ -34,10 +34,10 @@ jobs:
       run: appcmd stop site /site.name:FitStreakApi
       
     - name: Delete all files from old Website
-      run: rm -r ..\..\inetpub\wwwroot\*
+      run: rm -r ..\..\..\..\..\inetpub\wwwroot\*
       
     - name: Copy published files to Website
-      run: cp -a ${{ env.PUBLISH_PATH }}\. ..\..inetpub\wwwroot
+      run: cp -a ${{ env.PUBLISH_PATH }}\. ..\..\..\..\..\inetpub\wwwroot
       
     - name: Restart Website
       run: appcmd start site /site.name:FitStreakApi
