@@ -54,6 +54,9 @@ public static class MauiProgram
         builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
         builder.Services.AddSingleton<IConverter<RegisterModel, RegistrationRequest>, RegisterConverter>();
 
+        //Authentication
+        builder.Services.AddSingleton<AuthenticationTokenHolderModel>();
+
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
 #endif

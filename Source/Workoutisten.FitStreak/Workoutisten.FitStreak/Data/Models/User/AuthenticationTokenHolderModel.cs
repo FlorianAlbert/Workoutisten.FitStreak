@@ -8,6 +8,8 @@ namespace Workoutisten.FitStreak.Data.Models.User
 {
     public class AuthenticationTokenHolderModel
     {
-        //public JWT MyProperty { get; set; }
+        public string? AccessToken { get; set; }
+
+        public string? RefreshToken { get; set; }
     }
 }
