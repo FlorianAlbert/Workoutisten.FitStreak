@@ -4,7 +4,7 @@ on: workflow_dispatch
   
 env:
   PUBLISH_PATH: '.\published'
-  NET_VERSION: '6.0.3'
+  NET_VERSION: '6.0.300'
   PROJECT_PATH: 'Source\Workoutisten.FitStreak\Workoutisten.FitStreak.Server\Workoutisten.FitStreak.Server.csproj'
 
 jobs:
