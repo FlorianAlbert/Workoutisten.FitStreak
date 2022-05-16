@@ -33,13 +33,13 @@ jobs:
       run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --no-build -o ${{ env.PUBLISH_PATH}}
       
     - name: Stop Website
-      run: appcmd stop site /site.name:FitStreakApi
+      run: iisreset /stop
       
     - name: Delete all files from old Website
       run: rm -r ..\..\..\..\..\inetpub\wwwroot\*
       
     - name: Copy published files to Website
-      run: cp -a ${{ env.PUBLISH_PATH }}\. ..\..\..\..\..\inetpub\wwwroot
+      run: Copy-Item ${{ env.PUBLISH_PATH }}/* ..\..\..\..\..\inetpub\wwwroot -Recurse -Force
       
     - name: Restart Website
-      run: appcmd start site /site.name:FitStreakApi
+      run: iisreset /start
