@@ -16,11 +16,13 @@ namespace Workoutisten.FitStreak.Server.Model.Account
 
         public string? RefreshToken { get; set; }
 
+        public string? RegistrationConfirmationKey { get; set; }
+
+        public string? PasswordForgottenKey { get; set; }
+
         public DateTime RefreshTokenExpiryTime { get; set; }
 
         public bool IsVerified { get; set; }
-
-        public Guid? PasswordForgottenKey { get; set; }
 
         private ICollection<Exercise> _Exercises;
         public virtual ICollection<Exercise> Exercises => _Exercises ??= new List<Exercise>();

@@ -43,14 +43,14 @@ public class RegistrationController : ControllerBase
     }
 
     [HttpPost]
-    [Route("confirm/{userId}", Name = nameof(ConfirmRegistration))]
+    [Route("confirm/{registrationConfirmationKey}", Name = nameof(ConfirmRegistration))]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<IActionResult> ConfirmRegistration(Guid userId)
+    public async Task<IActionResult> ConfirmRegistration([FromRoute] string registrationConfirmationKey)
     {
-        var result = await RegistrationService.ConfirmRegistrationAsync(userId);
+        var result = await RegistrationService.ConfirmRegistrationAsync(registrationConfirmationKey);
         if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
         else return Ok();
     }

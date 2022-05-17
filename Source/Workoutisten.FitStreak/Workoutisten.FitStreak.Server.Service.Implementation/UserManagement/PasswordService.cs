@@ -9,7 +9,7 @@ public class PasswordService : IPasswordService
         throw new NotImplementedException();
     }
 
-    public async Task<Result> ConfirmPasswordResetAsync(Guid passwordForgottenKey, string newPassword)
+    public async Task<Result> ConfirmPasswordResetAsync(string passwordForgottenKey, string newPassword)
     {
         throw new NotImplementedException();
     }

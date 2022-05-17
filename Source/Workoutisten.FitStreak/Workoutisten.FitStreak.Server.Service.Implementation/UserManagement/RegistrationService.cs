@@ -13,10 +13,13 @@ public class RegistrationService : IRegistrationService
 
     private IPasswordHashingService PasswordHashingService { get; }
 
-    public RegistrationService(IRepository repository, IPasswordHashingService passwordHashingService)
+    private IAlphaNumericStringGenerator AlphaNumericStringGenerator { get; }
+
+    public RegistrationService(IRepository repository, IPasswordHashingService passwordHashingService, IAlphaNumericStringGenerator alphaNumericStringGenerator)
     {
         Repository = repository ?? throw new ArgumentNullException(nameof(repository));
         PasswordHashingService = passwordHashingService ?? throw new ArgumentNullException(nameof(passwordHashingService));
+        AlphaNumericStringGenerator = alphaNumericStringGenerator ?? throw new ArgumentNullException(nameof(alphaNumericStringGenerator));
     }
 
     public async Task<Result<bool>> CanRegisterAsync(string email)
@@ -53,20 +56,22 @@ public class RegistrationService : IRegistrationService
         }
     }
 
-    public async Task<Result<bool>> ConfirmRegistrationAsync(Guid userId)
+    public async Task<Result<bool>> ConfirmRegistrationAsync(string registrationConfirmationKey)
     {
         try
         {
-            var user = await Repository.GetAsync<User>(userId);
+            var users = await Repository.GetAllAsync<User>();
+            var user = users.FirstOrDefault(user => user.RegistrationConfirmationKey == registrationConfirmationKey);
             if (user is null) { 
                 return new Result<bool> 
                 { 
                     StatusCode = StatusCodes.Status404NotFound,
-                    Detail = $"There is no registered user with this id to register."
+                    Detail = $"There is no registered user with this registrationConfirmationKey to confirm."
                 }; 
             }
 
             user.IsVerified = true;
+            user.RegistrationConfirmationKey = null;
             var updatedUser = await Repository.CreateOrUpdateAsync(user);
             return new Result<bool> 
             { 
@@ -92,7 +97,8 @@ public class RegistrationService : IRegistrationService
             FirstName = firstName,
             LastName = lastName,
             NormalizedEmail = email.NormalizeEmail(),
-            PasswordHash = await PasswordHashingService.HashPasswordForStorageAsync(password)
+            PasswordHash = await PasswordHashingService.HashPasswordForStorageAsync(password),
+            RegistrationConfirmationKey = await AlphaNumericStringGenerator.GenerateAlphaNumericString()
         };
 
         try

@@ -59,10 +59,25 @@ public class AuthenticationService : IAuthenticationService
         }
 
         var successful = await PasswordHashingService.VerifyPasswordAsync(password, user.PasswordHash);
-        if (successful) 
+        if (!successful) 
         {
-            var tokens = await TokenService.GenerateTokensAsync(user);
-            
+            return new Result<LoginResult>
+            {
+                StatusCode = StatusCodes.Status401Unauthorized,
+                Detail = $"The password for the user with the email {email} was wrong!"
+            };
+        }
+
+        
+
+        var tokens = await TokenService.GenerateTokensAsync(user);
+
+        try
+        {
+            user.RefreshToken = tokens.RefreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(3);
+            await Repository.CreateOrUpdateAsync(user);
+
             return new Result<LoginResult>
             {
                 StatusCode = StatusCodes.Status200OK,
@@ -71,14 +86,16 @@ public class AuthenticationService : IAuthenticationService
                     User = user,
                     Tokens = tokens
                 }
-            }; 
+            };
         }
-
-        return new Result<LoginResult> 
+        catch (DatabaseRepositoryException)
         {
-            StatusCode = StatusCodes.Status401Unauthorized,
-            Detail = $"The password for the user with the email {email} was wrong!"
-        };
+            return new Result<LoginResult>
+            {
+                StatusCode = StatusCodes.Status503ServiceUnavailable,
+                Detail = "The Database-Service couldn't connect to the Database."
+            };
+        }
     }
 
     public async Task<Result<TokenResult>> RefreshTokens(string expiredJwt, string refreshToken)
@@ -116,6 +133,7 @@ public class AuthenticationService : IAuthenticationService
         try
         {
             user.RefreshToken = tokens.RefreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(3);
             await Repository.CreateOrUpdateAsync(user);
             return new Result<TokenResult>
             {
