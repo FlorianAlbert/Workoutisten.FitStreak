@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Workoutisten.FitStreak.Server.Database.Implementation.Exceptions;
 using Workoutisten.FitStreak.Server.Database.Interface;
 using Workoutisten.FitStreak.Server.Model.Account;
 using Workoutisten.FitStreak.Server.Service.Interface.Data;
@@ -47,7 +49,7 @@ public class TokenService : ITokenService
         return Task.FromResult(tokenResult);
     }
 
-    public async Task<User?> GetUserFromJwtAsync(string token)
+    public async Task<Result<User>> GetUserFromJwtAsync(string token)
     {
         var tokenValidationParameters = new TokenValidationParameters
         {
@@ -61,15 +63,60 @@ public class TokenService : ITokenService
         var tokenHandler = new JwtSecurityTokenHandler();
         var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
         if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-            throw new SecurityTokenException("Invalid token");
+        {
+            return new Result<User>
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Detail = "Invalid token!"
+            };
+        }
 
         var userIdString = principal.Claims.SingleOrDefault(c => c.Type == "UserId")?.Value;
 
-        if (userIdString is null) return null;
+        if (userIdString is null)
+        {
+            return new Result<User> 
+            { 
+                StatusCode = StatusCodes.Status404NotFound,
+                Detail = "There was no userId in the claim!"
+            };
+        }
+        if (!Guid.TryParse(userIdString, out var userId))
+        {
+            return new Result<User>
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Detail = "The userId was not a Guid!"
+            };
+        }
 
-        if (!Guid.TryParse(userIdString, out var userId)) return null;
-
-        return await Repository.GetAsync<User>(userId);
+        try
+        {
+            var user =  await Repository.GetAsync<User>(userId);
+            if (user is null)
+            {
+                return new Result<User>
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Detail = "No user exists with the given id."
+                };
+            }
+            else
+            {
+                return new Result<User>
+                {
+                    Value = user,
+                    StatusCode = StatusCodes.Status200OK
+                };
+            }
+        } catch (DatabaseRepositoryException)
+        {
+            return new Result<User>
+            {
+                StatusCode = StatusCodes.Status503ServiceUnavailable,
+                Detail = "The Database - Service couldn't connect to the Database."
+            };
+        }
     }
 
     public Task<bool> IsRefreshTokenValidAsync(User user, string refreshToken)

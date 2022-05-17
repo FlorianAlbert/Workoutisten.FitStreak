@@ -17,40 +17,41 @@ public class RegistrationController : ControllerBase
     }
 
     [HttpPost]
-    [Route("request")]
-    [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> RequestRegistration([FromBody] RegistrationRequest registrationRequest)
-    {
-        if(string.IsNullOrEmpty(registrationRequest?.Email) ||
-           string.IsNullOrEmpty(registrationRequest.Password) ||
-           string.IsNullOrEmpty(registrationRequest.FirstName) ||
-           string.IsNullOrEmpty(registrationRequest.LastName)) return BadRequest();
-
-        var canRegister = await RegistrationService.CanRegisterAsync(registrationRequest.Email);
-        if (!canRegister) return Conflict();
-
-        var successful = await RegistrationService.RegisterAsync(registrationRequest.Email, 
-                                                                 registrationRequest.Password, 
-                                                                 registrationRequest.FirstName,
-                                                                 registrationRequest.LastName);
-        if (successful) return Ok();
-        else return BadRequest();
-    }
-
-    [HttpPost]
-    [Route("confirm/{userId}")]
+    [Route("request", Name = nameof(RequestRegistration))]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ConfirmRegistration(Guid userId)
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+    public async Task<IActionResult> RequestRegistration([FromBody] RegistrationRequest registrationRequest)
     {
-        if(userId == Guid.Empty) return BadRequest();
+        if (string.IsNullOrEmpty(registrationRequest?.Email) ||
+           string.IsNullOrEmpty(registrationRequest.Password) ||
+           string.IsNullOrEmpty(registrationRequest.FirstName) ||
+           string.IsNullOrEmpty(registrationRequest.LastName))  
+           return BadRequest("One or more of the following values were empty: email, password, firstname, lastname!");
 
-        var successful = await RegistrationService.ConfirmRegistrationAsync(userId);
-        if (successful) return Ok();
-        else return BadRequest();
+        var canRegisterResult = await RegistrationService.CanRegisterAsync(registrationRequest.Email);
+        if (canRegisterResult.Unsccessful) return Problem(statusCode: canRegisterResult.StatusCode, detail: canRegisterResult.Detail);
+
+        var result = await RegistrationService.RegisterAsync(registrationRequest.Email, 
+                                                                 registrationRequest.Password, 
+                                                                 registrationRequest.FirstName,
+                                                                 registrationRequest.LastName);
+        if (result.Successful) return Ok();
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
+    }
+
+    [HttpPost]
+    [Route("confirm/{registrationConfirmationKey}", Name = nameof(ConfirmRegistration))]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+    public async Task<IActionResult> ConfirmRegistration([FromRoute] string registrationConfirmationKey)
+    {
+        var result = await RegistrationService.ConfirmRegistrationAsync(registrationConfirmationKey);
+        if (result.Successful) return Ok();
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
 }

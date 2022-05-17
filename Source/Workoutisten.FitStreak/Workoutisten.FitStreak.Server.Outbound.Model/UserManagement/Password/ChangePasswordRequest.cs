@@ -7,6 +7,7 @@ namespace Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Password;
 public class ChangePasswordRequest
 {
     [Required]
+    [EmailAddress]
     [JsonProperty("Email")]
     public string Email { get; set; }
 

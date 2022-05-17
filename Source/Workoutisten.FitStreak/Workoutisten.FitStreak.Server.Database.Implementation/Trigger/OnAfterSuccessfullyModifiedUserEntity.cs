@@ -72,9 +72,9 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Trigger
                     $"\n" +
                     $"wir freuen uns, dass du dich für FitStreak interessierst und in unserer Community mitwirken möchtest! " +
                     $"Damit du so richtig loslegen kannst, musst du vorher allerdings noch deinen Account bestätigen. " +
-                    $"Klicke dafür einfach auf den folgenden Link:\n" +
+                    $"Bitte gib dafür den folgenden Code in deiner App ein:\n" +
                     $"\n" +
-                    $"<Link muss noch eingefügt werden>\n" +
+                    $"{ context.Entity.RegistrationConfirmationKey }\n" +
                     $"\n" +
                     $"Sobald das erledigt ist, kannst du sofort loslegen!\n" +
                     $"Und immer dran denken: Bleib geschmeidig!\n" +

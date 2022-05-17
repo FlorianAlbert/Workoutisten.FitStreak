@@ -10,7 +10,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 public class FriendshipController : ControllerBase
 {
     [HttpGet]
-    [Route("request")]
+    [Route("request", Name = nameof(GetFriendshipRequests))]
     [Authorize]
     [ProducesResponseType(typeof(FriendshipRequest[]),StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -22,7 +22,7 @@ public class FriendshipController : ControllerBase
     }
 
     [HttpPost]
-    [Route("request")]
+    [Route("request", Name = nameof(CreateFriendshipRequest))]
     [Authorize]
     [ProducesResponseType(typeof(FriendshipRequest), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -33,7 +33,7 @@ public class FriendshipController : ControllerBase
     }
 
     [HttpPost]
-    [Route("request/{friendshipRequestId}")]
+    [Route("request/{friendshipRequestId}", Name = nameof(AcceptFriendshipRequest))]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -44,7 +44,7 @@ public class FriendshipController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("request/{friendshipRequestId}")]
+    [Route("request/{friendshipRequestId}", Name = nameof(DeclineFriendshipRequest))]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -55,7 +55,7 @@ public class FriendshipController : ControllerBase
     }
 
     [HttpGet]
-    [Route("friend/{friendId}")]
+    [Route("friend/{friendId}", Name = nameof(GetFriend))]
     [Authorize]
     [ProducesResponseType(typeof(User) ,StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -66,7 +66,7 @@ public class FriendshipController : ControllerBase
     }
 
     [HttpGet]
-    [Route("friend")]
+    [Route("friend", Name = nameof(GetFriends))]
     [Authorize]
     [ProducesResponseType(typeof(User[]), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -77,7 +77,7 @@ public class FriendshipController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("friend")]
+    [Route("friend", Name = nameof(DeleteFriend))]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

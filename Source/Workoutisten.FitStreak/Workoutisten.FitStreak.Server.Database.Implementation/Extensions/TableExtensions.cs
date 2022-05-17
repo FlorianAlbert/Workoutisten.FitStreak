@@ -12,7 +12,12 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Extensions
                 throw new ArgumentException("Argument does not inherit from abstract class BaseEntity.", nameof(type));
             }
 
-            var tableName = context.Model.FindEntityType(type).GetTableName();
+            var entityType = context.Model.FindRuntimeEntityType(type);
+            var tableName = entityType?.GetTableName();
+            if (tableName is null)
+            {
+                throw new ArgumentException($"There exists no table with the tableName {tableName}.", nameof(tableName));
+            }
 
             return tableName;
         }
