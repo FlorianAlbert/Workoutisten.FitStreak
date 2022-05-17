@@ -12,10 +12,10 @@
         <MudText Class="align-center" Typo="Typo.h4"><b>Enter your Code:</b></MudText>
         <MudText Typo="Typo.caption">Please enter the code we have sent you by email to confirm your account.</MudText>
         <MudDivider/>
-        <MudPaper Class="mud-theme-dark p-3 rounded-xl">
+        <MudPaper Class="mud-theme-dark p-3 rounded-xl mt-4">
             <MudTextField T="string" Counter="8" Immediate="true" Label="Code" Variant="Variant.Text" @bind-Value="VerificationCode"/>
-            <FitStreakButton Label="Verify" OnClick="SendCode" />
         </MudPaper>
+        <FitStreakButton Label="Verify" OnClick="SendCode" />
     </MudPaper>
 </MudStack>
 
