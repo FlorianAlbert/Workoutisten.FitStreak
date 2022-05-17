@@ -5,6 +5,7 @@
 @inject NavigationManager _NavigationManager
 @inject IRestClient _RestClient
 @inject IConverterWrapper _Converter
+@inject CustomAuthenticationStateProvider _AuthenticationStateProvider
 
 <MudStack>
     <MudStack AlignItems="AlignItems.Center">
@@ -22,17 +23,28 @@
             </MudItem>
             <MudDivider/>
             <FitStreakButton Label="Login" OnClick="Login_Button"/>
+            <MudText Typo="Typo.subtitle1">@message</MudText>
         </MudStack>
     </MudPaper>
 </MudStack>
 
 @code {
     public LoginModel loginModel { get; set; } = new LoginModel();
+    string message = string.Empty;
 
     async void Login_Button()
     {
-        await _RestClient.LoginAsync(await _Converter.ToDto<LoginModel, AuthenticationRequest>(loginModel));
-
-        _NavigationManager.NavigateTo("/home");
+        message = "Logging in...";
+        var response = await _RestClient.LoginAsync(await _Converter.ToDto<LoginModel, AuthenticationRequest>(loginModel));
+        if (response != null)
+        {
+            message = "Success";
+            await _AuthenticationStateProvider.Login(response.Jwt);
+            _NavigationManager.NavigateTo("/home");
+        }
+        else
+        {
+            message = "Login Error!";
+        }
     }
 }
