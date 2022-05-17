@@ -5,11 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
+using Workoutisten.FitStreak.Data.Models.User;
+using Microsoft.AspNetCore.Components;
 
 namespace Workoutisten.FitStreak
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
+        [Inject]
+        public AuthenticationTokenHolderModel TokenHolder { get; set; }
+
         public CustomAuthenticationStateProvider()
         {
         }

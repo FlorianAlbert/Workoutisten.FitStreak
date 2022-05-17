@@ -1,14 +1,26 @@
-﻿@page "/login"
+﻿@inject NavigationManager navigationManager
+
+@page "/login"
+
 
 <MudStack>
-    <MudText Typo="Typo.h3">Login</MudText>
-    <MudItem xs=12>
-        <MudTextField @bind-Value="email" Label="email" Variant="Variant.Text" Text="Enter your e-mail" Clearable="true" />
-    </MudItem>
-    <MudItem xs=12>
-        <MudTextField @bind-Value="password" Label="password" Variant="Variant.Text" Text="Password" Clearable="true" />
-    </MudItem>
-    <FitStreakButton  Label="Login" OnClick="Login_Button"/>
+    <MudStack AlignItems="AlignItems.Center">
+        <MudImage Class="align-center" Src="Images/fitstreak_logo_white.svg" Width="300" Height="100"></MudImage>
+    </MudStack>
+    <MudPaper Class="rounded-xl p-4 mt-5" Elevation="5">
+        <MudText Class="align-center" Typo="Typo.h4"><b>Login</b></MudText>
+        <MudDivider/>
+        <MudStack Spacing="3">
+            <MudItem xs=12>
+                <MudTextField @bind-Value="email" Label="Email" Variant="Variant.Text" Text="Enter your e-mail" Clearable="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="password" Label="Password" Variant="Variant.Text" Text="Password" Clearable="true" />
+            </MudItem>
+            <MudDivider/>
+            <FitStreakButton Label="Login" OnClick="Login_Button"/>
+        </MudStack>
+    </MudPaper>
 </MudStack>
 
 @code {
@@ -17,6 +29,6 @@
 
     void Login_Button()
     {
-        
+        navigationManager.NavigateTo("/home");
     }
 }
