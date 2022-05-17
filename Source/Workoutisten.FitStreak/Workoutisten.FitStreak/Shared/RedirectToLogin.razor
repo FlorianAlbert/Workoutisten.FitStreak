@@ -1,4 +1,4 @@
-﻿@inject NavigationManager navigationManager
+﻿@inject NavigationManager _NavigationManager
 
 <MudPaper>
     <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
@@ -9,6 +9,6 @@
         
     protected override void OnInitialized()
     {
-        navigationManager.NavigateTo("/welcome");
+        _NavigationManager.NavigateTo("/welcome");
     }
 }
