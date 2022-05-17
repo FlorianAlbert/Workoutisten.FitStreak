@@ -82,6 +82,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHashingService, PasswordHashingService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAlphaNumericStringGenerator, AlphaNumericStringGenerator>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Training
 builder.Services.AddScoped<IExerciseEntryService, ExerciseEntryService>();
