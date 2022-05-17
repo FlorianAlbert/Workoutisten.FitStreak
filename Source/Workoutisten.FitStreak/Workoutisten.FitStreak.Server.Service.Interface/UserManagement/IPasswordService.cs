@@ -5,7 +5,7 @@ public interface IPasswordService
 {
     Task<Result> ChangePasswordAsync(Guid userId, string oldPassword, string newPassword);
 
-    Task<Result> ConfirmPasswordResetAsync(string passwordForgottenKey, string newPassword);
+    Task<Result> ConfirmPasswordResetAsync(string passwordForgottenKey, string email, string newPassword);
 
     Task<Result> RequestPasswordResetAsync(string email);
 }

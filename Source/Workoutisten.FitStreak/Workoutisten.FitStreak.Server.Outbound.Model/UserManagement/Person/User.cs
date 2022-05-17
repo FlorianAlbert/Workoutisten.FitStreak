@@ -11,6 +11,7 @@ public class User
     public Guid UserId { get; set; }
 
     [Required]
+    [EmailAddress]
     [JsonProperty("Email")]
     public string Email { get; set; }
 
@@ -22,8 +23,8 @@ public class User
     [JsonProperty("LastName")]
     public string LastName { get; set; }
 
-    [JsonProperty("CreatedDate")]
-    public DateTime CreatedDate { get; set; }
+    [JsonProperty("CreatedAt")]
+    public DateTime CreatedAt { get; set; }
 
     [JsonProperty("ExerciseStreak")]
     public int ExerciseStreak { get; set; }

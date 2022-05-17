@@ -10,8 +10,8 @@ public class Workout
     [JsonProperty("WorkoutId")]
     public Guid WorkoutId { get; set; }
 
-    [JsonProperty("CreationDate")]
-    public DateTime CreationDate { get; set; }
+    [JsonProperty("CreatedAt")]
+    public DateTime CreatedAt { get; set; }
 
     [Required]
     [JsonProperty("WorkoutName")]

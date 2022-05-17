@@ -7,6 +7,7 @@ namespace Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Registrati
     public class RegistrationRequest
     {
         [Required]
+        [EmailAddress]
         [JsonProperty("Email")]
         public string Email { get; set; }
 
