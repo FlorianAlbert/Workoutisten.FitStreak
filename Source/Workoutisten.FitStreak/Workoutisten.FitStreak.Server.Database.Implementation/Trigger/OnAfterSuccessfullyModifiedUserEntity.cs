@@ -59,6 +59,34 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Trigger
 
                 await Repository.CreateOrUpdateAsync(verificationMail);
             }
+
+            if (!string.IsNullOrEmpty(context.Entity.PasswordForgottenKey) &&
+                context.Entity.PasswordForgottenKey != context.UnmodifiedEntity.PasswordForgottenKey)
+            {
+                await GeneratePasswordForgottenEmail(context.Entity);
+            }
+        }
+
+        private async Task GeneratePasswordForgottenEmail(User user)
+        {
+            var resetMail = new Email
+            {
+                Subject = "Beantragung eines Passwort-Resets!",
+                Message = $"Hallo {user.FirstName}!\n" +
+                    $"\n" +
+                    $"du hast einen Reset deines Passwortes beantragt. " +
+                    $"Um dein Passwort zurück zu setzen musst du in der App deine Email und den folgenden Code eingeben:" +
+                    $"\n" +
+                    $"{user.PasswordForgottenKey}\n" +
+                    $"\n" +
+                    $"Sobald das erledigt ist, kannst du dich normal mit deinem neuen Passwort anmelden!\n" +
+                    $"Und immer dran denken: Bleib geschmeidig!\n" +
+                    $"\n" +
+                    $"Dein FitStreak-Team"
+            };
+
+            resetMail.Receivers.Add(user);
+            await Repository.CreateOrUpdateAsync(resetMail);
         }
 
         private async Task OnUserAdded(ITriggerContext<User> context, CancellationToken cancellationToken)
