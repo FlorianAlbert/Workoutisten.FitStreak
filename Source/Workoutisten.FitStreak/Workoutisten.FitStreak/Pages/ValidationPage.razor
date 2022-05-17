@@ -1,5 +1,8 @@
 ﻿@page "/validate"
 
+@inject IRestClient _RestClient
+@inject NavigationManager _NavManager
+
 
 <MudStack>
     <MudStack AlignItems="AlignItems.Center">
@@ -9,13 +12,25 @@
         <MudText Class="align-center" Typo="Typo.h4"><b>Enter your Code:</b></MudText>
         <MudText Typo="Typo.caption">Please enter the code we have sent you by email to confirm your account.</MudText>
         <MudDivider/>
-        <MudPaper Class="mud-theme-dark p-3 rounded-xl
-">
-            <MudTextField T="string" Counter="8" Immediate="true" Label="Code" Variant="Variant.Text" />
+        <MudPaper Class="mud-theme-dark p-3 rounded-xl">
+            <MudTextField T="string" Counter="8" Immediate="true" Label="Code" Variant="Variant.Text" @bind-Value="VerificationCode"/>
+            <FitStreakButton Label="Verify" OnClick="SendCode" />
         </MudPaper>
     </MudPaper>
 </MudStack>
 
 @code {
+    public string? VerificationCode { get; set; } = string.Empty;
 
+    void SendCode()
+    {
+        if(VerificationCode.Count() == 8)
+        {
+            _RestClient.ConfirmRegistrationAsync(VerificationCode);
+            //TODO: Fehlerbehandlung bei falschem Code
+
+            _NavManager.NavigateTo("/login");
+
+        }
+    }
 }

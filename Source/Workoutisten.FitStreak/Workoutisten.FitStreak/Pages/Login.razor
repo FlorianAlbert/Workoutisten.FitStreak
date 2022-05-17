@@ -1,6 +1,10 @@
-﻿@inject NavigationManager _NavigationManager
+﻿@using Workoutisten.FitStreak.Data.Models.User
 
 @page "/login"
+
+@inject NavigationManager _NavigationManager
+@inject IRestClient _RestClient
+@inject IConverterWrapper _Converter
 
 <MudStack>
     <MudStack AlignItems="AlignItems.Center">
@@ -11,10 +15,10 @@
         <MudDivider/>
         <MudStack Spacing="3">
             <MudItem xs=12>
-                <MudTextField @bind-Value="email" Label="Email" Variant="Variant.Text" Text="Enter your e-mail" Clearable="true" />
+                <MudTextField @bind-Value="@loginModel.Email" Label="Email" Variant="Variant.Text" Clearable="true" />
             </MudItem>
             <MudItem xs=12>
-                <MudTextField @bind-Value="password" Label="Password" Variant="Variant.Text" Text="Password" Clearable="true" />
+                <MudTextField @bind-Value="@loginModel.Password" Label="Password" Variant="Variant.Text" Clearable="true" />
             </MudItem>
             <MudDivider/>
             <FitStreakButton Label="Login" OnClick="Login_Button"/>
@@ -23,11 +27,12 @@
 </MudStack>
 
 @code {
-    string email;
-    string password;
+    public LoginModel loginModel { get; set; } = new LoginModel();
 
-    void Login_Button()
+    async void Login_Button()
     {
+        await _RestClient.LoginAsync(await _Converter.ToDto<LoginModel, AuthenticationRequest>(loginModel));
+
         _NavigationManager.NavigateTo("/home");
     }
 }

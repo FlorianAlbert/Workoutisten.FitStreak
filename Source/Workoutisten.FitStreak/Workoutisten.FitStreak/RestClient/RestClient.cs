@@ -31,354 +31,363 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneCardioExercise> CardioGETAsync(System.Guid doneCardioExerciseId);
+        System.Threading.Tasks.Task<AuthenticationResponse> RefreshTokensAsync(TokenRefreshRequest body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneCardioExercise> CardioGETAsync(System.Guid doneCardioExerciseId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<AuthenticationResponse> RefreshTokensAsync(TokenRefreshRequest body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<DoneCardioExercise> GetDoneCardioExerciseAsync(System.Guid doneCardioExerciseId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<DoneCardioExercise> GetDoneCardioExerciseAsync(System.Guid doneCardioExerciseId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task CardioDELETEAsync(System.Guid doneCardioExerciseId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>No Content</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task CardioDELETEAsync(System.Guid doneCardioExerciseId, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneCardioExercise>> CardioAllAsync();
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneCardioExercise>> CardioAllAsync(System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneCardioExercise> CardioPOSTAsync(DoneCardioExercise body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneCardioExercise> CardioPOSTAsync(DoneCardioExercise body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneCardioExercise> CardioPUTAsync(DoneCardioExercise body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneCardioExercise> CardioPUTAsync(DoneCardioExercise body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneStrengthExercise> StrengthGETAsync(System.Guid doneStrengthExerciseId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneStrengthExercise> StrengthGETAsync(System.Guid doneStrengthExerciseId, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>No Content</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task StrengthDELETEAsync(System.Guid doneStrengthExerciseId);
+        System.Threading.Tasks.Task DeleteDoneCardioExerciseAsync(System.Guid doneCardioExerciseId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task StrengthDELETEAsync(System.Guid doneStrengthExerciseId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task DeleteDoneCardioExerciseAsync(System.Guid doneCardioExerciseId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneStrengthExercise>> StrengthAllAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneCardioExercise>> GetDoneCardioExercisesAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneStrengthExercise>> StrengthAllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneCardioExercise>> GetDoneCardioExercisesAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneStrengthExercise> StrengthPOSTAsync(DoneStrengthExercise body);
+        System.Threading.Tasks.Task<DoneCardioExercise> CreateDoneCardioExerciseAsync(DoneCardioExercise body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneStrengthExercise> StrengthPOSTAsync(DoneStrengthExercise body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<DoneCardioExercise> CreateDoneCardioExerciseAsync(DoneCardioExercise body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneStrengthExercise> StrengthPUTAsync(DoneStrengthExercise body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DoneStrengthExercise> StrengthPUTAsync(DoneStrengthExercise body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Exercise> ExerciseGETAsync(System.Guid exerciseId);
+        System.Threading.Tasks.Task<DoneCardioExercise> UpdateDoneCardioExerciseAsync(DoneCardioExercise body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Exercise> ExerciseGETAsync(System.Guid exerciseId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<DoneCardioExercise> UpdateDoneCardioExerciseAsync(DoneCardioExercise body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<DoneStrengthExercise> GetDoneStrengthExerciseAsync(System.Guid doneStrengthExerciseId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<DoneStrengthExercise> GetDoneStrengthExerciseAsync(System.Guid doneStrengthExerciseId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ExerciseDELETEAsync(System.Guid exerciseId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>No Content</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ExerciseDELETEAsync(System.Guid exerciseId, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Exercise>> ExerciseAllAsync();
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Exercise>> ExerciseAllAsync(System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Exercise> ExercisePOSTAsync(Exercise body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Exercise> ExercisePOSTAsync(Exercise body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Exercise> ExercisePUTAsync(Exercise body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Exercise> ExercisePUTAsync(Exercise body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupGETAsync(System.Guid exerciseGroupId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupGETAsync(System.Guid exerciseGroupId, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>No Content</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ExerciseGroupDELETEAsync(System.Guid exerciseGroupId);
+        System.Threading.Tasks.Task DeleteDoneStrengthExerciseAsync(System.Guid doneStrengthExerciseId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ExerciseGroupDELETEAsync(System.Guid exerciseGroupId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task DeleteDoneStrengthExerciseAsync(System.Guid doneStrengthExerciseId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ExerciseGroup>> ExerciseGroupAllAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneStrengthExercise>> GetDoneStrengthExercisesAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ExerciseGroup>> ExerciseGroupAllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneStrengthExercise>> GetDoneStrengthExercisesAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupPOSTAsync(ExerciseGroup body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupPOSTAsync(ExerciseGroup body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupPUTAsync(ExerciseGroup body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupPUTAsync(ExerciseGroup body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<FriendshipRequest>> RequestAllAsync();
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<FriendshipRequest>> RequestAllAsync(System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FriendshipRequest> RequestPOSTAsync(string body);
+        System.Threading.Tasks.Task<DoneStrengthExercise> CreateDoneStrengthExerciseAsync(DoneStrengthExercise body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FriendshipRequest> RequestPOSTAsync(string body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<DoneStrengthExercise> CreateDoneStrengthExerciseAsync(DoneStrengthExercise body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task RequestPOST2Async(System.Guid friendshipRequestId);
+        System.Threading.Tasks.Task<DoneStrengthExercise> UpdateDoneStrengthExerciseAsync(DoneStrengthExercise body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task RequestPOST2Async(System.Guid friendshipRequestId, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task RequestDELETEAsync(System.Guid friendshipRequestId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Created</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task RequestDELETEAsync(System.Guid friendshipRequestId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<DoneStrengthExercise> UpdateDoneStrengthExerciseAsync(DoneStrengthExercise body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<User> FriendGETAsync(System.Guid friendId);
+        System.Threading.Tasks.Task<Exercise> GetExerciseAsync(System.Guid exerciseId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<User> FriendGETAsync(System.Guid friendId, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> FriendAllAsync();
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> FriendAllAsync(System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task FriendDELETEAsync(string body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task FriendDELETEAsync(string body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<Exercise> GetExerciseAsync(System.Guid exerciseId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ChangeAsync(ChangePasswordRequest body);
+        System.Threading.Tasks.Task DeleteExerciseAsync(System.Guid exerciseId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ChangeAsync(ChangePasswordRequest body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>No Content</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task RequestResetAsync(ResetPasswordRequest body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>No Content</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task RequestResetAsync(ResetPasswordRequest body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task DeleteExerciseAsync(System.Guid exerciseId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<AuthenticationResponse> ResetAsync(ResetPassword body);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Exercise>> GetExercisesAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<AuthenticationResponse> ResetAsync(ResetPassword body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Exercise>> GetExercisesAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task RequestPOST3Async(RegistrationRequest body);
+        System.Threading.Tasks.Task<Exercise> CreateExerciseAsync(Exercise body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task RequestPOST3Async(RegistrationRequest body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<Exercise> CreateExerciseAsync(Exercise body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ConfirmAsync(System.Guid userId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ConfirmAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<User> UserPUTAsync(User body);
+        System.Threading.Tasks.Task<Exercise> UpdateExerciseAsync(Exercise body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<User> UserPUTAsync(User body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<Exercise> UpdateExerciseAsync(Exercise body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ExerciseGroup> GetExerciseGroupAsync(System.Guid exerciseGroupId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ExerciseGroup> GetExerciseGroupAsync(System.Guid exerciseGroupId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task UserDELETEAsync();
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>No Content</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task UserDELETEAsync(System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Workout> WorkoutGETAsync(System.Guid workoutId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Workout> WorkoutGETAsync(System.Guid workoutId, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>No Content</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task WorkoutDELETEAsync(System.Guid workoutId);
+        System.Threading.Tasks.Task DeleteExerciseGroupAsync(System.Guid exerciseGroupId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task WorkoutDELETEAsync(System.Guid workoutId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task DeleteExerciseGroupAsync(System.Guid exerciseGroupId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Workout>> WorkoutAllAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ExerciseGroup>> GetExerciseGroupsAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Workout>> WorkoutAllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ExerciseGroup>> GetExerciseGroupsAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Workout> WorkoutPOSTAsync(Workout body);
+        System.Threading.Tasks.Task<ExerciseGroup> CreateExerciseGroupAsync(ExerciseGroup body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Workout> WorkoutPOSTAsync(Workout body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ExerciseGroup> CreateExerciseGroupAsync(ExerciseGroup body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Workout> WorkoutPUTAsync(Workout body);
+        System.Threading.Tasks.Task<ExerciseGroup> UpdateExerciseGroupAsync(ExerciseGroup body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Workout> WorkoutPUTAsync(Workout body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ExerciseGroup> UpdateExerciseGroupAsync(ExerciseGroup body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<FriendshipRequest>> GetFriendshipRequestsAsync();
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<FriendshipRequest>> GetFriendshipRequestsAsync(System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Created</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FriendshipRequest> CreateFriendshipRequestAsync(string body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Created</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FriendshipRequest> CreateFriendshipRequestAsync(string body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task AcceptFriendshipRequestAsync(System.Guid friendshipRequestId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task AcceptFriendshipRequestAsync(System.Guid friendshipRequestId, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Created</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task DeclineFriendshipRequestAsync(System.Guid friendshipRequestId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Created</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task DeclineFriendshipRequestAsync(System.Guid friendshipRequestId, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<User> GetFriendAsync(System.Guid friendId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<User> GetFriendAsync(System.Guid friendId, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> GetFriendsAsync();
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> GetFriendsAsync(System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task DeleteFriendAsync(string body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task DeleteFriendAsync(string body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>No Content</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task ChangePasswordAsync(ChangePasswordRequest body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>No Content</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task ChangePasswordAsync(ChangePasswordRequest body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>No Content</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task RequestPasswordResetAsync(ResetPasswordRequest body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>No Content</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task RequestPasswordResetAsync(ResetPasswordRequest body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>No Content</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task ResetPasswordAsync(ResetPassword body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>No Content</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task ResetPasswordAsync(ResetPassword body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task RequestRegistrationAsync(RegistrationRequest body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task RequestRegistrationAsync(RegistrationRequest body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task ConfirmRegistrationAsync(string registrationConfirmationKey);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task ConfirmRegistrationAsync(string registrationConfirmationKey, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<User> UpdateUserAsync(User body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<User> UpdateUserAsync(User body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>No Content</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task DeleteUserAsync();
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>No Content</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task DeleteUserAsync(System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<Workout> GetWorkoutAsync(System.Guid workoutId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<Workout> GetWorkoutAsync(System.Guid workoutId, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>No Content</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task DeleteWorkoutAsync(System.Guid workoutId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>No Content</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task DeleteWorkoutAsync(System.Guid workoutId, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Workout>> GetWorkoutsAsync();
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Workout>> GetWorkoutsAsync(System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Created</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<Workout> CreateWorkoutAsync(Workout body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Created</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<Workout> CreateWorkoutAsync(Workout body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<Workout> UpdateWorkoutAsync(Workout body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<Workout> UpdateWorkoutAsync(Workout body, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -475,14 +484,20 @@ namespace Workoutisten.FitStreak.Client.RestClient
                             return objectResponse_.Object;
                         }
                         else
-                        if (status_ == 400)
+                        if (status_ == 403)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            throw new ApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            throw new ApiException<ProblemDetails>("Forbidden", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 503)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Server Error", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -506,15 +521,128 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<DoneCardioExercise> CardioGETAsync(System.Guid doneCardioExerciseId)
+        public virtual System.Threading.Tasks.Task<AuthenticationResponse> RefreshTokensAsync(TokenRefreshRequest body)
         {
-            return CardioGETAsync(doneCardioExerciseId, System.Threading.CancellationToken.None);
+            return RefreshTokensAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DoneCardioExercise> CardioGETAsync(System.Guid doneCardioExerciseId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<AuthenticationResponse> RefreshTokensAsync(TokenRefreshRequest body, System.Threading.CancellationToken cancellationToken)
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/authentication/tokens");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var content_ = new System.Net.Http.StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<AuthenticationResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<AuthenticationResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<AuthenticationResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<AuthenticationResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<AuthenticationResponse>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<AuthenticationResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<AuthenticationResponse>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 503)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Server Error", status_, responseText_, headers_, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<DoneCardioExercise> GetDoneCardioExerciseAsync(System.Guid doneCardioExerciseId)
+        {
+            return GetDoneCardioExerciseAsync(doneCardioExerciseId, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<DoneCardioExercise> GetDoneCardioExerciseAsync(System.Guid doneCardioExerciseId, System.Threading.CancellationToken cancellationToken)
         {
             if (doneCardioExerciseId == null)
                 throw new System.ArgumentNullException("doneCardioExerciseId");
@@ -604,15 +732,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CardioDELETEAsync(System.Guid doneCardioExerciseId)
+        public virtual System.Threading.Tasks.Task DeleteDoneCardioExerciseAsync(System.Guid doneCardioExerciseId)
         {
-            return CardioDELETEAsync(doneCardioExerciseId, System.Threading.CancellationToken.None);
+            return DeleteDoneCardioExerciseAsync(doneCardioExerciseId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CardioDELETEAsync(System.Guid doneCardioExerciseId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteDoneCardioExerciseAsync(System.Guid doneCardioExerciseId, System.Threading.CancellationToken cancellationToken)
         {
             if (doneCardioExerciseId == null)
                 throw new System.ArgumentNullException("doneCardioExerciseId");
@@ -696,15 +824,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneCardioExercise>> CardioAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneCardioExercise>> GetDoneCardioExercisesAsync()
         {
-            return CardioAllAsync(System.Threading.CancellationToken.None);
+            return GetDoneCardioExercisesAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneCardioExercise>> CardioAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneCardioExercise>> GetDoneCardioExercisesAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/doneExercise/cardio");
@@ -790,15 +918,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<DoneCardioExercise> CardioPOSTAsync(DoneCardioExercise body)
+        public virtual System.Threading.Tasks.Task<DoneCardioExercise> CreateDoneCardioExerciseAsync(DoneCardioExercise body)
         {
-            return CardioPOSTAsync(body, System.Threading.CancellationToken.None);
+            return CreateDoneCardioExerciseAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DoneCardioExercise> CardioPOSTAsync(DoneCardioExercise body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<DoneCardioExercise> CreateDoneCardioExerciseAsync(DoneCardioExercise body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/doneExercise/cardio");
@@ -887,15 +1015,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<DoneCardioExercise> CardioPUTAsync(DoneCardioExercise body)
+        public virtual System.Threading.Tasks.Task<DoneCardioExercise> UpdateDoneCardioExerciseAsync(DoneCardioExercise body)
         {
-            return CardioPUTAsync(body, System.Threading.CancellationToken.None);
+            return UpdateDoneCardioExerciseAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DoneCardioExercise> CardioPUTAsync(DoneCardioExercise body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<DoneCardioExercise> UpdateDoneCardioExerciseAsync(DoneCardioExercise body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/doneExercise/cardio");
@@ -984,15 +1112,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<DoneStrengthExercise> StrengthGETAsync(System.Guid doneStrengthExerciseId)
+        public virtual System.Threading.Tasks.Task<DoneStrengthExercise> GetDoneStrengthExerciseAsync(System.Guid doneStrengthExerciseId)
         {
-            return StrengthGETAsync(doneStrengthExerciseId, System.Threading.CancellationToken.None);
+            return GetDoneStrengthExerciseAsync(doneStrengthExerciseId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DoneStrengthExercise> StrengthGETAsync(System.Guid doneStrengthExerciseId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<DoneStrengthExercise> GetDoneStrengthExerciseAsync(System.Guid doneStrengthExerciseId, System.Threading.CancellationToken cancellationToken)
         {
             if (doneStrengthExerciseId == null)
                 throw new System.ArgumentNullException("doneStrengthExerciseId");
@@ -1082,15 +1210,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task StrengthDELETEAsync(System.Guid doneStrengthExerciseId)
+        public virtual System.Threading.Tasks.Task DeleteDoneStrengthExerciseAsync(System.Guid doneStrengthExerciseId)
         {
-            return StrengthDELETEAsync(doneStrengthExerciseId, System.Threading.CancellationToken.None);
+            return DeleteDoneStrengthExerciseAsync(doneStrengthExerciseId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task StrengthDELETEAsync(System.Guid doneStrengthExerciseId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteDoneStrengthExerciseAsync(System.Guid doneStrengthExerciseId, System.Threading.CancellationToken cancellationToken)
         {
             if (doneStrengthExerciseId == null)
                 throw new System.ArgumentNullException("doneStrengthExerciseId");
@@ -1174,15 +1302,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneStrengthExercise>> StrengthAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneStrengthExercise>> GetDoneStrengthExercisesAsync()
         {
-            return StrengthAllAsync(System.Threading.CancellationToken.None);
+            return GetDoneStrengthExercisesAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneStrengthExercise>> StrengthAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<DoneStrengthExercise>> GetDoneStrengthExercisesAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/doneExercise/strength");
@@ -1268,15 +1396,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<DoneStrengthExercise> StrengthPOSTAsync(DoneStrengthExercise body)
+        public virtual System.Threading.Tasks.Task<DoneStrengthExercise> CreateDoneStrengthExerciseAsync(DoneStrengthExercise body)
         {
-            return StrengthPOSTAsync(body, System.Threading.CancellationToken.None);
+            return CreateDoneStrengthExerciseAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DoneStrengthExercise> StrengthPOSTAsync(DoneStrengthExercise body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<DoneStrengthExercise> CreateDoneStrengthExerciseAsync(DoneStrengthExercise body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/doneExercise/strength");
@@ -1365,15 +1493,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<DoneStrengthExercise> StrengthPUTAsync(DoneStrengthExercise body)
+        public virtual System.Threading.Tasks.Task<DoneStrengthExercise> UpdateDoneStrengthExerciseAsync(DoneStrengthExercise body)
         {
-            return StrengthPUTAsync(body, System.Threading.CancellationToken.None);
+            return UpdateDoneStrengthExerciseAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DoneStrengthExercise> StrengthPUTAsync(DoneStrengthExercise body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<DoneStrengthExercise> UpdateDoneStrengthExerciseAsync(DoneStrengthExercise body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/doneExercise/strength");
@@ -1462,15 +1590,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Exercise> ExerciseGETAsync(System.Guid exerciseId)
+        public virtual System.Threading.Tasks.Task<Exercise> GetExerciseAsync(System.Guid exerciseId)
         {
-            return ExerciseGETAsync(exerciseId, System.Threading.CancellationToken.None);
+            return GetExerciseAsync(exerciseId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Exercise> ExerciseGETAsync(System.Guid exerciseId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<Exercise> GetExerciseAsync(System.Guid exerciseId, System.Threading.CancellationToken cancellationToken)
         {
             if (exerciseId == null)
                 throw new System.ArgumentNullException("exerciseId");
@@ -1560,15 +1688,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ExerciseDELETEAsync(System.Guid exerciseId)
+        public virtual System.Threading.Tasks.Task DeleteExerciseAsync(System.Guid exerciseId)
         {
-            return ExerciseDELETEAsync(exerciseId, System.Threading.CancellationToken.None);
+            return DeleteExerciseAsync(exerciseId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ExerciseDELETEAsync(System.Guid exerciseId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteExerciseAsync(System.Guid exerciseId, System.Threading.CancellationToken cancellationToken)
         {
             if (exerciseId == null)
                 throw new System.ArgumentNullException("exerciseId");
@@ -1652,15 +1780,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Exercise>> ExerciseAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Exercise>> GetExercisesAsync()
         {
-            return ExerciseAllAsync(System.Threading.CancellationToken.None);
+            return GetExercisesAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Exercise>> ExerciseAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Exercise>> GetExercisesAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/exercise");
@@ -1746,15 +1874,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Exercise> ExercisePOSTAsync(Exercise body)
+        public virtual System.Threading.Tasks.Task<Exercise> CreateExerciseAsync(Exercise body)
         {
-            return ExercisePOSTAsync(body, System.Threading.CancellationToken.None);
+            return CreateExerciseAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Exercise> ExercisePOSTAsync(Exercise body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<Exercise> CreateExerciseAsync(Exercise body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/exercise");
@@ -1843,15 +1971,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Exercise> ExercisePUTAsync(Exercise body)
+        public virtual System.Threading.Tasks.Task<Exercise> UpdateExerciseAsync(Exercise body)
         {
-            return ExercisePUTAsync(body, System.Threading.CancellationToken.None);
+            return UpdateExerciseAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Exercise> ExercisePUTAsync(Exercise body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<Exercise> UpdateExerciseAsync(Exercise body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/exercise");
@@ -1940,15 +2068,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupGETAsync(System.Guid exerciseGroupId)
+        public virtual System.Threading.Tasks.Task<ExerciseGroup> GetExerciseGroupAsync(System.Guid exerciseGroupId)
         {
-            return ExerciseGroupGETAsync(exerciseGroupId, System.Threading.CancellationToken.None);
+            return GetExerciseGroupAsync(exerciseGroupId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupGETAsync(System.Guid exerciseGroupId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ExerciseGroup> GetExerciseGroupAsync(System.Guid exerciseGroupId, System.Threading.CancellationToken cancellationToken)
         {
             if (exerciseGroupId == null)
                 throw new System.ArgumentNullException("exerciseGroupId");
@@ -2038,15 +2166,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ExerciseGroupDELETEAsync(System.Guid exerciseGroupId)
+        public virtual System.Threading.Tasks.Task DeleteExerciseGroupAsync(System.Guid exerciseGroupId)
         {
-            return ExerciseGroupDELETEAsync(exerciseGroupId, System.Threading.CancellationToken.None);
+            return DeleteExerciseGroupAsync(exerciseGroupId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ExerciseGroupDELETEAsync(System.Guid exerciseGroupId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteExerciseGroupAsync(System.Guid exerciseGroupId, System.Threading.CancellationToken cancellationToken)
         {
             if (exerciseGroupId == null)
                 throw new System.ArgumentNullException("exerciseGroupId");
@@ -2130,15 +2258,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ExerciseGroup>> ExerciseGroupAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ExerciseGroup>> GetExerciseGroupsAsync()
         {
-            return ExerciseGroupAllAsync(System.Threading.CancellationToken.None);
+            return GetExerciseGroupsAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ExerciseGroup>> ExerciseGroupAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ExerciseGroup>> GetExerciseGroupsAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/exerciseGroup");
@@ -2224,15 +2352,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupPOSTAsync(ExerciseGroup body)
+        public virtual System.Threading.Tasks.Task<ExerciseGroup> CreateExerciseGroupAsync(ExerciseGroup body)
         {
-            return ExerciseGroupPOSTAsync(body, System.Threading.CancellationToken.None);
+            return CreateExerciseGroupAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupPOSTAsync(ExerciseGroup body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ExerciseGroup> CreateExerciseGroupAsync(ExerciseGroup body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/exerciseGroup");
@@ -2321,15 +2449,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupPUTAsync(ExerciseGroup body)
+        public virtual System.Threading.Tasks.Task<ExerciseGroup> UpdateExerciseGroupAsync(ExerciseGroup body)
         {
-            return ExerciseGroupPUTAsync(body, System.Threading.CancellationToken.None);
+            return UpdateExerciseGroupAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ExerciseGroup> ExerciseGroupPUTAsync(ExerciseGroup body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ExerciseGroup> UpdateExerciseGroupAsync(ExerciseGroup body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/exerciseGroup");
@@ -2418,15 +2546,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<FriendshipRequest>> RequestAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<FriendshipRequest>> GetFriendshipRequestsAsync()
         {
-            return RequestAllAsync(System.Threading.CancellationToken.None);
+            return GetFriendshipRequestsAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<FriendshipRequest>> RequestAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<FriendshipRequest>> GetFriendshipRequestsAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/friendship/request");
@@ -2512,15 +2640,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FriendshipRequest> RequestPOSTAsync(string body)
+        public virtual System.Threading.Tasks.Task<FriendshipRequest> CreateFriendshipRequestAsync(string body)
         {
-            return RequestPOSTAsync(body, System.Threading.CancellationToken.None);
+            return CreateFriendshipRequestAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FriendshipRequest> RequestPOSTAsync(string body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FriendshipRequest> CreateFriendshipRequestAsync(string body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/friendship/request");
@@ -2609,15 +2737,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task RequestPOST2Async(System.Guid friendshipRequestId)
+        public virtual System.Threading.Tasks.Task AcceptFriendshipRequestAsync(System.Guid friendshipRequestId)
         {
-            return RequestPOST2Async(friendshipRequestId, System.Threading.CancellationToken.None);
+            return AcceptFriendshipRequestAsync(friendshipRequestId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task RequestPOST2Async(System.Guid friendshipRequestId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task AcceptFriendshipRequestAsync(System.Guid friendshipRequestId, System.Threading.CancellationToken cancellationToken)
         {
             if (friendshipRequestId == null)
                 throw new System.ArgumentNullException("friendshipRequestId");
@@ -2702,15 +2830,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task RequestDELETEAsync(System.Guid friendshipRequestId)
+        public virtual System.Threading.Tasks.Task DeclineFriendshipRequestAsync(System.Guid friendshipRequestId)
         {
-            return RequestDELETEAsync(friendshipRequestId, System.Threading.CancellationToken.None);
+            return DeclineFriendshipRequestAsync(friendshipRequestId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task RequestDELETEAsync(System.Guid friendshipRequestId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeclineFriendshipRequestAsync(System.Guid friendshipRequestId, System.Threading.CancellationToken cancellationToken)
         {
             if (friendshipRequestId == null)
                 throw new System.ArgumentNullException("friendshipRequestId");
@@ -2794,15 +2922,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<User> FriendGETAsync(System.Guid friendId)
+        public virtual System.Threading.Tasks.Task<User> GetFriendAsync(System.Guid friendId)
         {
-            return FriendGETAsync(friendId, System.Threading.CancellationToken.None);
+            return GetFriendAsync(friendId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<User> FriendGETAsync(System.Guid friendId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<User> GetFriendAsync(System.Guid friendId, System.Threading.CancellationToken cancellationToken)
         {
             if (friendId == null)
                 throw new System.ArgumentNullException("friendId");
@@ -2892,15 +3020,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> FriendAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> GetFriendsAsync()
         {
-            return FriendAllAsync(System.Threading.CancellationToken.None);
+            return GetFriendsAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> FriendAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> GetFriendsAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/friendship/friend");
@@ -2986,15 +3114,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task FriendDELETEAsync(string body)
+        public virtual System.Threading.Tasks.Task DeleteFriendAsync(string body)
         {
-            return FriendDELETEAsync(body, System.Threading.CancellationToken.None);
+            return DeleteFriendAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task FriendDELETEAsync(string body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteFriendAsync(string body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/friendship/friend");
@@ -3077,15 +3205,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ChangeAsync(ChangePasswordRequest body)
+        public virtual System.Threading.Tasks.Task ChangePasswordAsync(ChangePasswordRequest body)
         {
-            return ChangeAsync(body, System.Threading.CancellationToken.None);
+            return ChangePasswordAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ChangeAsync(ChangePasswordRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ChangePasswordAsync(ChangePasswordRequest body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/password/change");
@@ -3147,6 +3275,22 @@ namespace Workoutisten.FitStreak.Client.RestClient
                             throw new ApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 503)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Server Error", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3168,15 +3312,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task RequestResetAsync(ResetPasswordRequest body)
+        public virtual System.Threading.Tasks.Task RequestPasswordResetAsync(ResetPasswordRequest body)
         {
-            return RequestResetAsync(body, System.Threading.CancellationToken.None);
+            return RequestPasswordResetAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task RequestResetAsync(ResetPasswordRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task RequestPasswordResetAsync(ResetPasswordRequest body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/password/requestReset");
@@ -3228,6 +3372,22 @@ namespace Workoutisten.FitStreak.Client.RestClient
                             throw new ApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 503)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Server Error", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3247,17 +3407,17 @@ namespace Workoutisten.FitStreak.Client.RestClient
             }
         }
 
-        /// <returns>Success</returns>
+        /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<AuthenticationResponse> ResetAsync(ResetPassword body)
+        public virtual System.Threading.Tasks.Task ResetPasswordAsync(ResetPassword body)
         {
-            return ResetAsync(body, System.Threading.CancellationToken.None);
+            return ResetPasswordAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
+        /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<AuthenticationResponse> ResetAsync(ResetPassword body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ResetPasswordAsync(ResetPassword body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/password/reset");
@@ -3272,7 +3432,6 @@ namespace Workoutisten.FitStreak.Client.RestClient
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -3295,14 +3454,9 @@ namespace Workoutisten.FitStreak.Client.RestClient
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
+                        if (status_ == 204)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<AuthenticationResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
+                            return;
                         }
                         else
                         if (status_ == 400)
@@ -3313,6 +3467,32 @@ namespace Workoutisten.FitStreak.Client.RestClient
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             throw new ApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 404)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new ApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
+                        if (status_ == 503)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Server Error", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -3334,17 +3514,17 @@ namespace Workoutisten.FitStreak.Client.RestClient
             }
         }
 
-        /// <returns>Created</returns>
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task RequestPOST3Async(RegistrationRequest body)
+        public virtual System.Threading.Tasks.Task RequestRegistrationAsync(RegistrationRequest body)
         {
-            return RequestPOST3Async(body, System.Threading.CancellationToken.None);
+            return RequestRegistrationAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Created</returns>
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task RequestPOST3Async(RegistrationRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task RequestRegistrationAsync(RegistrationRequest body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/registration/request");
@@ -3381,7 +3561,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
+                        if (status_ == 200)
                         {
                             return;
                         }
@@ -3406,6 +3586,12 @@ namespace Workoutisten.FitStreak.Client.RestClient
                             throw new ApiException<ProblemDetails>("Conflict", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
+                        if (status_ == 503)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Server Error", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3427,22 +3613,22 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ConfirmAsync(System.Guid userId)
+        public virtual System.Threading.Tasks.Task ConfirmRegistrationAsync(string registrationConfirmationKey)
         {
-            return ConfirmAsync(userId, System.Threading.CancellationToken.None);
+            return ConfirmRegistrationAsync(registrationConfirmationKey, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ConfirmAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ConfirmRegistrationAsync(string registrationConfirmationKey, System.Threading.CancellationToken cancellationToken)
         {
-            if (userId == null)
-                throw new System.ArgumentNullException("userId");
+            if (registrationConfirmationKey == null)
+                throw new System.ArgumentNullException("registrationConfirmationKey");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/registration/confirm/{userId}");
-            urlBuilder_.Replace("{userId}", System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/registration/confirm/{registrationConfirmationKey}");
+            urlBuilder_.Replace("{registrationConfirmationKey}", System.Uri.EscapeDataString(ConvertToString(registrationConfirmationKey, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -3489,6 +3675,12 @@ namespace Workoutisten.FitStreak.Client.RestClient
                             throw new ApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
+                        if (status_ == 503)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Server Error", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3510,15 +3702,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<User> UserPUTAsync(User body)
+        public virtual System.Threading.Tasks.Task<User> UpdateUserAsync(User body)
         {
-            return UserPUTAsync(body, System.Threading.CancellationToken.None);
+            return UpdateUserAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<User> UserPUTAsync(User body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<User> UpdateUserAsync(User body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/user");
@@ -3607,15 +3799,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task UserDELETEAsync()
+        public virtual System.Threading.Tasks.Task DeleteUserAsync()
         {
-            return UserDELETEAsync(System.Threading.CancellationToken.None);
+            return DeleteUserAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task UserDELETEAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteUserAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/user");
@@ -3695,15 +3887,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Workout> WorkoutGETAsync(System.Guid workoutId)
+        public virtual System.Threading.Tasks.Task<Workout> GetWorkoutAsync(System.Guid workoutId)
         {
-            return WorkoutGETAsync(workoutId, System.Threading.CancellationToken.None);
+            return GetWorkoutAsync(workoutId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Workout> WorkoutGETAsync(System.Guid workoutId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<Workout> GetWorkoutAsync(System.Guid workoutId, System.Threading.CancellationToken cancellationToken)
         {
             if (workoutId == null)
                 throw new System.ArgumentNullException("workoutId");
@@ -3793,15 +3985,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task WorkoutDELETEAsync(System.Guid workoutId)
+        public virtual System.Threading.Tasks.Task DeleteWorkoutAsync(System.Guid workoutId)
         {
-            return WorkoutDELETEAsync(workoutId, System.Threading.CancellationToken.None);
+            return DeleteWorkoutAsync(workoutId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>No Content</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task WorkoutDELETEAsync(System.Guid workoutId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task DeleteWorkoutAsync(System.Guid workoutId, System.Threading.CancellationToken cancellationToken)
         {
             if (workoutId == null)
                 throw new System.ArgumentNullException("workoutId");
@@ -3885,15 +4077,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Workout>> WorkoutAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Workout>> GetWorkoutsAsync()
         {
-            return WorkoutAllAsync(System.Threading.CancellationToken.None);
+            return GetWorkoutsAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Workout>> WorkoutAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Workout>> GetWorkoutsAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/workout");
@@ -3979,15 +4171,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Workout> WorkoutPOSTAsync(Workout body)
+        public virtual System.Threading.Tasks.Task<Workout> CreateWorkoutAsync(Workout body)
         {
-            return WorkoutPOSTAsync(body, System.Threading.CancellationToken.None);
+            return CreateWorkoutAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Created</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Workout> WorkoutPOSTAsync(Workout body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<Workout> CreateWorkoutAsync(Workout body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/workout");
@@ -4076,15 +4268,15 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Workout> WorkoutPUTAsync(Workout body)
+        public virtual System.Threading.Tasks.Task<Workout> UpdateWorkoutAsync(Workout body)
         {
-            return WorkoutPUTAsync(body, System.Threading.CancellationToken.None);
+            return UpdateWorkoutAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Workout> WorkoutPUTAsync(Workout body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<Workout> UpdateWorkoutAsync(Workout body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/workout");
@@ -4290,9 +4482,13 @@ namespace Workoutisten.FitStreak.Client.RestClient
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class AuthenticationResponse
     {
-        [Newtonsoft.Json.JsonProperty("token", Required = Newtonsoft.Json.Required.Always)]
+        [Newtonsoft.Json.JsonProperty("refreshToken", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public string Token { get; set; }
+        public string RefreshToken { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("jwt", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Jwt { get; set; }
 
         [Newtonsoft.Json.JsonProperty("user", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required]
@@ -4324,8 +4520,8 @@ namespace Workoutisten.FitStreak.Client.RestClient
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.Guid DoneExerciseId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("creationDate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset CreationDate { get; set; }
+        [Newtonsoft.Json.JsonProperty("createdAt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset CreatedAt { get; set; }
 
         [Newtonsoft.Json.JsonProperty("exerciseId", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
@@ -4353,8 +4549,8 @@ namespace Workoutisten.FitStreak.Client.RestClient
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.Guid DoneExerciseId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("creationDate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset CreationDate { get; set; }
+        [Newtonsoft.Json.JsonProperty("createdAt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset CreatedAt { get; set; }
 
         [Newtonsoft.Json.JsonProperty("exerciseId", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
@@ -4379,8 +4575,8 @@ namespace Workoutisten.FitStreak.Client.RestClient
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.Guid ExerciseId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("creationDate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset CreationDate { get; set; }
+        [Newtonsoft.Json.JsonProperty("createdAt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset CreatedAt { get; set; }
 
         [Newtonsoft.Json.JsonProperty("name", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
@@ -4417,8 +4613,8 @@ namespace Workoutisten.FitStreak.Client.RestClient
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.Guid ExerciseGroupId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("creationDate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset CreationDate { get; set; }
+        [Newtonsoft.Json.JsonProperty("createdAt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset CreatedAt { get; set; }
 
         [Newtonsoft.Json.JsonProperty("groupName", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
@@ -4499,13 +4695,17 @@ namespace Workoutisten.FitStreak.Client.RestClient
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ResetPassword
     {
+        [Newtonsoft.Json.JsonProperty("passwordForgottenKey", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string PasswordForgottenKey { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Email { get; set; }
+
         [Newtonsoft.Json.JsonProperty("newPassword", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string NewPassword { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("token", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
-        public System.Guid Token { get; set; }
 
     }
 
@@ -4568,6 +4768,19 @@ namespace Workoutisten.FitStreak.Client.RestClient
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class TokenRefreshRequest
+    {
+        [Newtonsoft.Json.JsonProperty("refreshToken", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string RefreshToken { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("expiredJwt", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string ExpiredJwt { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.10.0 (NJsonSchema v10.6.10.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class User
     {
         [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.Always)]
@@ -4586,14 +4799,14 @@ namespace Workoutisten.FitStreak.Client.RestClient
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string LastName { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("createdDate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset CreatedDate { get; set; }
+        [Newtonsoft.Json.JsonProperty("createdAt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTime CreatedAt { get; set; }
 
         [Newtonsoft.Json.JsonProperty("exerciseStreak", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int ExerciseStreak { get; set; }
 
         [Newtonsoft.Json.JsonProperty("lastExercise", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset LastExercise { get; set; }
+        public System.DateTime LastExercise { get; set; }
 
     }
 
@@ -4604,8 +4817,8 @@ namespace Workoutisten.FitStreak.Client.RestClient
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public System.Guid WorkoutId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("creationDate", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset CreationDate { get; set; }
+        [Newtonsoft.Json.JsonProperty("createdAt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset CreatedAt { get; set; }
 
         [Newtonsoft.Json.JsonProperty("workoutName", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
