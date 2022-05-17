@@ -45,7 +45,7 @@
 
     async Task SignUp_Button()
     {
-        await _RestClient.RequestPOST3Async(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel));
+        await _RestClient.RequestRegistrationAsync(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel));
         navigationManager.NavigateTo("/validate");
     }
 

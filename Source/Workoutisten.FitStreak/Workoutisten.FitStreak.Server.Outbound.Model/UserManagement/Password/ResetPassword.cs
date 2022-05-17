@@ -7,10 +7,15 @@ namespace Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Password;
 public class ResetPassword
 {
     [Required]
-    [JsonProperty("NewPassword")]
-    public string NewPassword { get; set; }
+    [JsonProperty("PasswordForgottenKey")]
+    public string PasswordForgottenKey { get; set; }
 
     [Required]
-    [JsonProperty("Token")]
-    public Guid Token { get; set; }
+    [EmailAddress]
+    [JsonProperty("Email")]
+    public string Email { get; set; }
+
+    [Required]
+    [JsonProperty("NewPassword")]
+    public string NewPassword { get; set; }
 }

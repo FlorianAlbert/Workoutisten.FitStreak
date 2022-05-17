@@ -9,7 +9,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training;
 public class DoneExerciseController : ControllerBase
 {
     [HttpGet]
-    [Route("cardio/{doneCardioExerciseId}")]
+    [Route("cardio/{doneCardioExerciseId}", Name = nameof(GetDoneCardioExercise))]
     [Authorize]
     [ProducesResponseType(typeof(DoneCardioExercise), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -20,7 +20,7 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpGet]
-    [Route("cardio")]
+    [Route("cardio", Name = nameof(GetDoneCardioExercises))]
     [Authorize]
     [ProducesResponseType(typeof(DoneCardioExercise[]), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -31,7 +31,7 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpPost]
-    [Route("cardio")]
+    [Route("cardio", Name = nameof(CreateDoneCardioExercise))]
     [Authorize]
     [ProducesResponseType(typeof(DoneCardioExercise) ,StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -42,7 +42,7 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpPut]
-    [Route("cardio")]
+    [Route("cardio", Name = nameof(UpdateDoneCardioExercise))]
     [Authorize]
     [ProducesResponseType(typeof(DoneCardioExercise), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -53,7 +53,7 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("cardio/{doneCardioExerciseId}")]
+    [Route("cardio/{doneCardioExerciseId}", Name = nameof(DeleteDoneCardioExercise))]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -64,7 +64,7 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpGet]
-    [Route("strength/{doneStrengthExerciseId}")]
+    [Route("strength/{doneStrengthExerciseId}", Name = nameof(GetDoneStrengthExercise))]
     [Authorize]
     [ProducesResponseType(typeof(DoneStrengthExercise), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -75,7 +75,7 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpGet]
-    [Route("strength")]
+    [Route("strength", Name = nameof(GetDoneStrengthExercises))]
     [Authorize]
     [ProducesResponseType(typeof(DoneStrengthExercise[]), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -86,7 +86,7 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpPost]
-    [Route("strength")]
+    [Route("strength", Name = nameof(CreateDoneStrengthExercise))]
     [Authorize]
     [ProducesResponseType(typeof(DoneStrengthExercise), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -97,7 +97,7 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpPut]
-    [Route("strength")]
+    [Route("strength", Name = nameof(UpdateDoneStrengthExercise))]
     [Authorize]
     [ProducesResponseType(typeof(DoneStrengthExercise), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -108,7 +108,7 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("strength/{doneStrengthExerciseId}")]
+    [Route("strength/{doneStrengthExerciseId}", Name = nameof(DeleteDoneStrengthExercise))]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

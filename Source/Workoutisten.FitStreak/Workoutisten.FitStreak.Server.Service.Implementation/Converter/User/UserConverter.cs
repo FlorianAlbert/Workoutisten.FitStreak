@@ -19,7 +19,7 @@ namespace Workoutisten.FitStreak.Server.Service.Implementation.Converter.User
                 Email = entity.NormalizedEmail,
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
-                CreatedDate = entity.CreatedAt
+                CreatedAt = entity.CreatedAt
             };
 
             return Task.FromResult(dto);
@@ -37,7 +37,7 @@ namespace Workoutisten.FitStreak.Server.Service.Implementation.Converter.User
                 NormalizedEmail = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                CreatedAt = dto.CreatedDate
+                CreatedAt = dto.CreatedAt
             };
 
             return Task.FromResult(entity);

@@ -9,6 +9,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 public class UserController : ControllerBase
 {
     [HttpPut]
+    [Route("", Name = nameof(UpdateUser))]
     [Authorize]
     [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -19,6 +20,7 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete]
+    [Route("", Name = nameof(DeleteUser))]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

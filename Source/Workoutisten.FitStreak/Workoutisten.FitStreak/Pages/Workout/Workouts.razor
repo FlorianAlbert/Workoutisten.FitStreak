@@ -1,27 +1,28 @@
 ﻿@using Workoutisten.FitStreak.Data.Models.Workout
 @using Workoutisten.FitStreak.Pages.Dialogs
 @using Workoutisten.FitStreak.Shared.PageExclusives.WorkoutsPage
+
 @page "/workouts"
 
 @inject IDialogService DialogService
 
-<MudStack>
-    <MudGrid>
-        <MudItem xs="10">
-            <SearchBar SearchInput="@SearchInput" />
-        </MudItem>
-        <MudItem xs="2" Class="d-flex align-center justify-center ">
-            <AddButtonRounded ButtonClicked="@AddNewWorkout" />
-        </MudItem>
-    </MudGrid>
+<MudGrid>
+    <MudItem xs="10">
+        <SearchBar SearchInput="@SearchInput" />
+    </MudItem>
+    <MudItem xs="2" Class="d-flex align-center justify-center ">
+        <AddButtonRounded ButtonClicked="@AddNewWorkout" />
+    </MudItem>
+</MudGrid>
 
+<MudPaper Class="rounded-xl p-2 my-3">
     <MudList>
         @foreach (var workout in UserWorkouts)
         {
             <WorkoutListElement Description="@workout.Description" LastTraining="@workout.LastTraining.ToString()" Title="@workout.WorkoutName" />
         }
     </MudList>
-</MudStack>
+</MudPaper>
 
 @code {
 

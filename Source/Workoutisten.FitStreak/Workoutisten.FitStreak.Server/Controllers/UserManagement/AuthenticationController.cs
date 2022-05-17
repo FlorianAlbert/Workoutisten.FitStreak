@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Authentication;
 using Workoutisten.FitStreak.Server.Service.Interface.Converter;
-using Workoutisten.FitStreak.Server.Service.Interface.Data;
 using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 using User = Workoutisten.FitStreak.Server.Model.Account.User;
 using UserDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person.User;
@@ -24,26 +23,47 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost]
-    [Route("login")]
+    [Route("login", Name = nameof(Login))]
     [AllowAnonymous]
     [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> Login([FromBody] AuthenticationRequest authenticationRequest)
     {
-        if (authenticationRequest?.Email is null || authenticationRequest.Password is null) return BadRequest();
+        if (authenticationRequest?.Email is null ||
+            authenticationRequest.Password is null)
+            return BadRequest("One or more of the following values were empty: email, password!");
 
-        var loginResult = await AuthenticationService.LoginAsync(authenticationRequest.Email, authenticationRequest.Password);
-
-        switch (loginResult.Status)
+        var result = await AuthenticationService.LoginAsync(authenticationRequest.Email, authenticationRequest.Password);
+        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        else return Ok(new AuthenticationResponse
         {
-            case LoginResultStatus.BadRequest: return BadRequest();
-            case LoginResultStatus.Unauthorized: return Unauthorized();
-            case LoginResultStatus.Successful: return Ok(new AuthenticationResponse
-            {
-                Token = loginResult.Token,
-                User = await Converter.ToDto<User, UserDto>(loginResult.User)
-            });
-            default: throw new ArgumentOutOfRangeException(nameof(loginResult.Status), $"Not expected login status value: {loginResult.Status}");
-        }
+            RefreshToken = result.Value.Tokens.RefreshToken,
+            Jwt = result.Value.Tokens.Jwt,
+            User = await Converter.ToDto<User, UserDto>(result.Value.User)
+        });
+    }
+
+    [HttpPost]
+    [Route("tokens", Name = nameof(RefreshTokens))]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+    public async Task<IActionResult> RefreshTokens([FromBody] TokenRefreshRequest tokenRefreshRequest)
+    {
+        if (string.IsNullOrEmpty(tokenRefreshRequest?.RefreshToken) ||
+            string.IsNullOrEmpty(tokenRefreshRequest.ExpiredJwt))
+            return BadRequest("One or more of the following values were empty: refreshToken, expiredJwt!");
+
+        var result = await AuthenticationService.RefreshTokens(tokenRefreshRequest.ExpiredJwt, tokenRefreshRequest.RefreshToken);
+        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        else return Ok(new TokenRefreshResponse
+        {
+            NewJwt = result.Value.Jwt,
+            NewRefreshToken = result.Value.RefreshToken
+        });
     }
 }

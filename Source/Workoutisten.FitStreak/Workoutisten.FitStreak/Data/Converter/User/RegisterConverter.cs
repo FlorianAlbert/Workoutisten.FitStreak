@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Workoutisten.FitStreak.Client.RestClient;
-using Workoutisten.FitStreak.Data.Models;
+﻿using Workoutisten.FitStreak.Client.RestClient;
+using Workoutisten.FitStreak.Converter;
 using Workoutisten.FitStreak.Data.Models.User;
 
-namespace Workoutisten.FitStreak.Converter.User
+namespace Workoutisten.FitStreak.Data.Converter.User
 {
     public class RegisterConverter : IConverter<RegisterModel, RegistrationRequest>
     {

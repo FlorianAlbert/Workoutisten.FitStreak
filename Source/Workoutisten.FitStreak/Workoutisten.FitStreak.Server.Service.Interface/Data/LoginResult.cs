@@ -3,9 +3,7 @@
 namespace Workoutisten.FitStreak.Server.Service.Interface.Data;
 public class LoginResult
 {
-    public string Token { get; set; }
-
     public User User { get; set; }
 
-    public LoginResultStatus Status { get; set; }
+    public TokenResult Tokens { get; set; }
 }

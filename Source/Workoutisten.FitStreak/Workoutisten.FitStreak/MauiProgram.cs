@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Components.WebView.Maui;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.LifecycleEvents;
-using Workoutisten.FitStreak.Data;
 using MudBlazor.Services;
+using System.Reflection;
 using Workoutisten.FitStreak.Client.RestClient;
 using Workoutisten.FitStreak.Converter;
-using Workoutisten.FitStreak.Data.Models.User;
-using Workoutisten.FitStreak.Converter.User;
 using Workoutisten.FitStreak.Data.Converter;
-using System.Reflection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Components.Authorization;
+using Workoutisten.FitStreak.Data.Converter.User;
+using Workoutisten.FitStreak.Data.Models.User;
 
 #if WINDOWS
 using Microsoft.UI;
@@ -48,12 +46,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<IRestClient, RestClient>(Services =>
         {
             var configSection = builder.Configuration.GetRequiredSection("LoginConfiguration");
-            return new RestClient($"{configSection.GetSection("BaseUri")}:{configSection.GetSection("Port")}", Services.GetRequiredService<IHttpClientFactory>().CreateClient());
+            //return new RestClient($"{configSection.GetSection("BaseUri")}:{configSection.GetSection("Port")}", Services.GetRequiredService<IHttpClientFactory>().CreateClient());
+            return new RestClient($"https://localhost:7228", Services.GetRequiredService<IHttpClientFactory>().CreateClient());
         });
 
         //Converters
         builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
         builder.Services.AddSingleton<IConverter<RegisterModel, RegistrationRequest>, RegisterConverter>();
+        builder.Services.AddSingleton<IConverter<LoginModel, AuthenticationRequest>, LoginConverter>();
 
         //Authentication
         builder.Services.AddSingleton<AuthenticationTokenHolderModel>();

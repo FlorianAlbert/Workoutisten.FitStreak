@@ -10,7 +10,10 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url)
         {
-            request.Headers.Authorization = System.Net.Http.Headers.AuthenticationHeaderValue.Parse(TokenHolder.AccessToken);
+            if (TokenHolder is not null && TokenHolder.AccessToken is not null)
+            {
+                request.Headers.Authorization = System.Net.Http.Headers.AuthenticationHeaderValue.Parse(TokenHolder.AccessToken);
+            }
         }
 
         partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder)
@@ -20,11 +23,12 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         partial void ProcessResponse(HttpClient client, HttpResponseMessage response)
         {
-            if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 //this.
                 //Wie refreshen wir den Token?
             }
         }
+
     }
 }

@@ -7,6 +7,6 @@
   },
   "LoginConfiguration": {
     "BaseUri": "http://localhost",
-    "Port": "7228"
+    "Port": "5228"
   }
 }
