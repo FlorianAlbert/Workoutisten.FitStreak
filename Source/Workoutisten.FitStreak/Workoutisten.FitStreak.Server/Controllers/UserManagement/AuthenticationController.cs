@@ -30,15 +30,13 @@ public class AuthenticationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> Login([FromBody] AuthenticationRequest authenticationRequest)
     {
-        if (authenticationRequest?.Email is null || authenticationRequest.Password is null) return BadRequest("The send data was empty!");
+        if (authenticationRequest?.Email is null ||
+            authenticationRequest.Password is null)
+            return BadRequest("One or more of the following values were empty: email, password!");
 
         var result = await AuthenticationService.LoginAsync(authenticationRequest.Email, authenticationRequest.Password);
-        if (result.Unsccessful)
-        {
-            return Problem(statusCode: result.StatusCode, detail: result.Detail);
-        }
-
-        return Ok(new AuthenticationResponse
+        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        else return Ok(new AuthenticationResponse
         {
             RefreshToken = result.Value.Tokens.RefreshToken,
             Jwt = result.Value.Tokens.Jwt,
@@ -56,9 +54,9 @@ public class AuthenticationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> RefreshTokens([FromBody] TokenRefreshRequest tokenRefreshRequest)
     {
-        if (tokenRefreshRequest is null ||
-            string.IsNullOrEmpty(tokenRefreshRequest.RefreshToken) ||
-            string.IsNullOrEmpty(tokenRefreshRequest.ExpiredJwt)) return BadRequest("The send data was not sufficient!");
+        if (string.IsNullOrEmpty(tokenRefreshRequest?.RefreshToken) ||
+            string.IsNullOrEmpty(tokenRefreshRequest.ExpiredJwt))
+            return BadRequest("One or more of the following values were empty: refreshToken, expiredJwt!");
 
         var result = await AuthenticationService.RefreshTokens(tokenRefreshRequest.ExpiredJwt, tokenRefreshRequest.RefreshToken);
         if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);

@@ -45,7 +45,7 @@ public class AuthenticationService : IAuthenticationService
             return new Result<LoginResult>
             {
                 StatusCode = StatusCodes.Status404NotFound,
-                Detail = $"There exixts no registered user with the email {email}."
+                Detail = $"There exists no registered user with the email {email}."
             };
         }
 
@@ -76,6 +76,7 @@ public class AuthenticationService : IAuthenticationService
         {
             user.RefreshToken = tokens.RefreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(3);
+            user.PasswordForgottenKey = null; //resets key in case the reset was requested but remembered it before executing reset
             await Repository.CreateOrUpdateAsync(user);
 
             return new Result<LoginResult>

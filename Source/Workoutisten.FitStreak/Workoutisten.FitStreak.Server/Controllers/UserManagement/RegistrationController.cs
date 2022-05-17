@@ -19,17 +19,17 @@ public class RegistrationController : ControllerBase
     [HttpPost]
     [Route("request", Name = nameof(RequestRegistration))]
     [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> RequestRegistration([FromBody] RegistrationRequest registrationRequest)
     {
-        if(string.IsNullOrEmpty(registrationRequest?.Email) ||
+        if (string.IsNullOrEmpty(registrationRequest?.Email) ||
            string.IsNullOrEmpty(registrationRequest.Password) ||
            string.IsNullOrEmpty(registrationRequest.FirstName) ||
-           string.IsNullOrEmpty(registrationRequest.LastName)) 
-            return BadRequest($"One or more of the following values were empty: email, password, firstname, lastname !");
+           string.IsNullOrEmpty(registrationRequest.LastName))  
+           return BadRequest("One or more of the following values were empty: email, password, firstname, lastname!");
 
         var canRegisterResult = await RegistrationService.CanRegisterAsync(registrationRequest.Email);
         if (canRegisterResult.Unsccessful) return Problem(statusCode: canRegisterResult.StatusCode, detail: canRegisterResult.Detail);
@@ -38,8 +38,8 @@ public class RegistrationController : ControllerBase
                                                                  registrationRequest.Password, 
                                                                  registrationRequest.FirstName,
                                                                  registrationRequest.LastName);
-        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
-        else return Ok();
+        if (result.Successful) return Ok();
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
 
     [HttpPost]
@@ -51,7 +51,7 @@ public class RegistrationController : ControllerBase
     public async Task<IActionResult> ConfirmRegistration([FromRoute] string registrationConfirmationKey)
     {
         var result = await RegistrationService.ConfirmRegistrationAsync(registrationConfirmationKey);
-        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
-        else return Ok();
+        if (result.Successful) return Ok();
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
 }
