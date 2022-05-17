@@ -1,12 +1,20 @@
-﻿@*@page "/"*@
+﻿@page "/welcome"
 @inject NavigationManager NavManager
 
 <MudStack>
-    <MudText Typo="Typo.h3">FitStreak</MudText>
-    <MudText Typo="Typo.h5">Welcome</MudText>
-    <MudText>Track your Progress and competete with your friends. Don't lose your Streak!</MudText>
-    <FitStreakButton Label="Login" Href="login"/>
-    <FitStreakButton Label="Sign Up" Href="/signup"/>
+    <MudStack AlignItems="AlignItems.Center">
+        <MudImage Class="align-center" Src="Images/fitstreak_logo_white.svg" Width="300" Height="100"></MudImage>
+    </MudStack>
+    <MudPaper Class="rounded-xl p-4 mt-5" Elevation="5">
+        <MudStack>
+            <MudText Typo="Typo.h3"><b>Welcome!</b></MudText>
+            <MudText Typo="Typo.body1">Track your Progress and competete with your friends. <br/>Don't lose your <span class="mud-primary-text">Streak</span>! </MudText>
+        </MudStack>
+        <MudStack Class="m-4" Spacing="10">
+            <FitStreakButton Label="Login" Href="login"/>
+            <FitStreakButton Label="Sign Up" Href="/signup"/>
+        </MudStack>
+    </MudPaper>
 </MudStack>
 
 @code{

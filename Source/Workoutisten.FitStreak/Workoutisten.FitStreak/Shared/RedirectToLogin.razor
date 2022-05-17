@@ -1,0 +1,14 @@
+﻿@inject NavigationManager navigationManager
+
+<MudPaper>
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+    <MudText>Redirecting...</MudText>
+</MudPaper>
+
+@code{
+        
+    protected override void OnInitialized()
+    {
+        navigationManager.NavigateTo("/welcome");
+    }
+}

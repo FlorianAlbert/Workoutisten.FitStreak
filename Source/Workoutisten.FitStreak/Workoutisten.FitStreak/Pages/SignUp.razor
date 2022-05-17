@@ -6,23 +6,38 @@
 
 @inject IRestClient _RestClient
 @inject IConverterWrapper _Converter
+@inject NavigationManager navigationManager
+
 
 <MudStack>
-    <h3>Register:</h3>
-    <MudItem xs=12>
-        <MudTextField @bind-Value="@registerModel.FirstName" Label="First Name" Variant="Variant.Text" Clearable="true" />
-    </MudItem>
-    <MudItem xs=12>
-        <MudTextField @bind-Value="@registerModel.LastName" Label="Last Name" Variant="Variant.Text" Clearable="true" />
-    </MudItem>
-    <MudItem xs=12>
-        <MudTextField @bind-Value="@registerModel.Email" Label="email" Variant="Variant.Text" Clearable="true" />
-    </MudItem>
-    <MudItem xs=12>
-        <MudTextField @bind-Value="@registerModel.Password" Label="password" Variant="Variant.Text" Clearable="true" />
-    </MudItem>
-    <FitStreakButton Label="Sign Up" OnClick="(() => SignUp_Button())"/>
+    <MudStack AlignItems="AlignItems.Center">
+        <MudImage Class="align-center" Src="Images/fitstreak_logo_white.svg" Width="300" Height="100"></MudImage>
+    </MudStack>
+    <MudPaper Class="rounded-xl p-4 mt-5" Elevation="5">
+        <MudText Class="align-center" Typo="Typo.h4"><b>Register</b></MudText>
+        <MudDivider/>
+        <MudStack Spacing="3">
+            <MudItem xs=12>
+                <MudTextField @bind-Value="@registerModel.FirstName" Label="First Name" Variant="Variant.Text" Clearable="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="@registerModel.LastName" Label="Last Name" Variant="Variant.Text" Clearable="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="@registerModel.Email" Label="Email" Variant="Variant.Text" Clearable="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="@registerModel.Password" Label="Password" Variant="Variant.Text" Clearable="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="@registerModel.Password" Label="Reenter Password" Variant="Variant.Text" Clearable="true" />
+            </MudItem>
+            <MudDivider/>
+            <FitStreakButton Label="Sign Up" OnClick="(() => SignUp_Button())"/>
+        </MudStack>
+    </MudPaper>
 </MudStack>
+
 
 @code {
 
@@ -31,6 +46,7 @@
     async Task SignUp_Button()
     {
         await _RestClient.RequestPOST3Async(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel));
+        navigationManager.NavigateTo("/validate");
     }
 
 }

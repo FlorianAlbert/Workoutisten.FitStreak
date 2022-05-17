@@ -1,0 +1,45 @@
+﻿@page "/history"
+
+<MudText Class="m-3" Typo="Typo.h5" Align="Align.Center">History</MudText>
+<MudText Align="Align.Center">You last worked out on 16.05.22 at 16:00</MudText>
+<MudDivider Class="Foreground: white"/>
+<MudTimeline TimelineAlign="TimelineAlign.Start" TimelinePosition="TimelinePosition.Left">
+    @for (var i = 0; i < 10; i++)
+    {
+        <MudTimelineItem Color="Color.Primary" Elevation="25">
+            <ItemContent>
+                <MudPaper  Elevation="3" Class="p-3">
+                    <MudText Color="Color.Primary" Typo="Typo.caption" GutterBottom="true">16.05.22 02:00</MudText>
+                    <MudExpansionPanels>
+                        @for (var i = 0; i < 4; i++)
+                        {
+                            <MudExpansionPanel Dense="true" Class="mud-theme-dark"> 
+                                <TitleContent>
+                                    <div class="d-flex gap-4">
+                                        <MudIcon Icon="@Icons.Material.Filled.Sports"/>
+                                        <MudText><strong>ExerciseName</strong></MudText>
+                                        <MudText Color="Color.Primary">3x</MudText>
+                                    </div>
+                                </TitleContent>
+                                <ChildContent>
+                                    <MudDivider Class="mud-theme-primary"/>
+                                    <MudList Dense="true">
+                                        @for (var i = 0; i < 3; i++)
+                                        {
+                                            <MudListItem><MudText>Set @i: 8 Reps, 12kg </MudText></MudListItem>
+                                            <MudDivider/>
+                                        }
+                                    </MudList>
+                                </ChildContent>
+                            </MudExpansionPanel>
+                        }
+                    </MudExpansionPanels>
+                </MudPaper>
+            </ItemContent>
+        </MudTimelineItem>
+    }
+</MudTimeline>
+
+@code {
+    
+}

@@ -38,6 +38,8 @@
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+		<MauiImage Update="Resources\Images\fitstreak_logo_black.svg" BaseSize="160,50" />
+		<MauiImage Update="Resources\Images\fitstreak_logo_white.svg" BaseSize="160,50" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -61,6 +63,9 @@
 
 	<ItemGroup>
 	  <EmbeddedResource Include="Properties\launchSettings.json" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.5" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.5" />
+	  <PackageReference Include="MudBlazor" Version="6.0.10" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -76,6 +81,8 @@
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
+	  <Folder Include="Shared\PageExclusives\ExercisePage\" />
+	  <Folder Include="Shared\PageExclusives\SocialPage\" />
 	</ItemGroup>
 
 </Project>

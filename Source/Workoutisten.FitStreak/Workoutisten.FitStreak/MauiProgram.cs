@@ -9,6 +9,7 @@ using Workoutisten.FitStreak.Converter.User;
 using Workoutisten.FitStreak.Data.Converter;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Components.Authorization;
 
 #if WINDOWS
 using Microsoft.UI;
@@ -56,6 +57,9 @@ public static class MauiProgram
 
         //Authentication
         builder.Services.AddSingleton<AuthenticationTokenHolderModel>();
+        builder.Services.AddAuthorizationCore();
+        builder.Services.AddScoped<CustomAuthenticationStateProvider>();
+        builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<CustomAuthenticationStateProvider>());
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
