@@ -1,6 +1,7 @@
 ﻿@using Workoutisten.FitStreak.Pages.Dialogs
-@page "/exercises"
 @using Workoutisten.FitStreak.Data.Models.Workout
+
+@page "/exercises"
 
 @inject IDialogService DialogService
 
@@ -9,7 +10,7 @@
         <SearchBar SearchInput="@SearchInput" />
     </MudItem>
     <MudItem xs="2" Class="d-flex align-center justify-center">
-        <MudIconButton Variant="Variant.Filled" Icon="@Icons.Filled.Add" Color="Color.Secondary" OnClick="AddNewExercise"></MudIconButton>
+        <AddButtonRounded ButtonClicked="@AddNewExercise" />
     </MudItem>
 </MudGrid>
 

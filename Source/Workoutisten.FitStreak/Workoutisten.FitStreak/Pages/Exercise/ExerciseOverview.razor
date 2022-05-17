@@ -1,0 +1,67 @@
+﻿@using Workoutisten.FitStreak.Data.Models.Workout
+
+@page "/exercises/overview"
+@page "/"
+
+@inject IDialogService _DialogService
+
+<MudGrid>
+    <MudItem xs="5" Class="MudTextHiddenOverflow">
+        <MudText Typo="Typo.h5" >@WorkoutName</MudText>
+    </MudItem>
+    <MudItem xs="3">
+        <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="CancelExercise"><MudText Typo="Typo.button">CANCEL</MudText></MudButton>
+    </MudItem>
+    <MudItem xs="3">
+        <FitStreakButton Label="COMPLETE" OnClick="@CompleteExercise" />
+    </MudItem>
+</MudGrid>
+<MudPaper Class="rounded-xl p-2 my-3">
+    @*<MudStack Row="true" Justify="Justify.Center" AlignItems="Align.Center">*@
+    <MudIconButton Icon="@Icons.Filled.ArrowBackIos" Class="mr-5"/>
+    <MudText Typo="Typo.body1" >@CurrentExercise.Name</MudText>
+    <MudIconButton Icon="@Icons.Filled.ArrowForwardIos" Class="ml-5"/>
+
+    @*</MudStack>*@
+</MudPaper>
+
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "exercise")]
+    public Guid[]? ExerciseGuids { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "workout")]
+    public Guid? WorkoutGuid { get; set; }
+
+    //[Parameter]
+    //[SupplyParameterFromQuery(Name = "workoutname")]
+    public string? WorkoutName { get; set; }
+
+    ExerciseModel CurrentExercise = new ExerciseModel();
+
+    protected override void OnInitialized()
+    {
+        //Exercises anhand der ExerciseGuids oder der WorkoutGuid holen
+
+        #region ToDelete
+        WorkoutName = "Workout 1 awdawdawdasdas";
+        CurrentExercise.Name = "Exercise 1";
+        CurrentExercise.Category = ExerciseCategoryEnum.Cardio;
+        #endregion
+
+        base.OnInitialized();
+    }
+
+    void CancelExercise()
+    {
+        //To be done
+    }
+
+    void CompleteExercise()
+    {
+        //To be done
+    }
+
+}

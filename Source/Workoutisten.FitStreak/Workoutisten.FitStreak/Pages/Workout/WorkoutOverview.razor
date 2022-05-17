@@ -2,7 +2,6 @@
 @using Workoutisten.FitStreak.Data.Models.Workout
 
 @page "/workouts/overview"
-@*@page "/"*@
 
 @*@inject IRestClient _RestClient;*@
 
@@ -28,13 +27,16 @@
 @code {
 
     [Parameter]
-    [SupplyParameterFromQuery(Name = "workoutname")]
-    public string WorkoutName { get; set; }
+    [SupplyParameterFromQuery(Name = "workout")]
+    public Guid? WorkoutGuid { get; set; }
 
     public WorkoutModel Workout { get; set; } = new WorkoutModel();
 
     protected override void OnInitialized()
     {
+        //Workout anhand der WorkoutGuid initialisieren
+
+        #region toDelete
         Workout.WorkoutName = "Workout 1";
         for (int i = 0; i < 5; i++)
         {
@@ -44,6 +46,7 @@
                     Category = ExerciseCategoryEnum.Strength
                 });
         }
+        #endregion
         base.OnInitialized();
     }
 

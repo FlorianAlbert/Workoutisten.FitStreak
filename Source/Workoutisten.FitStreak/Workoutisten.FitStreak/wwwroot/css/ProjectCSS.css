@@ -2,10 +2,7 @@
 
 .MudTextHiddenOverflow {
     overflow: hidden;
-
 }
-
-
 
 .mud-chart-donut .mud-donut-ring {
     stroke: transparent !important;
