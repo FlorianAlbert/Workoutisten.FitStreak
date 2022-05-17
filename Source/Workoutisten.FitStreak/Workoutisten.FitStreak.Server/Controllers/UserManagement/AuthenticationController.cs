@@ -30,7 +30,7 @@ public class AuthenticationController : ControllerBase
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> Login([FromBody] AuthenticationRequest authenticationRequest)
     {
-        if (authenticationRequest?.Email is null || authenticationRequest.Password is null) return BadRequest();
+        if (authenticationRequest?.Email is null || authenticationRequest.Password is null) return BadRequest("The send data was empty!");
 
         var result = await AuthenticationService.LoginAsync(authenticationRequest.Email, authenticationRequest.Password);
         if (result.Unsccessful)
@@ -43,6 +43,29 @@ public class AuthenticationController : ControllerBase
             RefreshToken = result.Value.Tokens.RefreshToken,
             Jwt = result.Value.Tokens.Jwt,
             User = await Converter.ToDto<User, UserDto>(result.Value.User)
+        });
+    }
+
+    [HttpPost]
+    [Route("tokens", Name = nameof(RefreshTokens))]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+    public async Task<IActionResult> RefreshTokens([FromBody] TokenRefreshRequest tokenRefreshRequest)
+    {
+        if (tokenRefreshRequest is null ||
+            string.IsNullOrEmpty(tokenRefreshRequest.RefreshToken) ||
+            string.IsNullOrEmpty(tokenRefreshRequest.ExpiredJwt)) return BadRequest("The send data was not sufficient!");
+
+        var result = await AuthenticationService.RefreshTokens(tokenRefreshRequest.ExpiredJwt, tokenRefreshRequest.RefreshToken);
+        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        else return Ok(new TokenRefreshResponse
+        {
+            NewJwt = result.Value.Jwt,
+            NewRefreshToken = result.Value.RefreshToken
         });
     }
 }

@@ -45,7 +45,7 @@ public class AuthenticationService : IAuthenticationService
             return new Result<LoginResult>
             {
                 StatusCode = StatusCodes.Status404NotFound,
-                Detail = $"There is no registered user with the email {email}."
+                Detail = $"There exixts no registered user with the email {email}."
             };
         }
 
@@ -79,5 +79,57 @@ public class AuthenticationService : IAuthenticationService
             StatusCode = StatusCodes.Status401Unauthorized,
             Detail = $"The password for the user with the email {email} was wrong!"
         };
+    }
+
+    public async Task<Result<TokenResult>> RefreshTokens(string expiredJwt, string refreshToken)
+    {
+        var userResult = await TokenService.GetUserFromJwtAsync(expiredJwt);
+        if (userResult.Unsccessful) {
+            return new Result<TokenResult>
+            {
+                StatusCode = userResult.StatusCode,
+                Detail = userResult.Detail
+            };
+        }
+
+        var user = userResult.Value;
+        var isRefreshTokenValid = await TokenService.IsRefreshTokenValidAsync(user, refreshToken);
+        if (!isRefreshTokenValid)
+        {
+            return new Result<TokenResult>
+            {
+                StatusCode = StatusCodes.Status401Unauthorized,
+                Detail = "The refreshToken is expired!"
+            };
+        }
+
+        var tokens = await TokenService.GenerateTokensAsync(user);
+        if(tokens?.RefreshToken is null || tokens.Jwt is null)
+        {
+            return new Result<TokenResult>
+            {
+                StatusCode = StatusCodes.Status503ServiceUnavailable,
+                Detail = "The server was unable to generate new tokens with the correct refreshToken."
+            };
+        }
+
+        try
+        {
+            user.RefreshToken = tokens.RefreshToken;
+            await Repository.CreateOrUpdateAsync(user);
+            return new Result<TokenResult>
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Value = tokens
+            };
+
+        } catch (DatabaseRepositoryException)
+        {
+            return new Result<TokenResult>
+            {
+                StatusCode = StatusCodes.Status503ServiceUnavailable,
+                Detail = "The Database - Service couldn't connect to the Database."
+            };
+        }
     }
 }

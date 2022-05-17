@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Workoutisten.FitStreak.Server.Database.Implementation.Exceptions;
 using Workoutisten.FitStreak.Server.Database.Interface;
 using Workoutisten.FitStreak.Server.Model.Account;
 using Workoutisten.FitStreak.Server.Service.Interface.Data;
@@ -62,7 +63,13 @@ public class TokenService : ITokenService
         var tokenHandler = new JwtSecurityTokenHandler();
         var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
         if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-            throw new SecurityTokenException("Invalid token");
+        {
+            return new Result<User>
+            {
+                StatusCode = StatusCodes.Status400BadRequest,
+                Detail = "Invalid token!"
+            };
+        }
 
         var userIdString = principal.Claims.SingleOrDefault(c => c.Type == "UserId")?.Value;
 
@@ -86,12 +93,23 @@ public class TokenService : ITokenService
         try
         {
             var user =  await Repository.GetAsync<User>(userId);
-            return new Result<User> 
-            { 
-                Value = user, 
-                StatusCode = StatusCodes.Status200OK 
-            };
-        } catch
+            if (user is null)
+            {
+                return new Result<User>
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Detail = "No user exists with the given id."
+                };
+            }
+            else
+            {
+                return new Result<User>
+                {
+                    Value = user,
+                    StatusCode = StatusCodes.Status200OK
+                };
+            }
+        } catch (DatabaseRepositoryException)
         {
             return new Result<User>
             {

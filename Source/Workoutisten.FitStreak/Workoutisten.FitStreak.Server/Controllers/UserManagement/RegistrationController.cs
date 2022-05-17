@@ -29,8 +29,7 @@ public class RegistrationController : ControllerBase
            string.IsNullOrEmpty(registrationRequest.Password) ||
            string.IsNullOrEmpty(registrationRequest.FirstName) ||
            string.IsNullOrEmpty(registrationRequest.LastName)) 
-            return Problem(statusCode: StatusCodes.Status400BadRequest, detail: 
-                $"One or more of the following values were empty: email, password, firstname, lastname !");
+            return BadRequest($"One or more of the following values were empty: email, password, firstname, lastname !");
 
         var canRegisterResult = await RegistrationService.CanRegisterAsync(registrationRequest.Email);
         if (canRegisterResult.Unsccessful) return Problem(statusCode: canRegisterResult.StatusCode, detail: canRegisterResult.Detail);
