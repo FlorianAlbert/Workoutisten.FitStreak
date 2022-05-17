@@ -1,8 +1,12 @@
 ﻿@using System.Timers
+@using Microsoft.AspNetCore.Authorization
 @using Workoutisten.FitStreak.Shared.PageExclusives.HomescreenPage
 
 @page "/home"
+@page "/"
 @*@page "/"*@
+
+@attribute [Authorize]  
 
 <MudStack>
 

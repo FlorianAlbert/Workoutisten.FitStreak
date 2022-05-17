@@ -1,22 +1,35 @@
 ﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
 
 <MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="FitStreakTheme"/>
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar>
-        <NavBar />
-    </MudAppBar>
-    @* <MudDrawer @bind-Open="@_drawerOpen">
-    <NavMenu />
-    </MudDrawer>*@
-    <MudMainContent>
-        <MudContainer Class="mt-2">
-            @Body
-        </MudContainer>
-    </MudMainContent>
+    <AuthorizeView>
+        <Authorized>
+            <MudAppBar>
+                <NavBar />
+            </MudAppBar>
+            @* <MudDrawer @bind-Open="@_drawerOpen">
+            <NavMenu />
+            </MudDrawer>*@
+            <MudMainContent>
+                <MudContainer Class="mt-2">
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </Authorized>
+        <NotAuthorized>
+            <MudMainContent>
+                @Body
+            </MudMainContent>
+        </NotAuthorized>
+    </AuthorizeView>
 </MudLayout>
+
+
+
 @code {
     MudTheme FitStreakTheme = new MudTheme()
     {

@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Server.Service.Implementation", "Workoutisten.FitStreak.Server.Service.Implementation\Workoutisten.FitStreak.Server.Service.Implementation.csproj", "{EAD3D2DD-15FB-47C1-AC22-741F8C3813FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Workoutisten.FitStreak.Server.Outbound.Model", "Workoutisten.FitStreak.Server.Outbound.Model\Workoutisten.FitStreak.Server.Outbound.Model.csproj", "{15E4412A-D9C7-4F59-B9B6-B75F1AA8CCCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Workoutisten.FitStreak.Server.Outbound.Model", "Workoutisten.FitStreak.Server.Outbound.Model\Workoutisten.FitStreak.Server.Outbound.Model.csproj", "{15E4412A-D9C7-4F59-B9B6-B75F1AA8CCCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
