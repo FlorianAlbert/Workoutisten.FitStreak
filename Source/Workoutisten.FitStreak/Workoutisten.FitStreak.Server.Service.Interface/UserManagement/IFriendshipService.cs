@@ -4,11 +4,11 @@ using Workoutisten.FitStreak.Server.Service.Interface.Data;
 namespace Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 public interface IFriendshipService
 {
-    Task<Result> AcceptFriendshipRequestAsync(Guid requestedUserId, Guid friendshipRequestId);
+    Task<Result> AcceptFriendshipRequestAsync(Guid userId, Guid friendshipRequestId);
 
-    Task<Result> CreateFriendshipRequestAsync(Guid requestingUserId, string requestedUserEmail);
+    Task<Result> CreateFriendshipRequestAsync(Guid userId, string requestedUserEmail);
 
-    Task<Result> DeclineFriendshipRequestAsync(Guid requestedUserId, Guid friendshipRequestId);
+    Task<Result> DeclineFriendshipRequestAsync(Guid userId, Guid friendshipRequestId);
 
     Task<Result> DeleteFollowerAsync(Guid userId, Guid followerId);
 
@@ -22,5 +22,5 @@ public interface IFriendshipService
 
     Task<Result> UnfollowUserAsync(Guid userId, Guid followedUserId);
 
-    Task<Result> WithdrawFriendshipRequestAsync(Guid requestingUserId, Guid friendshipRequestId);
+    Task<Result> WithdrawFriendshipRequestAsync(Guid userId, Guid friendshipRequestId);
 }

@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Workoutisten.FitStreak.Server.Extensions;
-using Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Friendship;
-using Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person;
+using Workoutisten.FitStreak.Server.Service.Interface.Converter;
 using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
+using UserEntity = Workoutisten.FitStreak.Server.Model.Account.User;
+using UserDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person.User;
+using FriendshipRequestEntity = Workoutisten.FitStreak.Server.Model.Account.FriendshipRequest;
+using FriendshipRequestDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Friendship.FriendshipRequest;
+using Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Friendship;
 
 namespace Workoutisten.FitStreak.Server.Controllers.UserManagement;
 
@@ -13,9 +17,12 @@ public class FriendshipController : ControllerBase
 {
     private IFriendshipService FriendshipService { get; }
 
-    public FriendshipController(IFriendshipService friendshipService)
+    private IConverterWrapper Converter { get; }
+
+    public FriendshipController(IFriendshipService friendshipService, IConverterWrapper converter)
     {
         FriendshipService = friendshipService ?? throw new ArgumentNullException(nameof(friendshipService));
+        Converter = converter ?? throw new ArgumentNullException(nameof(converter));
     }
 
     [HttpPost]
@@ -44,13 +51,13 @@ public class FriendshipController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<IActionResult> CreateFriendshipRequest([FromBody] string requestedUserEmail)
+    public async Task<IActionResult> CreateFriendshipRequest([FromBody] FriendRequest friendRequest)
     {
         var userId = await User.GetUserIdAsync();
         if (userId is null) return BadRequest("There was no userId present in the JWT!");
-        if (string.IsNullOrEmpty(requestedUserEmail)) return BadRequest("The requestedUserEmail was null or empty!");
+        if (string.IsNullOrEmpty(friendRequest?.Email)) return BadRequest("The requestedUserEmail was null or empty!");
 
-        var result = await FriendshipService.CreateFriendshipRequestAsync(userId.Value, requestedUserEmail);
+        var result = await FriendshipService.CreateFriendshipRequestAsync(userId.Value, friendRequest.Email);
         if (result.Successful) return NoContent();
         else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
@@ -74,70 +81,147 @@ public class FriendshipController : ControllerBase
     }
 
     [HttpDelete]
-    [Route("friend/followed/{followedUserId}", Name = nameof(DeleteFollower))]
+    [Route("friend/follower/{followerId}", Name = nameof(DeleteFollower))]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> DeleteFollower([FromRoute] Guid followedUserId)
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+    public async Task<IActionResult> DeleteFollower([FromRoute] Guid followerId)
     {
-        return BadRequest();
+        var userId = await User.GetUserIdAsync();
+        if (userId is null) return BadRequest("There was no userId present in the JWT!");
+
+        var result = await FriendshipService.DeleteFollowerAsync(userId.Value, followerId);
+        if (result.Successful) return NoContent();
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
 
     [HttpGet]
-    [Route("firend/followed", Name = nameof(GetFollowedUsers))]
+    [Route("friend/followed", Name = nameof(GetFollowedUsers))]
     [Authorize]
-    [ProducesResponseType(typeof(User[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserDto[]), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> GetFollowedUsers()
     {
-        return BadRequest();
+        var userId = await User.GetUserIdAsync();
+        if (userId is null) return BadRequest("There was no userId present in the JWT!");
+
+        var result = await FriendshipService.GetFollowedUsersAsync(userId.Value);
+        if (result.Successful)
+        {
+            var userDtos = result
+                .Value
+                ?.Select(async user => await Converter.ToDto<UserEntity, UserDto>(user))
+                .Select(task => task.Result)
+                .Where(result => result is not null)
+                .ToArray();
+            return Ok(userDtos);
+        }
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
 
     [HttpGet]
-    [Route("firend/follower", Name = nameof(GetFollower))]
+    [Route("friend/follower", Name = nameof(GetFollower))]
     [Authorize]
-    [ProducesResponseType(typeof(User[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserDto[]), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> GetFollower()
     {
-        return BadRequest();
+        var userId = await User.GetUserIdAsync();
+        if (userId is null) return BadRequest("There was no userId present in the JWT!");
+
+        var result = await FriendshipService.GetFollowerAsync(userId.Value);
+        if (result.Successful)
+        {
+            var userDtos = result
+                .Value
+                ?.Select(async user => await Converter.ToDto<UserEntity, UserDto>(user))
+                .Select(task => task.Result)
+                .Where(result => result is not null)
+                .ToArray();
+            return Ok(userDtos);
+        }
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
 
     [HttpGet]
     [Route("request/incoming", Name = nameof(GetIncomingFriendshipRequests))]
     [Authorize]
-    [ProducesResponseType(typeof(FriendshipRequest[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(FriendshipRequestDto[]), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> GetIncomingFriendshipRequests()
     {
+        var userId = await User.GetUserIdAsync();
+        if (userId is null) return BadRequest("There was no userId present in the JWT!");
 
-        return BadRequest();
+        var result = await FriendshipService.GetIncomingFriendshipRequestsAsync(userId.Value);
+        if (result.Successful)
+        {
+            var friendshipRequestDtos = result
+                .Value
+                ?.Select(async request => await Converter.ToDto<FriendshipRequestEntity, FriendshipRequestDto>(request))
+                .Select(task => task.Result)
+                .Where(result => result is not null)
+                .ToArray();
+            return Ok(friendshipRequestDtos);
+        }
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
 
     [HttpGet]
     [Route("request/outgoing", Name = nameof(GetOutgoingFriendshipRequests))]
     [Authorize]
-    [ProducesResponseType(typeof(FriendshipRequest[]),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(FriendshipRequestDto[]),StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> GetOutgoingFriendshipRequests()
     {
-        return BadRequest();
+        var userId = await User.GetUserIdAsync();
+        if (userId is null) return BadRequest("There was no userId present in the JWT!");
+
+        var result = await FriendshipService.GetOutgoingFriendshipRequestsAsync(userId.Value);
+        if (result.Successful)
+        {
+            var friendshipRequestDtos = result
+                .Value
+                ?.Select(async request => await Converter.ToDto<FriendshipRequestEntity, FriendshipRequestDto>(request))
+                .Select(task => task.Result)
+                .Where(result => result is not null)
+                .ToArray();
+            return Ok(friendshipRequestDtos);
+        }
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
 
     [HttpDelete]
-    [Route("friend/follower/{followedUserId}", Name = nameof(UnfollowUser))]
+    [Route("friend/followed/{followedUserId}", Name = nameof(UnfollowUser))]
     [Authorize]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> UnfollowUser([FromRoute] Guid followedUserId)
     {
-        return BadRequest();
+        var userId = await User.GetUserIdAsync();
+        if (userId is null) return BadRequest("There was no userId present in the JWT!");
+
+        var result = await FriendshipService.UnfollowUserAsync(userId.Value, followedUserId);
+        if (result.Successful) return NoContent();
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
 
     [HttpDelete]
