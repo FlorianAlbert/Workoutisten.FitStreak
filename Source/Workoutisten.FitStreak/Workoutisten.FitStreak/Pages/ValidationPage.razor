@@ -15,7 +15,7 @@
         <MudPaper Class="mud-theme-dark p-3 rounded-xl mt-4">
             <MudTextField T="string" Counter="8" Immediate="true" Label="Code" Variant="Variant.Text" @bind-Value="VerificationCode"/>
         </MudPaper>
-        <FitStreakButton Label="Verify" OnClick="SendCode" />
+        <MudButton Class="rounded-xl p-3 mt-4" Color="Color.Primary" Variant="Variant.Filled" OnClick="SendCode" FullWidth="true"><MudText Typo="Typo.button"><b>Verify</b></MudText></MudButton>
     </MudPaper>
 </MudStack>
 
