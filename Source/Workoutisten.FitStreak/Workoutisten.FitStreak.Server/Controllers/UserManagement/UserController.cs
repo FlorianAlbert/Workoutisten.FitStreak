@@ -22,6 +22,47 @@ public class UserController : ControllerBase
         Converter = converter ?? throw new ArgumentNullException(nameof(converter));
     }
 
+    [HttpDelete]
+    [Route("{userToDeleteId}", Name = nameof(DeleteUser))]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+    public async Task<IActionResult> DeleteUser([FromRoute] Guid userToDeleteId)
+    {
+
+        var ownUserId = await User.GetUserIdAsync();
+        if (ownUserId is null) return BadRequest("There was no userId present in the JWT!");
+
+        var result = await UserService.DeleteUserAsync(ownUserId.Value, userToDeleteId);
+        if (result.Successful) return NoContent();
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
+    }
+
+    [HttpGet]
+    [Route("{userId}", Name = nameof(GetUser))]
+    [Authorize]
+    [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUser([FromRoute] Guid userId)
+    {
+
+        var ownUserId = await User.GetUserIdAsync();
+        if (ownUserId is null) return BadRequest("There was no userId present in the JWT!");
+
+        var result = await UserService.GetUserAsync(userId);
+        if (result.Successful)
+        {
+            var userDto = await Converter.ToDto<UserEntity, UserDto>(result.Value);
+            return Ok(userDto);
+        }
+        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
+    }
+
     [HttpPut]
     [Route("", Name = nameof(UpdateUser))]
     [Authorize]
@@ -45,25 +86,6 @@ public class UserController : ControllerBase
             var userDto = await Converter.ToDto<UserEntity, UserDto>(result.Value);
             return Ok(userDto);
         }
-        else return Problem(statusCode: result.StatusCode, detail: result.Detail);
-    }
-
-    [HttpDelete]
-    [Route("{userToDeleteId}", Name = nameof(DeleteUser))]
-    [Authorize]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<IActionResult> DeleteUser([FromRoute] Guid userToDeleteId)
-    {
-
-        var ownUserId = await User.GetUserIdAsync();
-        if (ownUserId is null) return BadRequest("There was no userId present in the JWT!");
-
-        var result = await UserService.DeleteUser(ownUserId.Value, userToDeleteId);
-        if (result.Successful) return NoContent();
         else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
 }

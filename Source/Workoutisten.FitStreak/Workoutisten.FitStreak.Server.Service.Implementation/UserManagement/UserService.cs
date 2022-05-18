@@ -15,7 +15,7 @@ public class UserService : IUserService
         Repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<Result> DeleteUser(Guid ownUserId, Guid userToDeleteId)
+    public async Task<Result> DeleteUserAsync(Guid ownUserId, Guid userToDeleteId)
     {
         if (ownUserId != userToDeleteId)
         {
@@ -46,6 +46,36 @@ public class UserService : IUserService
         catch (DatabaseRepositoryException)
         {
             return new Result
+            {
+                StatusCode = StatusCodes.Status503ServiceUnavailable,
+                Detail = "The Database - Service couldn't connect to the Database."
+            };
+        }
+    }
+
+    public async Task<Result<User>> GetUserAsync(Guid userId)
+    {
+        try
+        {
+            var user = await Repository.GetAsync<User>(userId);
+            if (user is null)
+            {
+                return new Result<User>
+                {
+                    StatusCode = StatusCodes.Status404NotFound,
+                    Detail = $"There exists no registered user with the id {userId}."
+                };
+            }
+
+            return new Result<User>
+            {
+                StatusCode = StatusCodes.Status200OK,
+                Value = user
+            };
+        }
+        catch (DatabaseRepositoryException)
+        {
+            return new Result<User>
             {
                 StatusCode = StatusCodes.Status503ServiceUnavailable,
                 Detail = "The Database - Service couldn't connect to the Database."
