@@ -40,9 +40,10 @@ namespace Workoutisten.FitStreak.Pages
             {
                 DateTime currentTime = e.SignalTime;
                 var remainingTime = maxTimeSpan - currentTime.Subtract(lastWorkoutDate);
-                remainingPercent = (remainingTime.TotalSeconds/maxTimeSpan.TotalSeconds)*100;
+                remainingPercent = (remainingTime.TotalSeconds / maxTimeSpan.TotalSeconds) * 100;
                 elapsedPercent = 100 - remainingPercent;
-                Counts = new double[] { elapsedPercent, remainingPercent };
+                Counts = new double[] { remainingPercent, elapsedPercent };
+                if (remainingTime.TotalSeconds <= 0) timer.Stop();
                 remainingTimeString = $"{remainingTime:dd\\:hh\\:mm\\:ss}";
                 StateHasChanged();
             });
