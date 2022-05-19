@@ -10,10 +10,6 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Configurations
         {
             base.Configure(builder);
 
-            builder.HasIndex(x => x.PasswordForgottenKey)
-                   .IsUnique();
-            builder.HasIndex(x => x.RegistrationConfirmationKey)
-                   .IsUnique();
             builder.HasMany(x => x.Exercises)
                    .WithOne(x => x.Creator)
                    .OnDelete(DeleteBehavior.Cascade);
