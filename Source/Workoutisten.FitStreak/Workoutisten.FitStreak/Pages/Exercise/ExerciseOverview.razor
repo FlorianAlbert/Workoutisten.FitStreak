@@ -27,7 +27,8 @@
 
 <MudPaper Class="rounded-xl p-2 my-3">
     <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
-        <MudIconButton Icon="@Icons.Filled.ArrowBackIos" Class="mr-5" />
+        @*<MudIconButton Icon="@Icons.Filled.ArrowBackIos" Class="mr-5" OnClick="( () => Task.Run( () =>*@
+         @*CurrentExercise = Exercises[Exercises.IndexOf(CurrentExercise) +1 ] );"/>*@
         <MudText Typo="Typo.body1">@CurrentExercise.Name</MudText>
         <MudIconButton Icon="@Icons.Filled.ArrowForwardIos" Class="ml-5" />
     </MudStack>
@@ -127,6 +128,8 @@
 
     ExerciseModel CurrentExercise = new ExerciseModel();
 
+    List<ExerciseModel> Exercises { get; set; } = new List<ExerciseModel>();
+
     int? Reps { get; set; }
 
     int? Weight { get; set; }
@@ -144,6 +147,8 @@
         Sets.Add(new Set() { SetNumber = 1, Reps = 12, Weight = 10 });
         Sets.Add(new Set() { SetNumber = 2, Reps = 12, Weight = 10 });
         Sets.Add(new Set() { SetNumber = 3, Reps = 12, Weight = 10 });
+
+        //Exercises.
         #endregion
 
         base.OnInitialized();

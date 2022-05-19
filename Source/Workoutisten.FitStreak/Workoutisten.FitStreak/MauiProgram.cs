@@ -41,14 +41,29 @@ public static class MauiProgram
                         .Build();
         builder.Configuration.AddConfiguration(config);
 
+        HttpClient httpClient = null;
+
+#if __ANDROID__
+        httpClient = new HttpClient(new Xamarin.Android.Net.AndroidMessageHandler());
+#endif
+
+
         //RestClient
         builder.Services.AddHttpClient();
         builder.Services.AddSingleton<IRestClient, RestClient>(Services =>
         {
             var configSection = builder.Configuration.GetRequiredSection("LoginConfiguration");
             //return new RestClient($"{configSection.GetSection("BaseUri")}:{configSection.GetSection("Port")}", Services.GetRequiredService<IHttpClientFactory>().CreateClient());
-            return new RestClient($"https://localhost:7228", Services.GetRequiredService<IHttpClientFactory>().CreateClient());
+
+            if (httpClient is null)
+            {
+                httpClient = Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+            }
+
+
+            return new RestClient($"http://192.168.37.44:7228", httpClient);
         });
+
 
         //Converters
         builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
