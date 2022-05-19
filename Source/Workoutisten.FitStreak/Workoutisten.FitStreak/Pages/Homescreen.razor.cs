@@ -25,7 +25,7 @@ namespace Workoutisten.FitStreak.Pages
         public double[] Counts { get; set; } = new double[] { 0, 100 };
         public ChartOptions chartOptions = new ChartOptions()
         { DisableLegend = true, ChartPalette = new string[] { "#EB5E55", "#3D4151" }, LineStrokeWidth = 1 };
-
+        CustomAuthenticationStateProvider customAuthenticationStateProvider = new CustomAuthenticationStateProvider();
         
         string remainingTimeString = "00:00:00";
         double elapsedPercent = 0;
@@ -52,6 +52,7 @@ namespace Workoutisten.FitStreak.Pages
         {
             base.OnInitialized();
             StartTimer();
+            var data = customAuthenticationStateProvider.GetAuthenticationStateAsync();
         }
 
         void StartTimer()
