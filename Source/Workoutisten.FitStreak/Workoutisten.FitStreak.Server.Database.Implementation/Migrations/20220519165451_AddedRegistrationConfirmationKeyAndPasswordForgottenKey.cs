@@ -9,10 +9,14 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropIndex(
+                name: "IX_User_PasswordForgottenKey",
+                table: "User");
+
             migrationBuilder.AlterColumn<string>(
                 name: "PasswordForgottenKey",
                 table: "User",
-                type: "nvarchar(450)",
+                type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(Guid),
                 oldType: "uniqueidentifier",
@@ -21,23 +25,12 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "RegistrationConfirmationKey",
                 table: "User",
-                type: "nvarchar(450)",
+                type: "nvarchar(max)",
                 nullable: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_RegistrationConfirmationKey",
-                table: "User",
-                column: "RegistrationConfirmationKey",
-                unique: true,
-                filter: "[RegistrationConfirmationKey] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_User_RegistrationConfirmationKey",
-                table: "User");
-
             migrationBuilder.DropColumn(
                 name: "RegistrationConfirmationKey",
                 table: "User");
@@ -48,8 +41,15 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 type: "uniqueidentifier",
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(450)",
+                oldType: "nvarchar(max)",
                 oldNullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_PasswordForgottenKey",
+                table: "User",
+                column: "PasswordForgottenKey",
+                unique: true,
+                filter: "[PasswordForgottenKey] IS NOT NULL");
         }
     }
 }

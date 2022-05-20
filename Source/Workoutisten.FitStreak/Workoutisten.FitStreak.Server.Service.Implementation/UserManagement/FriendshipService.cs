@@ -84,7 +84,7 @@ public class FriendshipService : IFriendshipService
             }
 
             var requestedUser = (await Repository.GetAllAsync<User>())
-                .FirstOrDefault(user => user.NormalizedEmail == requestedUserEmail.NormalizeEmail());
+                .SingleOrDefault(user => user.NormalizedEmail == requestedUserEmail.NormalizeEmail());
             if (requestedUser is null)
             {
                 return new Result

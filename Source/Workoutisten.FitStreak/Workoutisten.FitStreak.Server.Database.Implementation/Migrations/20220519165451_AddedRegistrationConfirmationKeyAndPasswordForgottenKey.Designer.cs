@@ -12,7 +12,7 @@ using Workoutisten.FitStreak.Server.Database;
 namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
 {
     [DbContext(typeof(FitStreakDbContext))]
-    [Migration("20220517111503_AddedRegistrationConfirmationKeyAndPasswordForgottenKey")]
+    [Migration("20220519165451_AddedRegistrationConfirmationKeyAndPasswordForgottenKey")]
     partial class AddedRegistrationConfirmationKeyAndPasswordForgottenKey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -135,7 +135,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordForgottenKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -148,17 +148,9 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RegistrationConfirmationKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PasswordForgottenKey")
-                        .IsUnique()
-                        .HasFilter("[PasswordForgottenKey] IS NOT NULL");
-
-                    b.HasIndex("RegistrationConfirmationKey")
-                        .IsUnique()
-                        .HasFilter("[RegistrationConfirmationKey] IS NOT NULL");
 
                     b.ToTable("User");
                 });
