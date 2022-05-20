@@ -119,6 +119,14 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Add email to the container
+if (!int.TryParse(builder.Configuration["Smtp:SmtpPort"], out var smtpPort))
+    throw new ArgumentException($"The given SMTP port is not of type integer.", nameof(smtpPort));
+
+builder.Services.AddFluentEmail(builder.Configuration["Smtp:SmtpUser"], builder.Configuration["Smtp:SmtpUsername"])
+                .AddSmtpSender(builder.Configuration["Smtp:SmtpHost"], smtpPort, builder.Configuration["Smtp:SmtpUser"], builder.Configuration["Smtp:SmtpPassword"]);
+
+
 // Build the web application
 var app = builder.Build();
 
