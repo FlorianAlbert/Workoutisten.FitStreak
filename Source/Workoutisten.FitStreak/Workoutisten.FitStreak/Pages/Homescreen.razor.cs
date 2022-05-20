@@ -24,9 +24,13 @@ namespace Workoutisten.FitStreak.Pages
     {
         public double[] Counts { get; set; } = new double[] { 0, 100 };
         public ChartOptions chartOptions = new ChartOptions()
-        { DisableLegend = true, ChartPalette = new string[] { "#EB5E55", "#3D4151" }, LineStrokeWidth = 1 };
+        {
+            DisableLegend = true,
+            ChartPalette = new string[] { "#EB5E55", "#3D4151" },
+            LineStrokeWidth = 1
+        };
         CustomAuthenticationStateProvider customAuthenticationStateProvider = new CustomAuthenticationStateProvider();
-        
+
         string remainingTimeString = "00:00:00";
         double elapsedPercent = 0;
         double remainingPercent = 100;
@@ -40,7 +44,7 @@ namespace Workoutisten.FitStreak.Pages
             {
                 DateTime currentTime = e.SignalTime;
                 var remainingTime = maxTimeSpan - currentTime.Subtract(lastWorkoutDate);
-                remainingPercent = (remainingTime.TotalSeconds/maxTimeSpan.TotalSeconds)*100;
+                remainingPercent = (remainingTime.TotalSeconds / maxTimeSpan.TotalSeconds) * 100;
                 elapsedPercent = 100 - remainingPercent;
                 Counts = new double[] { elapsedPercent, remainingPercent };
                 remainingTimeString = $"{remainingTime:dd\\:hh\\:mm\\:ss}";

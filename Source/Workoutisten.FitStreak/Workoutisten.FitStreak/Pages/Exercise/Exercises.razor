@@ -39,6 +39,7 @@
                 CloseButton = true,
                 FullWidth = true
             };
+
         var DialogReference = DialogService.Show<AddExerciseDialog>("New Exercise: ", options);
 
         var result = await DialogReference.Result;
