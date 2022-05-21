@@ -80,16 +80,6 @@ else if (ExerciseCategory == ExerciseCategoryEnum.Cardio)
 
     Stopwatch _Stopwatch { get; set; } = new Stopwatch();
 
-    void StartDurationTimer()
-    {
-
-    }
-
-    void StopDurationTimer()
-    {
-
-    }
-
     void ToggleTimer(bool toggle)
     {
         _IconToggle = toggle;
@@ -105,13 +95,14 @@ else if (ExerciseCategory == ExerciseCategoryEnum.Cardio)
         {
             _DurationTimer.Enabled = false;
             _Stopwatch.Stop();
+            _Stopwatch.Reset();
         }
 
     }
 
     async void TimerEvent(object source, ElapsedEventArgs args)
     {
-        InvokeAsync(() =>
+        await InvokeAsync(() =>
      {
          _Seconds = _Stopwatch.Elapsed.Seconds;
          _Minutes = _Stopwatch.Elapsed.Minutes;

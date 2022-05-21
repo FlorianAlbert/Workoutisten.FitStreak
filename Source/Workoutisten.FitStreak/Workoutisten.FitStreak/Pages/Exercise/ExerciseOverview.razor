@@ -77,7 +77,7 @@
                         <MudItem xs="3" Class="d-flex justify-end">
                             <MudStack Row="true" AlignItems="AlignItems.End" Justify="Justify.FlexStart">
                                 <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Primary" Size="Size.Small" OnClick="() => EditSet(set, CurrentExercise.Category)" />
-                                <MudIconButton Icon="@Icons.Filled.Remove" Size="Size.Small" />
+                                <MudIconButton Icon="@Icons.Filled.Remove" Size="Size.Small" OnClick="() => StrengthExerciseSets[CurrentExercise].Remove(set)"/>
                             </MudStack>
                         </MudItem>
                     </MudGrid>
@@ -101,7 +101,7 @@
                         <MudItem xs="3" Class="d-flex justify-end">
                             <MudStack Row="true" AlignItems="AlignItems.End" Justify="Justify.FlexStart">
                                 <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Primary" Size="Size.Small" OnClick="() => EditSet(set, CurrentExercise.Category)" />
-                                <MudIconButton Icon="@Icons.Filled.Remove" Size="Size.Small" />
+                                <MudIconButton Icon="@Icons.Filled.Remove" Size="Size.Small" OnClick="() => CardioExerciseSets[CurrentExercise].Remove(set)"/>
                             </MudStack>
                         </MudItem>
                     </MudGrid>
@@ -116,7 +116,7 @@
     <MudGrid>
         @*<MudItem xs="1" />*@
         <MudItem xs="3" Class="d-flex justify-center">
-            <MudIconButton Icon="@Icons.Filled.Refresh" Variant="Variant.Filled" Color="Color.Primary" Class="rounded-circle p-2" />
+            <MudIconButton Icon="@Icons.Filled.Refresh" Variant="Variant.Filled" Color="Color.Primary" Class="rounded-circle" OnClick="ResetTimer"/>
         </MudItem>
         <MudItem xs="1" Class="d-flex justify-end align-center">
             <MudIconButton Icon="@Icons.Filled.Remove" Variant="Variant.Filled" Color="Color.Dark" Class="rounded-circle" OnClick="( () => Task.Run( () => TimerValue = (TimerValue.TotalSeconds == 15)? TimerValue : TimerValue.Subtract(new System.TimeSpan(0, 0, 15))))" />
@@ -128,7 +128,10 @@
             <MudIconButton Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Dark" Class="rounded-circle" OnClick="( () => Task.Run( () => TimerValue = TimerValue.Add(new System.TimeSpan(0, 0, 15))))" />
         </MudItem>
         <MudItem xs="3" Class="d-flex justify-center">
-            <MudIconButton Icon="@Icons.Filled.PlayArrow" Variant="Variant.Filled" Color="Color.Primary" Size=Size.Large Class="rounded-circle" />
+            <MudToggleIconButton Toggled="@_TimerIconToggle" ToggledChanged="ToggleTimer" Variant="Variant.Filled" Class="rounded-circle"
+                                 Icon="@Icons.Filled.PlayArrow" Color="Color.Primary"
+                                 ToggledIcon="@Icons.Filled.Pause" ToggledColor="Color.Warning" />
+
         </MudItem>
         @*<MudItem xs="1" />*@
     </MudGrid>

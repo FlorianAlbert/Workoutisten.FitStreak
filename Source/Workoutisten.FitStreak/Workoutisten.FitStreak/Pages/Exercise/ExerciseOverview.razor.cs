@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Diagnostics;
+using System.Timers;
 using Workoutisten.FitStreak.Data.Converter;
 using Workoutisten.FitStreak.Data.Enums;
 using Workoutisten.FitStreak.Data.Models.Workout;
@@ -9,6 +11,7 @@ namespace Workoutisten.FitStreak.Pages.Exercise
 {
     public partial class ExerciseOverview
     {
+        #region Parameters
         [Parameter]
         [SupplyParameterFromQuery(Name = "exercise")]
         public Guid[]? ExerciseGuids { get; set; }
@@ -20,7 +23,9 @@ namespace Workoutisten.FitStreak.Pages.Exercise
         //[Parameter]
         //[SupplyParameterFromQuery(Name = "workoutname")]
         public string? WorkoutName { get; set; }
+        #endregion
 
+        #region Properties
         ExerciseModel CurrentExercise { get; set; }
 
         List<ExerciseModel> ExerciseList { get; set; } = new();
@@ -32,8 +37,18 @@ namespace Workoutisten.FitStreak.Pages.Exercise
 
         CardioExerciseSetModel NewCardioExerciseSetModel { get; set; } = new();
 
-        System.TimeSpan TimerValue { get; set; } = new System.TimeSpan(0, 2, 0);
+        TimeSpan TimerValue { get; set; } = new TimeSpan(0, 2, 0);
 
+        TimeSpan? TimerValueBackup { get; set; }
+        
+        System.Timers.Timer _Timer { get; set; } = new System.Timers.Timer(1000);
+
+        Stopwatch _Stopwatch { get; set; } = new();
+
+        bool _TimerIconToggle { get; set; }
+        #endregion
+
+        #region Methods
         protected override void OnInitialized()
         {
             //Exercises anhand der ExerciseGuids oder der WorkoutGuid holen
@@ -113,7 +128,7 @@ namespace Workoutisten.FitStreak.Pages.Exercise
                                     SetNumber = CardioExerciseSets[CurrentExercise].Count() + 1,
                                     Distance = (newSet.Distance is null) ? 0 : newSet.Distance,
                                     Duration = (newSet.Distance.HasValue) ? (System.TimeSpan)newSet.Duration : new TimeSpan(0)
-                                }) ;
+                                });
             }
 
             StateHasChanged();
@@ -121,7 +136,7 @@ namespace Workoutisten.FitStreak.Pages.Exercise
 
         async void EditSet(object setToEdit, ExerciseCategoryEnum category)
         {
-            if(category == ExerciseCategoryEnum.Strength && setToEdit.GetType() == typeof(StrengthExerciseSetModel))
+            if (category == ExerciseCategoryEnum.Strength && setToEdit.GetType() == typeof(StrengthExerciseSetModel))
             {
                 var set = (StrengthExerciseSetModel)setToEdit;
                 var backupSetReps = set.Reps;
@@ -147,7 +162,7 @@ namespace Workoutisten.FitStreak.Pages.Exercise
                     set.Reps = backupSetReps;
                 }
             }
-            else if(category == ExerciseCategoryEnum.Cardio && setToEdit.GetType() == typeof(CardioExerciseSetModel))
+            else if (category == ExerciseCategoryEnum.Cardio && setToEdit.GetType() == typeof(CardioExerciseSetModel))
             {
                 var set = (CardioExerciseSetModel)setToEdit;
                 var backupeDuration = set.Duration;
@@ -157,7 +172,7 @@ namespace Workoutisten.FitStreak.Pages.Exercise
                 var parameters = new DialogParameters();
                 parameters.Add("CardioSetToEdit", set);
                 parameters.Add("ExerciseCategory", category);
-                
+
                 var options = new DialogOptions
                 {
                     CloseOnEscapeKey = true,
@@ -195,8 +210,52 @@ namespace Workoutisten.FitStreak.Pages.Exercise
             if (!result.Cancelled)
             {
                 TimerValue = (TimeSpan)result.Data;
+                TimerValueBackup = TimerValue;
                 StateHasChanged();
             }
         }
+
+        void ToggleTimer(bool toggle)
+        {
+            _TimerIconToggle = toggle;
+            if (toggle)
+            {
+                TimerValueBackup = TimerValue;
+                _Timer.Elapsed += TimerEvent;
+                _Timer.AutoReset = true;
+                _Timer.Enabled = true;
+                _Stopwatch.Start();
+            }
+            else
+            {
+                _Timer.Enabled = false;
+                _Stopwatch.Stop();
+                _Stopwatch.Reset();
+            }
+        }
+
+        async void TimerEvent(object source, ElapsedEventArgs args)
+        {
+            await InvokeAsync(() =>
+            {
+                TimerValue = TimerValueBackup.Value - _Stopwatch.Elapsed;
+                StateHasChanged();
+            });
+        }
+
+        void ResetTimer()
+        {
+            TimerValue = TimerValueBackup ?? TimerValue;
+            if (_Stopwatch.IsRunning)
+            {
+                _Stopwatch.Reset();
+            }
+            else
+            {
+                _Stopwatch.Restart();
+            }
+        }
+
+        #endregion
     }
 }
