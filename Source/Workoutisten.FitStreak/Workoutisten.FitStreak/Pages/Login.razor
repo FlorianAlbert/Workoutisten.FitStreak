@@ -44,16 +44,27 @@
     async void Login_Button()
     {
         message = "Logging in...";
-        var response = await _RestClient.LoginAsync(await _Converter.ToDto<LoginModel, AuthenticationRequest>(loginModel));
-        if (response != null)
+        try
         {
-            message = "Success";
-            await _AuthenticationStateProvider.Login(response.Jwt);
-            _NavigationManager.NavigateTo("/home");
-        }
-        else
+            var response = await _RestClient.LoginAsync(await _Converter.ToDto<LoginModel, AuthenticationRequest>(loginModel));
+
+            if (/*IsVerified*/ true)
+            {
+                message = "Success";
+                await _AuthenticationStateProvider.Login(response);
+                _NavigationManager.NavigateTo("/home");
+            }
+            else
+            {
+                _NavigationManager.NavigateTo("/validate");
+            }
+
+
+        } 
+        catch (Exception e)
         {
-            message = "Login Error!";
+            message = "Failed to Login";
         }
+
     }
-}
+ }

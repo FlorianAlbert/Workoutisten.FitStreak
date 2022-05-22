@@ -6,16 +6,14 @@
 
 @inject IRestClient _RestClient;
 
-<MudPaper Class="rounded-xl p-2 my-3">
+<MudPaper Class="rounded-xl p-2 my-3 h-75">
     <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
         <MudText Typo="Typo.h4">@Workout.WorkoutName</MudText>
         <MudText Align="Align.Start" Typo="Typo.subtitle2">@Workout.Exercises.Count Exercises</MudText>
         <FitStreakButton Label="START" OnClick="StartWorkout" />
     </MudStack>
     <MudDivider Class="mb-1 mt-3" DividerType="DividerType.FullWidth" />
-
-
-    <MudList>
+    <MudList Dense="true" Style="height:fit-content">
         @foreach (var exercise in Workout.Exercises)
         {
             <ExerciseListElement Category="exercise.Category" Name="@exercise.Name" />
@@ -39,7 +37,7 @@
 
         #region toDelete
         Workout.WorkoutName = "Workout 1";
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 9; i++)
         {
             Workout.Exercises.Add(new ExerciseModel()
                 {
