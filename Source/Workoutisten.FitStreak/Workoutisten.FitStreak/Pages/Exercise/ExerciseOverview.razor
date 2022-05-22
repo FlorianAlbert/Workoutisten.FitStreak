@@ -1,28 +1,113 @@
 ﻿@using Workoutisten.FitStreak.Data.Models.Workout
 
 @page "/exercises/overview"
-@*@page "/"*@
 
 @inject IDialogService _DialogService
 
+<style>
+    .AutoScrollSetStack {
+        height: 28vh;
+        overflow-x: hidden;
+        overflow-y: scroll
+    }
+</style>
+
 <MudGrid>
     <MudItem xs="5" Class="MudTextHiddenOverflow">
-        <MudText Typo="Typo.h5" >@WorkoutName</MudText>
+        <MudText Typo="Typo.h5">@WorkoutName</MudText>
     </MudItem>
     <MudItem xs="3">
-        <MudButton Color="Color.Warning" Variant="Variant.Filled" OnClick="CancelExercise"><MudText Typo="Typo.button">CANCEL</MudText></MudButton>
+        <MudButton Class="rounded-xl" Color="Color.Warning" Variant="Variant.Filled" OnClick="CancelExercise"><MudText Typo="Typo.button">CANCEL</MudText></MudButton>
     </MudItem>
     <MudItem xs="3">
         <FitStreakButton Label="COMPLETE" OnClick="@CompleteExercise" />
     </MudItem>
 </MudGrid>
-<MudPaper Class="rounded-xl p-2 my-3">
-    @*<MudStack Row="true" Justify="Justify.Center" AlignItems="Align.Center">*@
-    <MudIconButton Icon="@Icons.Filled.ArrowBackIos" Class="mr-5"/>
-    <MudText Typo="Typo.body1" >@CurrentExercise.Name</MudText>
-    <MudIconButton Icon="@Icons.Filled.ArrowForwardIos" Class="ml-5"/>
 
-    @*</MudStack>*@
+<MudPaper Class="rounded-xl p-2 my-3">
+    <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+        <MudIconButton Icon="@Icons.Filled.ArrowBackIos" Class="mr-5" />
+        <MudText Typo="Typo.body1">@CurrentExercise.Name</MudText>
+        <MudIconButton Icon="@Icons.Filled.ArrowForwardIos" Class="ml-5" />
+    </MudStack>
+
+    <MudDivider Style="padding: 2px" Class="Foreground: white my-2" />
+
+    <MudGrid>
+        <MudItem xs="2" />
+        <MudItem xs="8">
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudTextField @bind-Value="Reps" Label="Reps" Variant="Variant.Filled" MaxLength="3" Val />
+                <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Remove" Variant="Variant.Filled" Color="Color.Warning" OnClick="@( () => Task.Run( () => (Reps == null || Reps == 0)? Reps = 0 : Reps--))" />
+                <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" OnClick="@( () => Task.Run( () => (Reps == null)? Reps = 1 : Reps++))" />
+            </MudStack>
+        </MudItem>
+        <MudItem xs="2" />
+        <MudItem xs="2" />
+        <MudItem xs="8">
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudTextField @bind-Value="Weight" Label="Weight" Variant="Variant.Filled" Adornment="Adornment.End" AdornmentText="Kg" />
+                <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Remove" Variant="Variant.Filled" Color="Color.Warning" OnClick="@( () => Task.Run( () => ( Weight == null || Weight == 0)? Weight = 0 : Weight--))" />
+                <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" OnClick="@( () => Task.Run( () => (Weight == null)? Weight = 0 : Weight++))" />
+            </MudStack>
+        </MudItem>
+        <MudItem xs="2" />
+        <MudItem xs="12">
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <FitStreakButton Label="ADD SET" OnClick="AddSet" />
+            </MudStack>
+        </MudItem>
+    </MudGrid>
+
+    <MudDivider Style="padding: 2px" Class="Foreground: white my-4" />
+
+    <MudStack Spacing="2" Class="AutoScrollSetStack">
+        <MudText Typo="Typo.body1"><b>Completed:</b></MudText>
+        <MudDivider Class="mud-theme-primary" DividerType="DividerType.FullWidth" />
+        @foreach (var set in Sets)
+        {
+            <MudGrid>
+                <MudItem xs="3" Class="d-flex align-start justify-end">
+                    <MudText Typo="Typo.body1">@set.Name :</MudText>
+                </MudItem>
+                <MudItem xs="3" Class="d-flex justify-center">
+                    <MudText Typo="Typo.body1"><b>@set.Reps</b> Reps</MudText>
+                </MudItem>
+                <MudItem xs="3" Class="d-flex justify-start">
+                    <MudText Typo="Typo.body1"><b>@set.Weight</b> Kg</MudText>
+                </MudItem>
+                <MudItem xs="3" Class="d-flex justify-end">
+                    <MudStack Row="true" AlignItems="AlignItems.End" Justify="Justify.FlexStart">
+                        <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Primary" Size="Size.Small" />
+                        <MudIconButton Icon="@Icons.Filled.Remove" Size="Size.Small" />
+                    </MudStack>
+                </MudItem>
+            </MudGrid>
+            <MudDivider Class="mud-theme-primary" DividerType="DividerType.FullWidth" />
+        }
+    </MudStack>
+</MudPaper>
+
+<MudPaper Class="rounded-xl p-2 my-3">
+    <MudGrid>
+        <MudItem xs="1" />
+        <MudItem xs="2" Class="d-flex justify-center">
+            <MudIconButton Icon="@Icons.Filled.Refresh" Variant="Variant.Filled" Color="Color.Primary" Class="rounded-circle p-2" />
+        </MudItem>
+        <MudItem xs="2" Class="d-flex justify-end align-center">
+            <MudIconButton Icon="@Icons.Filled.Remove" Variant="Variant.Filled" Color="Color.Dark" Class="rounded-circle" />
+        </MudItem>
+        <MudItem xs="2" Class="d-flex justify-center align-center">
+            <MudText Typo="Typo.h5"><b>02:00</b></MudText>
+        </MudItem>
+        <MudItem xs="2" Class="d-flex justify-start align-center">
+            <MudIconButton Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Dark" Class="rounded-circle" />
+        </MudItem>
+        <MudItem xs="2" Class="d-flex justify-center">
+            <MudIconButton Icon="@Icons.Filled.PlayArrow" Variant="Variant.Filled" Color="Color.Primary" Size=Size.Large Class="rounded-circle" />
+        </MudItem>
+        <MudItem xs="1" />
+    </MudGrid>
 </MudPaper>
 
 
@@ -41,6 +126,12 @@
 
     ExerciseModel CurrentExercise = new ExerciseModel();
 
+    int? Reps { get; set; }
+
+    int? Weight { get; set; }
+
+    List<Set> Sets { get; set; } = new List<Set>();
+
     protected override void OnInitialized()
     {
         //Exercises anhand der ExerciseGuids oder der WorkoutGuid holen
@@ -49,6 +140,9 @@
         WorkoutName = "Workout 1 awdawdawdasdas";
         CurrentExercise.Name = "Exercise 1";
         CurrentExercise.Category = ExerciseCategoryEnum.Cardio;
+        Sets.Add(new Set() { SetNumber = 1, Reps = 12, Weight = 10 });
+        Sets.Add(new Set() { SetNumber = 2, Reps = 12, Weight = 10 });
+        Sets.Add(new Set() { SetNumber = 3, Reps = 12, Weight = 10 });
         #endregion
 
         base.OnInitialized();
@@ -64,4 +158,25 @@
         //To be done
     }
 
+    void AddSet()
+    {
+        Sets.Add(
+            new Set()
+                {
+                    SetNumber = Sets.Count() + 1,
+                    Reps = (Reps is null) ? 0 : (int)this.Reps,
+                    Weight = (Weight is null) ? 0 : (int)this.Weight
+                });
+    }
+
+    class Set
+    {
+        public int SetNumber { get; set; }
+
+        public string Name { get { return $"Set {SetNumber}"; } }
+
+        public int Reps { get; set; }
+
+        public int Weight { get; set; }
+    }
 }
