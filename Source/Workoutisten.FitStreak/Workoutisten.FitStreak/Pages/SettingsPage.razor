@@ -1,10 +1,13 @@
-﻿@page "/settings"
+﻿@using Plugin.LocalNotification
+@using Plugin.LocalNotification.AndroidOption
+@using Workoutisten.FitStreak.Services
+
+@page "/settings"
 @page "/"
 
-@using Plugin.LocalNotification
-@using Plugin.LocalNotification.AndroidOption
-
 @implements IDisposable
+
+@inject IPushNotificationManager _PushNotificationManager
 
 <MudStack>
     <MudText Typo="Typo.h5">Settings</MudText>
@@ -46,13 +49,13 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckMonday" Color="Color.Primary"></MudCheckBox></td>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckTuesday" Color="Color.Primary"></MudCheckBox></td>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckWednesday" Color="Color.Primary"></MudCheckBox></td>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckThursday" Color="Color.Primary"></MudCheckBox></td>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckFriday" Color="Color.Primary"></MudCheckBox></td>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckSaturday" Color="Color.Primary"></MudCheckBox></td>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckSunday" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@weekdaysWithNotification[0]" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@weekdaysWithNotification[1]" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@weekdaysWithNotification[2]" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@weekdaysWithNotification[3]" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@weekdaysWithNotification[4]" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@weekdaysWithNotification[5]" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@weekdaysWithNotification[6]" Color="Color.Primary"></MudCheckBox></td>
                     </tr>
                 </tbody>
             </MudSimpleTable>
@@ -69,25 +72,7 @@
 
     NotificationOptionEnum NotificationOption { get; set; } = NotificationOptionEnum.EverySecondDay;
 
-    NotificationRequest _Notification = new NotificationRequest
-        {
-            BadgeNumber = 1,
-            Description = "Hey! Time to work out!",
-            Title = "This is your reminder to stay on your workout schedule.\n Your body will appreciate it, and even more importantly your streak will appreciate it! ",
-            NotificationId = 1,
-            Android = new AndroidOptions
-            {
-                Priority = AndroidPriority.High
-            }
-        };
-
-    bool CheckMonday = true;
-    bool CheckTuesday = true;
-    bool CheckWednesday = true;
-    bool CheckThursday = true;
-    bool CheckFriday = true;
-    bool CheckSaturday = true;
-    bool CheckSunday = true;
+    bool[] weekdaysWithNotification = new bool[7];
 
     protected override void OnInitialized()
     {
@@ -108,17 +93,15 @@
             switch (NotificationOption)
             {
                 case NotificationOptionEnum.EveryDay:
-                    SetDailySchedule(new System.TimeSpan(24, 0, 0));
+                    _PushNotificationManager.SetDailySchedule(new System.TimeSpan(24, 0, 0));
                     break;
                 case NotificationOptionEnum.EverySecondDay:
-                    SetDailySchedule(new System.TimeSpan(48, 0, 0));
+                    _PushNotificationManager.SetDailySchedule(new System.TimeSpan(48, 0, 0));
                     break;
                 case NotificationOptionEnum.CostumWeekday:
-                    SetWeekdaySchedule();
+                    _PushNotificationManager.SetWeekdaySchedule(weekdaysWithNotification);
                     break;
             }
-
-            NotificationCenter.Current.Show(_Notification);
 
         }
     }
@@ -127,36 +110,6 @@
     {
         Preferences.Set(NotificationPreferenceKey, NotificationActive);
         Preferences.Set(NotificationOptionPreferenceKey, (int)NotificationOption);
-    }
-
-    private void SetDailySchedule(System.TimeSpan notificationRepeatTime)
-    {
-#if ANDROID
-
-    _Notification.Schedule = new NotificationRequestSchedule()
-    {
-    NotifyTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0).Add(notificationRepeatTime),
-    RepeatType = NotificationRepeat.TimeInterval,
-    NotifyRepeatInterval = notificationRepeatTime
-    };
-
-#endif
-    }
-
-    private void SetWeekdaySchedule()
-    {
-        //TODO: Wie wollen wir das machen?
-//#if ANDROID || IOS
-//   _Notification.Schedule = new NotificationRequestSchedule()
-//    {
-//        DateTime.Now.Da
-
-//    NotifyTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0).Add(notificationRepeatTime.Value),
-//    RepeatType = NotificationRepeat.TimeInterval,
-//    NotifyRepeatInterval = notificationRepeatTime
-//    }
-//    };
-//#endif
     }
 
 }

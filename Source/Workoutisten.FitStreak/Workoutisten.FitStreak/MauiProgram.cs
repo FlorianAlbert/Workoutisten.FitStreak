@@ -8,6 +8,7 @@ using Workoutisten.FitStreak.Converter;
 using Workoutisten.FitStreak.Data.Converter;
 using Workoutisten.FitStreak.Data.Converter.User;
 using Workoutisten.FitStreak.Data.Models.User;
+using Workoutisten.FitStreak.Services;
 
 #if WINDOWS
 using Microsoft.UI;
@@ -41,6 +42,7 @@ public static class MauiProgram
                         .Build();
         builder.Configuration.AddConfiguration(config);
 
+        //HttpClient
         HttpClient httpClient = null;
 
 #if __ANDROID__
@@ -75,6 +77,9 @@ public static class MauiProgram
         builder.Services.AddAuthorizationCore();
         builder.Services.AddScoped<CustomAuthenticationStateProvider>();
         builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<CustomAuthenticationStateProvider>());
+
+        //PushNotificationManager
+        builder.Services.AddSingleton<IPushNotificationManager, PushNotificationManager>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
