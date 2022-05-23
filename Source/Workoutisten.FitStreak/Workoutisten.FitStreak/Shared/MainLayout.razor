@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.Maui.Devices
 
 <MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="FitStreakTheme"/>
 <MudDialogProvider />
@@ -33,6 +34,8 @@
 
 
 @code {
+    string height = DeviceDisplay.Current.MainDisplayInfo.Height.ToString() + "px";
+
     MudTheme FitStreakTheme = new MudTheme()
     {
         Palette = new Palette()

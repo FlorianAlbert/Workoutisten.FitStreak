@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 using Workoutisten.FitStreak.Data.Models.User;
 using Microsoft.AspNetCore.Components;
+using Workoutisten.FitStreak.Client.RestClient;
+using System.Text.Json;
 
 namespace Workoutisten.FitStreak
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
-        [Inject]
-        public AuthenticationTokenHolderModel TokenHolder { get; set; }
+        public AuthenticationTokenHolderModel TokenHolder = AuthenticationTokenHolderModel.Instance;
 
         public CustomAuthenticationStateProvider()
         {
@@ -25,10 +26,19 @@ namespace Workoutisten.FitStreak
         /// </summary>
         /// <param name="token">Our JWT to store</param>
         /// <returns></returns>
-        public async Task Login(string token)
+        public async Task Login(AuthenticationResponse response)
         {
+            if(response == null) throw new ArgumentNullException(nameof(response));
+
+            TokenHolder.AccessToken = response.Jwt;
+            TokenHolder.RefreshToken = response.RefreshToken;
+
             //maybe do/store/save anything as part of this process
-            await SecureStorage.SetAsync("accounttoken", token);
+            await SecureStorage.SetAsync("accounttoken", response.Jwt);
+            await SecureStorage.SetAsync("refreshtoken", response.RefreshToken);
+            await SecureStorage.SetAsync("user", response.User.FirstName);
+
+
 
             //Providing the current identity ifnormation
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
@@ -56,9 +66,10 @@ namespace Workoutisten.FitStreak
             try
             {
                 var userInfo = await SecureStorage.GetAsync("accounttoken");
+                var userName = await SecureStorage.GetAsync("user");
                 if (userInfo != null)
                 {
-                    var claims = new[] { new Claim(ClaimTypes.Name, "Sample User") };
+                    var claims = new[] { new Claim(ClaimTypes.Name, userName)};
                     var identity = new ClaimsIdentity(claims, "Custom authentication");
                     return new AuthenticationState(new ClaimsPrincipal(identity));
                 }
@@ -71,5 +82,24 @@ namespace Workoutisten.FitStreak
 
             return new AuthenticationState(new ClaimsPrincipal());
         }
+
+        //public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
+        //{
+        //    var payload = jwt.Split('.')[1];
+        //    var jsonBytes = ParseBase64WithoutPadding(payload);
+        //    var keyValuePairs = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonBytes);
+        //    return keyValuePairs.Select(kvp => new Claim(kvp.Key, kvp.Value.ToString()));
+        //}
+
+        //private static byte[] ParseBase64WithoutPadding(string base64)
+        //{
+        //    switch (base64.Length % 4)
+        //    {
+        //        case 2: base64 += "=="; break;
+        //        case 3: base64 += "="; break;
+        //    }
+        //    return Convert.FromBase64String(base64);
+        //}
+
     }
 }
