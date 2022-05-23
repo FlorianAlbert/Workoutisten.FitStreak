@@ -1,4 +1,10 @@
 ﻿@page "/settings"
+@page "/"
+
+@using Plugin.LocalNotification
+@using Plugin.LocalNotification.AndroidOption
+
+@implements IDisposable
 
 <MudStack>
     <MudText Typo="Typo.h5">Settings</MudText>
@@ -9,7 +15,7 @@
                 <MudText Typo="Typo.body1">Activate Push-Notifications</MudText>
             </MudItem>
             <MudItem>
-                <MudSwitch @bind-Checked="@NotificationActive" Color="Color.Primary" />
+                <MudSwitch Checked="NotificationActive" Color="Color.Primary" T="bool" CheckedChanged="NotifyMeChanged" />
             </MudItem>
         </MudGrid>
         <MudGrid>
@@ -17,10 +23,10 @@
                 <MudText Typo="Typo.body1">Remind me every:</MudText>
             </MudItem>
             <MudItem>
-                <MudSelect @bind-Value="NotificationOption" Label="Select" Placeholder="Please Select">
-                    <MudSelectItem Value="@(0)">Custom Weekdays</MudSelectItem>
-                    <MudSelectItem Value="@(1)">Every other day</MudSelectItem>
-                    <MudSelectItem Value="@(2)">Everyday</MudSelectItem>
+                <MudSelect T="NotificationOptionEnum" @bind-Value="NotificationOption" Label="Select" Placeholder="Please Select">
+                    <MudSelectItem T="NotificationOptionEnum" Value="NotificationOptionEnum.EverySecondDay">Every other day</MudSelectItem>
+                    <MudSelectItem T="NotificationOptionEnum" Value="NotificationOptionEnum.EveryDay">Everyday</MudSelectItem>
+                    <MudSelectItem T="NotificationOptionEnum" Value="NotificationOptionEnum.CostumWeekday">Custom Weekdays</MudSelectItem>
                 </MudSelect>
             </MudItem>
         </MudGrid>
@@ -40,13 +46,13 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckMonday"  Color="Color.Primary"></MudCheckBox></td>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckTuesday"  Color="Color.Primary"></MudCheckBox></td>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckWednesday"  Color="Color.Primary"></MudCheckBox></td>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckThursday"  Color="Color.Primary"></MudCheckBox></td>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckFriday"  Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckMonday" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckTuesday" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckWednesday" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckThursday" Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckFriday" Color="Color.Primary"></MudCheckBox></td>
                         <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckSaturday" Color="Color.Primary"></MudCheckBox></td>
-                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckSunday"  Color="Color.Primary"></MudCheckBox></td>
+                        <td style="padding:0"><MudCheckBox Class="m-0" @bind-Checked="@CheckSunday" Color="Color.Primary"></MudCheckBox></td>
                     </tr>
                 </tbody>
             </MudSimpleTable>
@@ -55,14 +61,102 @@
 
 </MudStack>
 @code {
-    public bool NotificationActive = true;
-    public int NotificationOption = 0;
+    static readonly string NotificationPreferenceKey = "NotificationsEnabled";
 
-    public bool CheckMonday = true;
-    public bool CheckTuesday = true;
-    public bool CheckWednesday = true;
-    public bool CheckThursday = true;
-    public bool CheckFriday = true;
-    public bool CheckSaturday = true;
-    public bool CheckSunday = true;
+    static readonly string NotificationOptionPreferenceKey = "NotificationOptions";
+
+    bool NotificationActive = true;
+
+    NotificationOptionEnum NotificationOption { get; set; } = NotificationOptionEnum.EverySecondDay;
+
+    NotificationRequest _Notification = new NotificationRequest
+        {
+            BadgeNumber = 1,
+            Description = "Hey! Time to work out!",
+            Title = "This is your reminder to stay on your workout schedule.\n Your body will appreciate it, and even more importantly your streak will appreciate it! ",
+            NotificationId = 1,
+            Android = new AndroidOptions
+            {
+                Priority = AndroidPriority.High
+            }
+        };
+
+    bool CheckMonday = true;
+    bool CheckTuesday = true;
+    bool CheckWednesday = true;
+    bool CheckThursday = true;
+    bool CheckFriday = true;
+    bool CheckSaturday = true;
+    bool CheckSunday = true;
+
+    protected override void OnInitialized()
+    {
+        NotificationActive = Preferences.Get(NotificationPreferenceKey, false);
+        NotificationOption = (NotificationOptionEnum)Preferences.Get(NotificationOptionPreferenceKey, 1);
+
+        base.OnInitialized();
+    }
+
+    void NotifyMeChanged(bool switchState)
+    {
+        NotificationActive = switchState;
+
+        Preferences.Set(NotificationPreferenceKey, NotificationActive);
+
+        if (switchState)
+        {
+            switch (NotificationOption)
+            {
+                case NotificationOptionEnum.EveryDay:
+                    SetDailySchedule(new System.TimeSpan(24, 0, 0));
+                    break;
+                case NotificationOptionEnum.EverySecondDay:
+                    SetDailySchedule(new System.TimeSpan(48, 0, 0));
+                    break;
+                case NotificationOptionEnum.CostumWeekday:
+                    SetWeekdaySchedule();
+                    break;
+            }
+
+            NotificationCenter.Current.Show(_Notification);
+
+        }
+    }
+
+    public void Dispose()
+    {
+        Preferences.Set(NotificationPreferenceKey, NotificationActive);
+        Preferences.Set(NotificationOptionPreferenceKey, (int)NotificationOption);
+    }
+
+    private void SetDailySchedule(System.TimeSpan notificationRepeatTime)
+    {
+#if ANDROID
+
+    _Notification.Schedule = new NotificationRequestSchedule()
+    {
+    NotifyTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0).Add(notificationRepeatTime),
+    RepeatType = NotificationRepeat.TimeInterval,
+    NotifyRepeatInterval = notificationRepeatTime
+    };
+
+#endif
+    }
+
+    private void SetWeekdaySchedule()
+    {
+        //TODO: Wie wollen wir das machen?
+//#if ANDROID || IOS
+//   _Notification.Schedule = new NotificationRequestSchedule()
+//    {
+//        DateTime.Now.Da
+
+//    NotifyTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0).Add(notificationRepeatTime.Value),
+//    RepeatType = NotificationRepeat.TimeInterval,
+//    NotifyRepeatInterval = notificationRepeatTime
+//    }
+//    };
+//#endif
+    }
+
 }

@@ -40,8 +40,8 @@ namespace Workoutisten.FitStreak.Pages.Exercise
         TimeSpan TimerValue { get; set; } = new TimeSpan(0, 2, 0);
 
         TimeSpan? TimerValueBackup { get; set; }
-        
-        System.Timers.Timer _Timer { get; set; } = new System.Timers.Timer(1000);
+
+        System.Timers.Timer _Timer { get; set; } = new System.Timers.Timer(500);
 
         Stopwatch _Stopwatch { get; set; } = new();
 
@@ -239,6 +239,15 @@ namespace Workoutisten.FitStreak.Pages.Exercise
             await InvokeAsync(() =>
             {
                 TimerValue = TimerValueBackup.Value - _Stopwatch.Elapsed;
+                if (TimerValue.TotalSeconds == 0)
+                {
+                    ToggleTimer(false);
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Vibration.Vibrate(1000);
+                    }
+                    //TODO: Maybe Ton spielen oder so?
+                }
                 StateHasChanged();
             });
         }

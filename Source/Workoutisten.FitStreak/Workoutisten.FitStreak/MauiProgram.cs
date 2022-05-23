@@ -61,7 +61,7 @@ public static class MauiProgram
             }
 
 
-            return new RestClient($"http://192.168.37.46:5228", httpClient);
+            return new RestClient($"https://localhost:7228", httpClient);
         });
 
 

@@ -17,6 +17,8 @@ using MudBlazor;
 using Workoutisten.FitStreak.Shared.PageExclusives.HomescreenPage;
 using ApexCharts;
 using System.Timers;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
 
 namespace Workoutisten.FitStreak.Pages
 {
@@ -57,6 +59,7 @@ namespace Workoutisten.FitStreak.Pages
             base.OnInitialized();
             StartTimer();
             var data = customAuthenticationStateProvider.GetAuthenticationStateAsync();
+
         }
 
         void StartTimer()
