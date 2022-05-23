@@ -10,6 +10,25 @@ namespace Workoutisten.FitStreak.Services
 {
     public class PushNotificationManager : IPushNotificationManager
     {
+
+        //static PushNotificationManager()
+        //{
+        //}
+
+        //private PushNotificationManager()
+        //{
+        //}
+
+        //public static PushNotificationManager Instance
+        //{
+        //    get
+        //    {
+        //        return Instance;
+        //    }
+        //}
+
+        public PushNotificationManager() { }
+
         NotificationRequest _OptionalNotification = new NotificationRequest
         {
             BadgeNumber = 1,
