@@ -1,32 +1,10 @@
 ﻿using Plugin.LocalNotification;
 using Plugin.LocalNotification.AndroidOption;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Workoutisten.FitStreak.Services
 {
     public class PushNotificationManager : IPushNotificationManager
     {
-
-        //static PushNotificationManager()
-        //{
-        //}
-
-        //private PushNotificationManager()
-        //{
-        //}
-
-        //public static PushNotificationManager Instance
-        //{
-        //    get
-        //    {
-        //        return Instance;
-        //    }
-        //}
-
         public PushNotificationManager() { }
 
         NotificationRequest _OptionalNotification = new NotificationRequest
@@ -98,7 +76,7 @@ namespace Workoutisten.FitStreak.Services
             //    NotifyRepeatInterval = notificationRepeatTime
             //    }
             //    };
-            ShowNotification(_OptionalNotification);
+            //ShowNotification(_OptionalNotification);
             //#endif
         }
 
@@ -121,7 +99,9 @@ namespace Workoutisten.FitStreak.Services
 
         private void ShowNotification(NotificationRequest notificationToShow)
         {
+#if ANDROID
             NotificationCenter.Current.Show(notificationToShow);
+#endif
         }
     }
 }

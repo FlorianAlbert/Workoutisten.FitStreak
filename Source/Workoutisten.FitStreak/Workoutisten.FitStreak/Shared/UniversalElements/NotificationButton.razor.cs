@@ -15,7 +15,7 @@ using Workoutisten.FitStreak.Data.Enums;
 using Workoutisten.FitStreak.Data.Models;
 using MudBlazor;
 
-namespace Workoutisten.FitStreak.Shared
+namespace Workoutisten.FitStreak.Shared.UniversalElements
 {
     public partial class NotificationButton : MudComponentBase
     {
