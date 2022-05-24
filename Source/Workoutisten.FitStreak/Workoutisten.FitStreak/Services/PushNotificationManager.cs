@@ -35,10 +35,12 @@ namespace Workoutisten.FitStreak.Services
             Description = "Hey! Time to work out!",
             Title = "This is your reminder to stay on your workout schedule.\n Your body will appreciate it, and even more importantly your streak will appreciate it! ",
             NotificationId = 1,
+#if ANDROID
             Android = new AndroidOptions
             {
                 Priority = AndroidPriority.High
             }
+#endif
         };
 
         NotificationRequest _StreakNotification12HoursBefore = new NotificationRequest
@@ -47,10 +49,12 @@ namespace Workoutisten.FitStreak.Services
             Description = "Your Streak is running out!",
             Title = "You are only 12 hours away from losing your Streak, better sooner than later!",
             NotificationId = 1,
+#if ANDROID
             Android = new AndroidOptions
             {
                 Priority = AndroidPriority.High
             }
+#endif
         };
 
         NotificationRequest _StreakNotification2HoursBefore = new NotificationRequest
@@ -59,16 +63,17 @@ namespace Workoutisten.FitStreak.Services
             Description = "Your Streak is running out!",
             Title = "You are only 2 hours away from  losing your Streak, this is not a test, I repeat, this is not a test! You are about to lose your streak!",
             NotificationId = 1,
+#if ANDROID
             Android = new AndroidOptions
             {
                 Priority = AndroidPriority.Max
             }
+#endif
         };
 
 
         public void SetDailySchedule(System.TimeSpan notificationRepeatTime)
         {
-#if ANDROID
 
             _OptionalNotification.Schedule = new NotificationRequestSchedule()
             {
@@ -77,7 +82,6 @@ namespace Workoutisten.FitStreak.Services
                 NotifyRepeatInterval = notificationRepeatTime
             };
             ShowNotification(_OptionalNotification);
-#endif
 
         }
 
