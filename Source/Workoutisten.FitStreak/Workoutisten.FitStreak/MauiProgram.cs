@@ -6,8 +6,10 @@ using System.Reflection;
 using Workoutisten.FitStreak.Client.RestClient;
 using Workoutisten.FitStreak.Converter;
 using Workoutisten.FitStreak.Data.Converter;
+using Workoutisten.FitStreak.Data.Converter.ExerciseAndWorkout;
 using Workoutisten.FitStreak.Data.Converter.User;
 using Workoutisten.FitStreak.Data.Models.User;
+using Workoutisten.FitStreak.Data.Models.Workout;
 using Workoutisten.FitStreak.Services;
 
 #if WINDOWS
@@ -71,6 +73,8 @@ public static class MauiProgram
         builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
         builder.Services.AddSingleton<IConverter<RegisterModel, RegistrationRequest>, RegisterConverter>();
         builder.Services.AddSingleton<IConverter<LoginModel, AuthenticationRequest>, LoginConverter>();
+        builder.Services.AddSingleton<IConverter<ExerciseModel, Exercise>, ExerciseConverter>();
+        builder.Services.AddSingleton<IConverter<WorkoutModel, Workout>, WorkoutConverter>();
 
         //Authentication
         builder.Services.AddSingleton<AuthenticationTokenHolderModel>();
