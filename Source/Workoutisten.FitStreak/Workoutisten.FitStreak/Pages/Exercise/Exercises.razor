@@ -3,7 +3,7 @@
 
 @page "/exercises"
 
-@inject IDialogService DialogService
+@inject IDialogService _DialogService
 @inject IRestClient _RestClient
 @inject IConverterWrapper _Converter
 
@@ -42,7 +42,7 @@
                 FullWidth = true
             };
 
-        var DialogReference = DialogService.Show<AddExerciseDialog>("New Exercise: ", options);
+        var DialogReference = _DialogService.Show<AddExerciseDialog>("New Exercise: ", options);
 
         var result = await DialogReference.Result;
 

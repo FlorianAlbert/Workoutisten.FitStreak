@@ -1,4 +1,5 @@
 ﻿@using Workoutisten.FitStreak.Data.Models.User
+@using Workoutisten.FitStreak.Pages.Dialogs
 
 @page "/login"
 
@@ -6,6 +7,7 @@
 @inject CustomAuthenticationStateProvider _AuthenticationStateProvider
 @inject IRestClient _RestClient
 @inject IConverterWrapper _Converter
+@inject IDialogService _DialogService
 
 <MudStack>
     <MudStack AlignItems="AlignItems.Center">
@@ -27,7 +29,7 @@
         <MudButton Class="rounded-xl p-3 mt-4" Color="Color.Primary" Variant="Variant.Filled" OnClick="Login_Button" FullWidth="true">
             <MudText Typo="Typo.button"><b>Login</b></MudText>
         </MudButton>
-         <MudButton OnClick="ForgotPassword" Class="d-flex justify-center mt-3" FullWidth="true">
+        <MudButton OnClick="ForgotPassword" Class="d-flex justify-center mt-3" FullWidth="true">
             <MudText Typo="Typo.subtitle1" Color="Color.Primary"><u>Forgot password?</u></MudText>
         </MudButton>
         @if (!(string.IsNullOrEmpty(message)))
@@ -72,15 +74,31 @@
 
     }
 
-    void ForgotPassword()
+    async void ForgotPassword()
     {
         try
         {
+            var options = new DialogOptions
+                {
+                    CloseButton = true,
+                    FullWidth = true
+                };
 
+            var DialogReference = _DialogService.Show<ResetPasswordDialog>("Reset your password ", options);
+
+            var result = await DialogReference.Result;
+
+            if (!result.Cancelled)
+            {
+                //var exercise = await _RestClient.CreateExerciseAsync(await _Converter.ToDto<ExerciseModel, Exercise>((ExerciseModel)result.Data));
+                //UserExercises.Add(await _Converter.ToEntity<Exercise, ExerciseModel>(exercise));
+            }
+
+            StateHasChanged();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            
+
         }
     }
  }

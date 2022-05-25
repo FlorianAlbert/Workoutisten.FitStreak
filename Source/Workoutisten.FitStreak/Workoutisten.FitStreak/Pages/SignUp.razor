@@ -78,7 +78,7 @@
 
     private string PasswordMatch(string arg)
     {
-        if (pwField1.Value != arg)
+        if (!pwField1.Value.Equals(arg))
             return "Passwords don't match";
         return null;
     }
