@@ -3,7 +3,9 @@
 
 @page "/exercises"
 
-@inject IDialogService DialogService
+@inject IDialogService _DialogService
+@inject IRestClient _RestClient
+@inject IConverterWrapper _Converter
 
 <MudGrid>
     <MudItem xs="10">
@@ -39,13 +41,15 @@
                 CloseButton = true,
                 FullWidth = true
             };
-        var DialogReference = DialogService.Show<AddExerciseDialog>("New Exercise: ", options);
+
+        var DialogReference = _DialogService.Show<AddExerciseDialog>("New Exercise: ", options);
 
         var result = await DialogReference.Result;
 
         if (!result.Cancelled)
         {
-            UserExercises.Add((ExerciseModel)result.Data);
+            var exercise = await _RestClient.CreateExerciseAsync(await _Converter.ToDto<ExerciseModel, Exercise>((ExerciseModel)result.Data));
+            UserExercises.Add(await _Converter.ToEntity<Exercise, ExerciseModel>(exercise));
         }
 
         StateHasChanged();

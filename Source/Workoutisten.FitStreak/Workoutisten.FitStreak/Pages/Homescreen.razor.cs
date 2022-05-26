@@ -17,6 +17,8 @@ using MudBlazor;
 using Workoutisten.FitStreak.Shared.PageExclusives.HomescreenPage;
 using ApexCharts;
 using System.Timers;
+using Plugin.LocalNotification;
+using Plugin.LocalNotification.AndroidOption;
 
 namespace Workoutisten.FitStreak.Pages
 {
@@ -24,9 +26,13 @@ namespace Workoutisten.FitStreak.Pages
     {
         public double[] Counts { get; set; } = new double[] { 0, 100 };
         public ChartOptions chartOptions = new ChartOptions()
-        { DisableLegend = true, ChartPalette = new string[] { "#EB5E55", "#3D4151" }, LineStrokeWidth = 1 };
+        {
+            DisableLegend = true,
+            ChartPalette = new string[] { "#EB5E55", "#3D4151" },
+            LineStrokeWidth = 1
+        };
         CustomAuthenticationStateProvider customAuthenticationStateProvider = new CustomAuthenticationStateProvider();
-        
+
         string remainingTimeString = "00:00:00";
         double elapsedPercent = 0;
         double remainingPercent = 100;
@@ -40,9 +46,10 @@ namespace Workoutisten.FitStreak.Pages
             {
                 DateTime currentTime = e.SignalTime;
                 var remainingTime = maxTimeSpan - currentTime.Subtract(lastWorkoutDate);
-                remainingPercent = (remainingTime.TotalSeconds/maxTimeSpan.TotalSeconds)*100;
+                remainingPercent = (remainingTime.TotalSeconds / maxTimeSpan.TotalSeconds) * 100;
                 elapsedPercent = 100 - remainingPercent;
-                Counts = new double[] { elapsedPercent, remainingPercent };
+                Counts = new double[] { remainingPercent, elapsedPercent };
+                if (remainingTime.TotalSeconds <= 0) timer.Stop();
                 remainingTimeString = $"{remainingTime:dd\\:hh\\:mm\\:ss}";
                 StateHasChanged();
             });
@@ -53,6 +60,7 @@ namespace Workoutisten.FitStreak.Pages
             base.OnInitialized();
             StartTimer();
             var data = customAuthenticationStateProvider.GetAuthenticationStateAsync();
+
         }
 
         void StartTimer()

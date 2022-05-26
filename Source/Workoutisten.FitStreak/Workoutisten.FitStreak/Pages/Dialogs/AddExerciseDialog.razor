@@ -1,6 +1,6 @@
 ﻿@using Workoutisten.FitStreak.Data.Models.Workout
 
-<MudDialog Class="style: MaxHeight: ">
+<MudDialog>
     <DialogContent>
         <MudGrid>
             <MudItem xs=12>
@@ -32,11 +32,6 @@
     void Submit() => MudDialog.Close(DialogResult.Ok<ExerciseModel>(NewExercise));
 
     void Cancel() => MudDialog.Cancel();
-
-    void Test()
-    {
-        
-    }
 
     public ExerciseModel NewExercise { get; set; } = new ExerciseModel();
 }

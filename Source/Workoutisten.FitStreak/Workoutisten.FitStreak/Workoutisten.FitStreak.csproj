@@ -28,6 +28,42 @@
 		<TargetPlatformMinVersion Condition="$(TargetFramework.Contains('-windows'))">10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-android|AnyCPU'">
+	  <Debugger>Xamarin</Debugger>
+	  <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">
+	  <Debugger>Xamarin</Debugger>
+	  <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-ios|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-ios|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-maccatalyst|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-maccatalyst|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows10.0.19041|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows10.0.19041|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\appicon.svg" ForegroundFile="Resources\appiconfg.svg" Color="#512BD4" />
@@ -76,17 +112,19 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Blazor-ApexCharts" Version="0.9.7-beta" />
-	  <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="3.0.0">
+	  <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="6.0.5">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
 	  <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-preview.4.22229.4" />
 	  <PackageReference Include="MudBlazor" Version="6.0.10-dev.5" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	  <PackageReference Include="NSwag.ApiDescription.Client" Version="13.0.5">
+	  <PackageReference Include="NSwag.ApiDescription.Client" Version="13.16.0">
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
+	  <PackageReference Include="Plugin.LocalNotification" Version="9.2.1-preview03" />
+	  <PackageReference Include="System.Net.Http" Version="4.3.4" />
 	</ItemGroup>
 
 </Project>

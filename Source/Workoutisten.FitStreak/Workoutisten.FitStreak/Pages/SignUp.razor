@@ -33,7 +33,7 @@
                                 Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
                                 RequiredError="Password is required!"
                                 @bind-Value=registerModel.Password/>
-                <MudTextField T="string"
+                <MudTextField T="string" Required="true"
                                 Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
                                 Validation="@(new Func<string, string>(PasswordMatch))"/>
             </MudStack>
@@ -78,7 +78,7 @@
 
     private string PasswordMatch(string arg)
     {
-        if (pwField1.Value != arg)
+        if (!pwField1.Value.Equals(arg))
             return "Passwords don't match";
         return null;
     }

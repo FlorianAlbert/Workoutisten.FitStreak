@@ -6,8 +6,11 @@ using System.Reflection;
 using Workoutisten.FitStreak.Client.RestClient;
 using Workoutisten.FitStreak.Converter;
 using Workoutisten.FitStreak.Data.Converter;
+using Workoutisten.FitStreak.Data.Converter.ExerciseAndWorkout;
 using Workoutisten.FitStreak.Data.Converter.User;
 using Workoutisten.FitStreak.Data.Models.User;
+using Workoutisten.FitStreak.Data.Models.Workout;
+using Workoutisten.FitStreak.Services;
 
 #if WINDOWS
 using Microsoft.UI;
@@ -41,25 +44,47 @@ public static class MauiProgram
                         .Build();
         builder.Configuration.AddConfiguration(config);
 
+        //HttpClient
+        HttpClient httpClient = null;
+
+#if __ANDROID__
+        httpClient = new HttpClient(new Xamarin.Android.Net.AndroidMessageHandler());
+#endif
+
+
         //RestClient
         builder.Services.AddHttpClient();
         builder.Services.AddSingleton<IRestClient, RestClient>(Services =>
         {
             var configSection = builder.Configuration.GetRequiredSection("LoginConfiguration");
             //return new RestClient($"{configSection.GetSection("BaseUri")}:{configSection.GetSection("Port")}", Services.GetRequiredService<IHttpClientFactory>().CreateClient());
-            return new RestClient($"https://localhost:7228", Services.GetRequiredService<IHttpClientFactory>().CreateClient());
+
+            if (httpClient is null)
+            {
+                httpClient = Services.GetRequiredService<IHttpClientFactory>().CreateClient();
+            }
+
+
+            return new RestClient($"https://localhost:7228", httpClient);
         });
+
 
         //Converters
         builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
         builder.Services.AddSingleton<IConverter<RegisterModel, RegistrationRequest>, RegisterConverter>();
         builder.Services.AddSingleton<IConverter<LoginModel, AuthenticationRequest>, LoginConverter>();
+        builder.Services.AddSingleton<IConverter<ExerciseModel, Exercise>, ExerciseConverter>();
+        builder.Services.AddSingleton<IConverter<WorkoutModel, Workout>, WorkoutConverter>();
+        builder.Services.AddSingleton<IConverter<ResetPasswordModel, ResetPassword>, ResetPasswordConverter>();
 
         //Authentication
         builder.Services.AddSingleton<AuthenticationTokenHolderModel>();
         builder.Services.AddAuthorizationCore();
         builder.Services.AddScoped<CustomAuthenticationStateProvider>();
         builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<CustomAuthenticationStateProvider>());
+
+        //PushNotificationManager
+        builder.Services.AddTransient<IPushNotificationManager, PushNotificationManager>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
