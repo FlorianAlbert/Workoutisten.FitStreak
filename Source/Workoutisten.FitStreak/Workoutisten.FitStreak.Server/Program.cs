@@ -3,10 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Workoutisten.FitStreak.Server.Database;
 using Workoutisten.FitStreak.Server.Database.Implementation;
 using Workoutisten.FitStreak.Server.Database.Interface;
-using Workoutisten.FitStreak.Server.Extensions;
 using Workoutisten.FitStreak.Server.Service.Implementation.Converter;
 using Workoutisten.FitStreak.Server.Service.Implementation.Converter.Friendship;
 using Workoutisten.FitStreak.Server.Service.Implementation.Converter.User;
@@ -19,6 +17,9 @@ using User = Workoutisten.FitStreak.Server.Model.Account.User;
 using UserDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person.User;
 using FriendshipRequestEntity = Workoutisten.FitStreak.Server.Model.Account.FriendshipRequest;
 using FriendshipRequestDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Friendship.FriendshipRequest;
+using Workoutisten.FitStreak.Server.Database.Implementation.DbContext;
+using Workoutisten.FitStreak.Server.Database.Implementation.Trigger;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,16 +63,32 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Add DbContext to the container
-builder.Services.AddDbContext<FitStreakDbContext>(options =>
+builder.Services.AddDbContext<FitStreakDbContext>(optionsBuilder =>
 {
-    options.UseLazyLoadingProxies();
-    options.UseSqlServer(builder.Configuration.GetConnectionString("FitStreakDatabase"),
-        optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(FitStreakDbContext).Assembly.FullName));
-    options.UseTriggers();
+    if (builder.Configuration["DatabaseProvider"] == "MsSql")
+    {
+        optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("MsSqlFitStreakDatabase"),
+                optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(MsSqlFitStreakDbContext).Assembly.FullName));
+    }
+    else if (builder.Configuration["DatabaseProvider"] == "MySql")
+    {
+        optionsBuilder.UseMySql(builder.Configuration.GetConnectionString("MySqlFitStreakDatabase"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MySqlFitStreakDatabase")),
+            sqLiteOptionsBuilder => sqLiteOptionsBuilder.MigrationsAssembly(typeof(MySqlFitStreakDbContext).Assembly.FullName));
+    }
+    else
+    {
+        throw new NotSupportedException("No supported Database Provider given.");
+    }
+
+    optionsBuilder.UseLazyLoadingProxies();
+    optionsBuilder.UseTriggers(options =>
+    {
+        options.AddAssemblyTriggers(typeof(OnModifiedBaseEntity).Assembly);
+    });
 });
 
 // Add Triggers to the container
-builder.Services.AddTriggers();
+//builder.Services.AddAssemblyTriggers(typeof(OnModifiedBaseEntity).Assembly);
 
 // Add own services to the container
 builder.Services.AddScoped<IRepository, Repository>();
@@ -124,7 +141,7 @@ if (!int.TryParse(builder.Configuration["Smtp:SmtpPort"], out var smtpPort))
     throw new ArgumentException($"The given SMTP port is not of type integer.", nameof(smtpPort));
 
 builder.Services.AddFluentEmail(builder.Configuration["Smtp:SmtpUser"], builder.Configuration["Smtp:SmtpUsername"])
-                .AddSmtpSender(builder.Configuration["Smtp:SmtpHost"], smtpPort, builder.Configuration["Smtp:SmtpUser"], builder.Configuration["Smtp:SmtpPassword"]);
+                .AddSmtpSender(builder.Configuration["Smtp:SmtpHost"], smtpPort);
 
 
 // Build the web application
@@ -133,7 +150,10 @@ var app = builder.Build();
 // Ensure that the database exists
 using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
 {
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<OnModifiedBaseEntity>>();
+
     using var dbContext = scope.ServiceProvider.GetRequiredService<FitStreakDbContext>();
+
     dbContext.Database.Migrate();
 }
 
@@ -147,7 +167,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

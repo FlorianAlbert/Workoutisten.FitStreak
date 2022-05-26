@@ -109,7 +109,7 @@ public class RegistrationService : IRegistrationService
                 StatusCode = StatusCodes.Status200OK 
             };
         }
-        catch (DatabaseRepositoryException)
+        catch (DatabaseRepositoryException ex)
         {
             return new Result
             {
