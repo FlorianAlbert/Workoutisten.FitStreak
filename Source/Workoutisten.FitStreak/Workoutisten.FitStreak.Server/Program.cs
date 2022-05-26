@@ -10,6 +10,7 @@ using Workoutisten.FitStreak.Server.Extensions;
 using Workoutisten.FitStreak.Server.Service.Implementation.Converter;
 using Workoutisten.FitStreak.Server.Service.Implementation.Converter.Friendship;
 using Workoutisten.FitStreak.Server.Service.Implementation.Converter.User;
+using Workoutisten.FitStreak.Server.Service.Implementation.Converter.Training;
 using Workoutisten.FitStreak.Server.Service.Implementation.Training;
 using Workoutisten.FitStreak.Server.Service.Implementation.UserManagement;
 using Workoutisten.FitStreak.Server.Service.Interface.Converter;
@@ -19,6 +20,10 @@ using User = Workoutisten.FitStreak.Server.Model.Account.User;
 using UserDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person.User;
 using FriendshipRequestEntity = Workoutisten.FitStreak.Server.Model.Account.FriendshipRequest;
 using FriendshipRequestDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Friendship.FriendshipRequest;
+using ExerciseEntity = Workoutisten.FitStreak.Server.Model.Excercise.Exercise;
+using ExerciseDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.Exercise.Exercise;
+using WorkoutEntity = Workoutisten.FitStreak.Server.Model.Workout.Workout;
+using WorkoutDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.Workout.Workout;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,6 +102,8 @@ builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
 builder.Services.AddTransient<IConverter<User, UserDto>, UserConverter>();
 builder.Services.AddTransient<IConverter<FriendshipRequestEntity, FriendshipRequestDto>, FriendshipConverter>();
+builder.Services.AddTransient<IConverter<ExerciseEntity, ExerciseDto>, ExerciseConverter>();
+builder.Services.AddTransient<IConverter<WorkoutEntity, WorkoutDto>,WorkoutConverter>();
 
 // Add authentication to the container
 builder.Services.AddAuthentication(options =>
@@ -118,6 +125,14 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 });
+
+// Add email to the container
+if (!int.TryParse(builder.Configuration["Smtp:SmtpPort"], out var smtpPort))
+    throw new ArgumentException($"The given SMTP port is not of type integer.", nameof(smtpPort));
+
+builder.Services.AddFluentEmail(builder.Configuration["Smtp:SmtpUser"], builder.Configuration["Smtp:SmtpUsername"])
+                .AddSmtpSender(builder.Configuration["Smtp:SmtpHost"], smtpPort, builder.Configuration["Smtp:SmtpUser"], builder.Configuration["Smtp:SmtpPassword"]);
+
 
 // Build the web application
 var app = builder.Build();

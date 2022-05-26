@@ -1,5 +1,5 @@
-﻿
-using EntityFrameworkCore.Triggered;
+﻿using EntityFrameworkCore.Triggered;
+using Microsoft.Extensions.Logging;
 using Workoutisten.FitStreak.Server.Model.Account;
 using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 
@@ -7,10 +7,12 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Trigger;
 
 public class AfterSuccessfullySaveEmail : IAfterSaveTrigger<Email>
 {
+    public ILogger<AfterSuccessfullySaveEmail> Logger { get; }
     private IEmailService EmailService { get; }
 
-    public AfterSuccessfullySaveEmail(IEmailService emailService)
+    public AfterSuccessfullySaveEmail(ILogger<AfterSuccessfullySaveEmail> logger,IEmailService emailService)
     {
+        Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         EmailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
     }
 
@@ -18,10 +20,14 @@ public class AfterSuccessfullySaveEmail : IAfterSaveTrigger<Email>
     {
         if(context.ChangeType is ChangeType.Added)
         {
+            Logger.LogInformation($"Email with Id={context.Entity} is getting sent.");
+
             var subject = context.Entity.Subject;
             var message = context.Entity.Message;
-            var emailAddresses = context.Entity.Receivers.Select(user => user.NormalizedEmail);
-            await EmailService.BroadcastEmail(emailAddresses, subject, message);
+            var receivers = context.Entity.Receivers;
+            await EmailService.BroadcastEmail(receivers, subject, message);
+
+            Logger.LogInformation($"Email with Id={context.Entity} is got sent.");
         }
     }
 }

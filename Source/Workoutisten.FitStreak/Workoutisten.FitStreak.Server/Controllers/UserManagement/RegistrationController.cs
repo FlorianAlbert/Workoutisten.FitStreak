@@ -43,15 +43,20 @@ public class RegistrationController : ControllerBase
     }
 
     [HttpPost]
-    [Route("confirm/{registrationConfirmationKey}", Name = nameof(ConfirmRegistration))]
+    [Route("confirm", Name = nameof(ConfirmRegistration))]
     [AllowAnonymous]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<IActionResult> ConfirmRegistration([FromRoute] string registrationConfirmationKey)
+    public async Task<IActionResult> ConfirmRegistration([FromBody] RegistrationConfirmation registrationConfirmation)
     {
-        var result = await RegistrationService.ConfirmRegistrationAsync(registrationConfirmationKey);
-        if (result.Successful) return Ok();
+        if (string.IsNullOrEmpty(registrationConfirmation?.Email) ||
+            string.IsNullOrEmpty(registrationConfirmation.ConfirmationKey))
+            return BadRequest("One or more of the following values were empty: email, confirmationKey!");
+
+        var result = await RegistrationService.ConfirmRegistrationAsync(registrationConfirmation.Email, registrationConfirmation.ConfirmationKey);
+        if (result.Successful) return NoContent();
         else return Problem(statusCode: result.StatusCode, detail: result.Detail);
     }
 }

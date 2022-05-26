@@ -133,7 +133,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordForgottenKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -146,17 +146,9 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RegistrationConfirmationKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PasswordForgottenKey")
-                        .IsUnique()
-                        .HasFilter("[PasswordForgottenKey] IS NOT NULL");
-
-                    b.HasIndex("RegistrationConfirmationKey")
-                        .IsUnique()
-                        .HasFilter("[RegistrationConfirmationKey] IS NOT NULL");
 
                     b.ToTable("User");
                 });
