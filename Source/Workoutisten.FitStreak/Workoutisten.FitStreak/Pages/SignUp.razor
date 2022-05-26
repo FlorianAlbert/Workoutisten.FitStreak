@@ -5,10 +5,12 @@
 @using Workoutisten.FitStreak.Converter
 
 @using Workoutisten.FitStreak.Data.Models.User
+@using Workoutisten.FitStreak.Services
 
 @inject IRestClient _RestClient
 @inject IConverterWrapper _Converter
-@inject NavigationManager navigationManager
+@*@inject ErrorDialogService _ErrorDialogService*@
+@inject NavigationManager _NavigationManager
 
 
 <MudStack>
@@ -43,7 +45,10 @@
         @if (!(string.IsNullOrEmpty(message)))
         {
             <MudText Typo="Typo.subtitle1">@message</MudText>
-            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+            if (showWaitIndicator)
+            {
+                <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+            }
         }
     </MudPaper>
 </MudStack>
@@ -57,6 +62,8 @@
     bool success;
     string[] errors = { };
     string message = string.Empty;
+
+    bool showWaitIndicator;
 
 
     private IEnumerable<string> PasswordStrength(string pw)
@@ -86,14 +93,29 @@
     async void SignUp_Button()
     {
         message = "Registrating...";
+        showWaitIndicator = true;
+        StateHasChanged();
         try
         {
             await _RestClient.RequestRegistrationAsync(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel));
-            navigationManager.NavigateTo("/validate");
+            _NavigationManager.NavigateTo("/validate");
         }
-        catch
+        catch (ApiException e)
+        {
+
+            if (e.StatusCode == 409)
+            {
+                message = "This Email already has an account";
+            }
+            message = "We had some trouble reaching the server. Please try again later";
+        }
+        catch (Exception e)
         {
             message = "We had some trouble reaching the server. Please try again later";
+        }
+        finally
+        {
+            showWaitIndicator = false;
             StateHasChanged();
         }
     }

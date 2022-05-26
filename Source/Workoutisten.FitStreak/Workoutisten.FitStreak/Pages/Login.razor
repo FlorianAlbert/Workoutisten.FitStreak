@@ -35,7 +35,10 @@
         @if (!(string.IsNullOrEmpty(message)))
         {
             <MudText Typo="Typo.subtitle1">@message</MudText>
-            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+            if (showWaitIndicator)
+            {
+                <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+            }
         }
     </MudPaper>
 </MudStack>
@@ -47,9 +50,12 @@
     string[] errors = { };
     string message = string.Empty;
 
+    bool showWaitIndicator;
+
     async void Login_Button()
     {
         message = "Logging in...";
+        showWaitIndicator = true;
         try
         {
             var response = await _RestClient.LoginAsync(await _Converter.ToDto<LoginModel, AuthenticationRequest>(loginModel));
@@ -69,7 +75,11 @@
         }
         catch (ApiException e)
         {
-            if (e.StatusCode == 401)
+            if(e.StatusCode == 403)
+            {
+                _NavigationManager.NavigateTo("/validate");
+            }
+            else if (e.StatusCode == 401)
             {
                 message = "The Email or password was not correct";
             }
@@ -84,6 +94,7 @@
         }
         finally
         {
+            showWaitIndicator = false;
             StateHasChanged();
         }
 

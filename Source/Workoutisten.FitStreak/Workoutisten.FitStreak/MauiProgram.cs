@@ -83,8 +83,9 @@ public static class MauiProgram
         builder.Services.AddScoped<CustomAuthenticationStateProvider>();
         builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<CustomAuthenticationStateProvider>());
 
-        //PushNotificationManager
+        //PushNotificationManager and ErrorDialogService
         builder.Services.AddTransient<IPushNotificationManager, PushNotificationManager>();
+        //builder.Services.AddTransient<ErrorDialogService>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
