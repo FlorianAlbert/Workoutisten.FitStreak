@@ -36,7 +36,7 @@ public static class MauiProgram
 
         builder.Services.AddMudServices();
 
-        //Load Configuration
+        //Load Configuration (Muss maybe wieder raus, da wir sie sowieso nicht verwenden können)
         var assembly = Assembly.GetExecutingAssembly();
         using var stream = assembly.GetManifestResourceStream("Workoutisten.FitStreak.Properties.launchSettings.json");
         var config = new ConfigurationBuilder()
@@ -65,7 +65,7 @@ public static class MauiProgram
             }
 
 
-            return new RestClient($"https://localhost:7228", httpClient);
+            return new RestClient($"https://fitstreak.de", httpClient);
         });
 
 

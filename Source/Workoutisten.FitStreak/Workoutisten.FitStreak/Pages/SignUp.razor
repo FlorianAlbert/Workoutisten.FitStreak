@@ -17,33 +17,33 @@
     </MudStack>
     <MudPaper Class="rounded-xl p-4 mt-5" Elevation="5">
         <MudText Class="align-center" Typo="Typo.h4"><b>Register</b></MudText>
-        <MudDivider/>
+        <MudDivider />
 
         <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
-            <MudStack Spacing="3" >
+            <MudStack Spacing="3">
                 <MudTextField T="string" Label="First name" Required="true" RequiredError="First name is required!"
-                                @bind-Value=registerModel.FirstName/>
+                              @bind-Value=registerModel.FirstName />
                 <MudTextField T="string" Label="Last name" Required="true" RequiredError="Last name is required!"
-                                @bind-Value=registerModel.LastName/>
+                              @bind-Value=registerModel.LastName />
                 <MudTextField T="string" Label="Email" Required="true" RequiredError="Email is required!"
-                                Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"
-                                @bind-Value=registerModel.Email/>
+                              Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"
+                              @bind-Value=registerModel.Email />
                 <MudTextField T="string" Label="Password" HelperText="Choose a strong password" @ref="pwField1"
-                                InputType="InputType.Password"
-                                Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
-                                RequiredError="Password is required!"
-                                @bind-Value=registerModel.Password/>
+                              InputType="InputType.Password"
+                              Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
+                              RequiredError="Password is required!"
+                              @bind-Value=registerModel.Password />
                 <MudTextField T="string" Required="true"
-                                Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
-                                Validation="@(new Func<string, string>(PasswordMatch))"/>
+                              Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
+                              Validation="@(new Func<string, string>(PasswordMatch))" />
             </MudStack>
-        </MudForm> 
+        </MudForm>
 
         <MudButton Class="rounded-xl p-3 mt-4" Color="Color.Primary" Variant="Variant.Filled" Disabled="@(!success)" OnClick="SignUp_Button" FullWidth="true"><MudText Typo="Typo.button"><b>Register</b></MudText></MudButton>
         @if (!(string.IsNullOrEmpty(message)))
         {
             <MudText Typo="Typo.subtitle1">@message</MudText>
-            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7"/>
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
         }
     </MudPaper>
 </MudStack>
@@ -86,8 +86,16 @@
     async void SignUp_Button()
     {
         message = "Registrating...";
-        await _RestClient.RequestRegistrationAsync(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel));
-        navigationManager.NavigateTo("/validate");
+        try
+        {
+            await _RestClient.RequestRegistrationAsync(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel));
+            navigationManager.NavigateTo("/validate");
+        }
+        catch
+        {
+            message = "We had some trouble reaching the server. Please try again later";
+            StateHasChanged();
+        }
     }
 
 }
