@@ -10,6 +10,7 @@ using Workoutisten.FitStreak.Server.Extensions;
 using Workoutisten.FitStreak.Server.Service.Implementation.Converter;
 using Workoutisten.FitStreak.Server.Service.Implementation.Converter.Friendship;
 using Workoutisten.FitStreak.Server.Service.Implementation.Converter.User;
+using Workoutisten.FitStreak.Server.Service.Implementation.Converter.Training;
 using Workoutisten.FitStreak.Server.Service.Implementation.Training;
 using Workoutisten.FitStreak.Server.Service.Implementation.UserManagement;
 using Workoutisten.FitStreak.Server.Service.Interface.Converter;
@@ -19,6 +20,8 @@ using User = Workoutisten.FitStreak.Server.Model.Account.User;
 using UserDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person.User;
 using FriendshipRequestEntity = Workoutisten.FitStreak.Server.Model.Account.FriendshipRequest;
 using FriendshipRequestDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Friendship.FriendshipRequest;
+using ExerciseEntity = Workoutisten.FitStreak.Server.Model.Excercise.Exercise;
+using ExerciseDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.Exercise.Exercise;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,6 +100,7 @@ builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
 builder.Services.AddTransient<IConverter<User, UserDto>, UserConverter>();
 builder.Services.AddTransient<IConverter<FriendshipRequestEntity, FriendshipRequestDto>, FriendshipConverter>();
+builder.Services.AddTransient<IConverter<ExerciseEntity, ExerciseDto>, ExerciseConverter>();
 
 // Add authentication to the container
 builder.Services.AddAuthentication(options =>
