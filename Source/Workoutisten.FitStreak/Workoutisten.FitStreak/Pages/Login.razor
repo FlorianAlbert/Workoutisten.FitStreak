@@ -67,9 +67,24 @@
 
 
         }
-        catch (Exception e)
+        catch (ApiException e)
+        {
+            if (e.StatusCode == 401)
+            {
+                message = "The Email or password was not correct";
+            }
+            else
+            {
+                message = "Failed to Login";
+            }
+        }
+        catch
         {
             message = "Failed to Login";
+        }
+        finally
+        {
+            StateHasChanged();
         }
 
     }
