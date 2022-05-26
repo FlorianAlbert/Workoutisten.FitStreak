@@ -1,13 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Workoutisten.FitStreak.Server.Database.Implementation.Configurations;
+using Workoutisten.FitStreak.Server.Database.Implementation.Extensions;
 using Workoutisten.FitStreak.Server.Model;
+using BaseDbContext = Microsoft.EntityFrameworkCore.DbContext;
 
-namespace Workoutisten.FitStreak.Server.Database
+namespace Workoutisten.FitStreak.Server.Database.Implementation.DbContext
 {
-    public class FitStreakDbContext : DbContext
+    public class FitStreakDbContext : BaseDbContext
     {
-        public FitStreakDbContext(DbContextOptions<FitStreakDbContext> options) : base(options)
+        public IConfiguration Configuration { get; }
+
+        public FitStreakDbContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -15,14 +21,14 @@ namespace Workoutisten.FitStreak.Server.Database
         {
             var allTypes = Assembly.GetAssembly(typeof(BaseEntityConfigurations<>)).GetTypes();
             var allEntityConfigurationsTypes = from x in allTypes
-                                        let y = x.BaseType
-                                        where !x.IsAbstract && 
-                                              !x.IsInterface &&
-                                              y != null && 
-                                              y.IsGenericType &&
-                                              !y.IsInterface &&
-                                              y.GetGenericTypeDefinition() == typeof(BaseEntityConfigurations<>)
-                                        select x;
+                                               let y = x.BaseType
+                                               where !x.IsAbstract &&
+                                                     !x.IsInterface &&
+                                                     y != null &&
+                                                     y.IsGenericType &&
+                                                     !y.IsInterface &&
+                                                     y.GetGenericTypeDefinition() == typeof(BaseEntityConfigurations<>)
+                                               select x;
 
             foreach (var type in allEntityConfigurationsTypes)
             {
@@ -40,7 +46,7 @@ namespace Workoutisten.FitStreak.Server.Database
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var selectedEntities = ChangeTracker.Entries()
-            .Where(x => (x.Entity is BaseEntity) &&
+            .Where(x => x.Entity is BaseEntity &&
                         (x.State == EntityState.Added || x.State == EntityState.Modified));
 
             foreach (var entity in selectedEntities)
