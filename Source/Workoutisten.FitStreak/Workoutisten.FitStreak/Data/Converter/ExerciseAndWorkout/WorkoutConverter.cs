@@ -33,7 +33,7 @@ namespace Workoutisten.FitStreak.Data.Converter.ExerciseAndWorkout
 
             var entity = new WorkoutModel()
             {
-                Guid = dto.WorkoutId,
+                Guid = dto.WorkoutId.HasValue? dto.WorkoutId.Value : Guid.Empty,
                 //Exercises = dto.ExerciseIds.ToList(),
                 //Description = dto.Description
                 //LastTraining = dto.LastTraining

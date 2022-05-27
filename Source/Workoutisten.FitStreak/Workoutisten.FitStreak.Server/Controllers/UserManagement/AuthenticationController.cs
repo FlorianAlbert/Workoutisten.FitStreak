@@ -26,7 +26,10 @@ public class AuthenticationController : ControllerBase
     [Route("login", Name = nameof(Login))]
     [AllowAnonymous]
     [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> Login([FromBody] AuthenticationRequest authenticationRequest)
     {

@@ -104,6 +104,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Platforms\Android\Resources\xml\network_security_config.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <EmbeddedResource Include="Properties\launchSettings.json" />
 	  <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.5" />
 	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="6.0.5" />

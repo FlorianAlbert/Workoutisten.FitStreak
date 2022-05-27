@@ -39,7 +39,7 @@ public class AuthenticationService : IAuthenticationService
             };
         }
 
-        var user = users.FirstOrDefault(user => user.NormalizedEmail == email.NormalizeEmail());
+        var user = users.SingleOrDefault(user => user.NormalizedEmail == email.NormalizeEmail());
         if (user is null)
         {
             return new Result<LoginResult>

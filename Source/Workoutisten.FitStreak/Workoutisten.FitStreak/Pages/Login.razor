@@ -8,6 +8,7 @@
 @inject IRestClient _RestClient
 @inject IConverterWrapper _Converter
 @inject IDialogService _DialogService
+@inject ErrorDialogService _ErrorDialogService
 
 <MudStack>
     <MudStack AlignItems="AlignItems.Center">
@@ -62,14 +63,28 @@
             }
             else
             {
-                _NavigationManager.NavigateTo("/validate");
+                _NavigationManager.NavigateTo($"/validate?email={loginModel.Email}");
             }
 
 
         }
+        catch (ApiException<ProblemDetails> e)
+        {
+            if (e.Result.Status == 403)
+            {
+                _NavigationManager.NavigateTo("/validate");
+                return;
+            }
+            await _ErrorDialogService.ShowErrorDialog(e.Result.Status.ToString(), e.Result.Detail);
+        }
         catch (Exception e)
         {
-            message = "Failed to Login";
+            await _ErrorDialogService.ShowErrorDialog();
+        }
+        finally
+        {
+            message = string.Empty;
+            StateHasChanged();
         }
 
     }

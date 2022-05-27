@@ -2,35 +2,30 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Workoutisten.FitStreak.Server.Database;
+using Workoutisten.FitStreak.Server.Database.Implementation.DbContext;
 
 #nullable disable
 
-namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
+namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MySqlMigrations
 {
-    [DbContext(typeof(FitStreakDbContext))]
-    [Migration("20220511080513_RenamedJoinTableForFriendships")]
-    partial class RenamedJoinTableForFriendships
+    [DbContext(typeof(MySqlFitStreakDbContext))]
+    partial class MySqlFitStreakDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+                .HasAnnotation("ProductVersion", "6.0.5")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("EmailUser", b =>
                 {
                     b.Property<Guid>("EmailsId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("ReceiversId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.HasKey("EmailsId", "ReceiversId");
 
@@ -42,10 +37,10 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
             modelBuilder.Entity("UserUser", b =>
                 {
                     b.Property<Guid>("MyFriendsId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("UsersIAmFriendOfId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.HasKey("MyFriendsId", "UsersIAmFriendOfId");
 
@@ -58,23 +53,21 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Subject")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -85,21 +78,19 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("RequestedUserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid>("RequestingUserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -115,43 +106,46 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("NormalizedEmail")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
-                    b.Property<Guid?>("PasswordForgottenKey")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PasswordForgottenKey")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("RegistrationConfirmationKey")
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PasswordForgottenKey")
-                        .IsUnique()
-                        .HasFilter("[PasswordForgottenKey] IS NOT NULL");
 
                     b.ToTable("User");
                 });
@@ -160,30 +154,28 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("CreatorId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -196,28 +188,26 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Category")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("ExerciseId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid?>("WorkoutEntryId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<Guid?>("WorkoutId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -236,26 +226,24 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("CreatorId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -268,15 +256,13 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
@@ -287,21 +273,19 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("ExerciseId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("WorkoutId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
@@ -318,7 +302,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                     b.HasBaseType("Workoutisten.FitStreak.Server.Model.Excercise.ExerciseEntry");
 
                     b.Property<double>("Distance")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.Property<long>("Duration")
                         .HasColumnType("bigint");
@@ -334,7 +318,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("int");
 
                     b.Property<double>("Weight")
-                        .HasColumnType("float");
+                        .HasColumnType("double");
 
                     b.HasDiscriminator().HasValue("Strength");
                 });
@@ -365,7 +349,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                     b.HasOne("Workoutisten.FitStreak.Server.Model.Account.User", null)
                         .WithMany()
                         .HasForeignKey("UsersIAmFriendOfId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

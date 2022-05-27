@@ -70,7 +70,7 @@ public class PasswordService : IPasswordService
         try
         {
             var users = await Repository.GetAllAsync<User>();
-            var user = users.FirstOrDefault(user => user.NormalizedEmail == email.NormalizeEmail());
+            var user = users.SingleOrDefault(user => user.NormalizedEmail == email.NormalizeEmail());
             if (user is null)
             {
                 return new Result
@@ -102,7 +102,7 @@ public class PasswordService : IPasswordService
         try
         {
             var users = await Repository.GetAllAsync<User>();
-            var user = users.FirstOrDefault(user => user.NormalizedEmail == email.NormalizeEmail());
+            var user = users.SingleOrDefault(user => user.NormalizedEmail == email.NormalizeEmail());
             if (user is null)
             {
                 return new Result

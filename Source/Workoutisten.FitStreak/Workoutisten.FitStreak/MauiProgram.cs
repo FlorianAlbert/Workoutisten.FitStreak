@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.LifecycleEvents;
 using MudBlazor.Services;
@@ -36,7 +37,7 @@ public static class MauiProgram
 
         builder.Services.AddMudServices();
 
-        //Load Configuration
+        //Load Configuration (Muss maybe wieder raus, da wir sie sowieso nicht verwenden können)
         var assembly = Assembly.GetExecutingAssembly();
         using var stream = assembly.GetManifestResourceStream("Workoutisten.FitStreak.Properties.launchSettings.json");
         var config = new ConfigurationBuilder()
@@ -64,9 +65,9 @@ public static class MauiProgram
                 httpClient = Services.GetRequiredService<IHttpClientFactory>().CreateClient();
             }
 
-
-            return new RestClient($"https://localhost:7228", httpClient);
+            return new RestClient($"https://fitstreak.de", httpClient);
         });
+        
 
 
         //Converters
@@ -83,8 +84,9 @@ public static class MauiProgram
         builder.Services.AddScoped<CustomAuthenticationStateProvider>();
         builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<CustomAuthenticationStateProvider>());
 
-        //PushNotificationManager
+        //PushNotificationManager and ErrorDialogService
         builder.Services.AddTransient<IPushNotificationManager, PushNotificationManager>();
+        builder.Services.AddTransient<ErrorDialogService>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

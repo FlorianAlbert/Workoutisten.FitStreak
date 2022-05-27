@@ -12,10 +12,10 @@ public class FriendshipRequest
     public Guid FriendshipRequestId { get; set; }
 
     [Required]
-    [JsonProperty("Requester")]
-    public User Requester { get; set; }
+    [JsonProperty("RequestingUser")]
+    public User RequestingUser { get; set; }
 
     [Required]
-    [JsonProperty("Requested")]
-    public User Requested { get; set; }
+    [JsonProperty("RequestedUser")]
+    public User RequestedUser { get; set; }
 }
