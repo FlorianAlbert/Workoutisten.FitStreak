@@ -10,7 +10,7 @@ public class AfterSuccessfullySaveEmail : IAfterSaveTrigger<Email>
     public ILogger<AfterSuccessfullySaveEmail> Logger { get; }
     private IEmailService EmailService { get; }
 
-    public AfterSuccessfullySaveEmail(ILogger<AfterSuccessfullySaveEmail> logger,IEmailService emailService)
+    public AfterSuccessfullySaveEmail(ILogger<AfterSuccessfullySaveEmail> logger, IEmailService emailService)
     {
         Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         EmailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
