@@ -12,10 +12,15 @@ namespace Workoutisten.FitStreak.Services
     public class ErrorDialogService
     {
 
-        [Inject]
+        //[Inject]
         public IDialogService DialogService { get; set; }
 
-        async void ShowErrorDialog(string statusCode, string errorMessage)
+        public ErrorDialogService(IDialogService dialogService)
+        {
+            DialogService = dialogService;
+        }
+
+        public async Task ShowErrorDialog(string statusCode, string errorMessage)
         {
             var parameters = new DialogParameters();
             parameters.Add("ErrorMessage", errorMessage);
@@ -25,7 +30,22 @@ namespace Workoutisten.FitStreak.Services
                 CloseOnEscapeKey = true,
                 FullWidth = true,
             };
-            var DialogReference = DialogService.Show<ServerErrorDialog>($"Server error {statusCode}", options);
+            var DialogReference = DialogService.Show<ServerErrorDialog>($"Server error {statusCode}", parameters, options);
+
+            await DialogReference.Result;
+        }
+
+        public async Task ShowErrorDialog()
+        {
+            var parameters = new DialogParameters();
+            parameters.Add("ErrorMessage", "We had some trouble reaching the server. Please try again later");
+
+            var options = new DialogOptions
+            {
+                CloseOnEscapeKey = true,
+                FullWidth = true,
+            };
+            var DialogReference = DialogService.Show<ServerErrorDialog>($"Server error", parameters, options);
 
             await DialogReference.Result;
         }

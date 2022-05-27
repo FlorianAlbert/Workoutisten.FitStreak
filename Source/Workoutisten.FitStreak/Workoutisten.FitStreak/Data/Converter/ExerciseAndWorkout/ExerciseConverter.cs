@@ -34,7 +34,7 @@ namespace Workoutisten.FitStreak.Data.Converter.ExerciseAndWorkout
             var entity = new ExerciseModel()
             {
                Category = (Enums.ExerciseCategoryEnum)dto.ExerciseCategory,
-               Guid = dto.ExerciseId,
+               Guid = dto.ExerciseId.HasValue ? dto.ExerciseId.Value : Guid.Empty,
                Name = dto.Name,
                Description = dto.Description
             };

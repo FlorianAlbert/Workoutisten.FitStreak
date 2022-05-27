@@ -22,13 +22,17 @@
 @code {
     public string? VerificationCode { get; set; } = string.Empty;
 
-    void SendCode()
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "email")]
+    public string? Email { get; set; }
+
+    async void SendCode()
     {
         if (VerificationCode.Count() == 8)
         {
             try
             {
-                var test = _RestClient.ConfirmRegistrationAsync(VerificationCode);
+                await _RestClient.ConfirmRegistrationAsync(new RegistrationConfirmation(){ConfirmationKey = VerificationCode, Email = Email.Trim()});
                 _NavManager.NavigateTo("/login");
 
             }

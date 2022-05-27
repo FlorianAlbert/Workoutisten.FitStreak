@@ -3,13 +3,11 @@
 @using System.Text.RegularExpressions
 @using System.ComponentModel.DataAnnotations
 @using Workoutisten.FitStreak.Converter
-
 @using Workoutisten.FitStreak.Data.Models.User
-@using Workoutisten.FitStreak.Services
 
 @inject IRestClient _RestClient
 @inject IConverterWrapper _Converter
-@*@inject ErrorDialogService _ErrorDialogService*@
+@inject ErrorDialogService _ErrorDialogService
 @inject NavigationManager _NavigationManager
 
 
@@ -98,20 +96,15 @@
         try
         {
             await _RestClient.RequestRegistrationAsync(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel));
-            _NavigationManager.NavigateTo("/validate");
+            _NavigationManager.NavigateTo($"/validate?email={registerModel.Email}");
         }
-        catch (ApiException e)
+        catch (ApiException<ProblemDetails> e)
         {
-
-            if (e.StatusCode == 409)
-            {
-                message = "This Email already has an account";
-            }
-            message = "We had some trouble reaching the server. Please try again later";
+            await _ErrorDialogService.ShowErrorDialog(e.Result.Status.ToString(), e.Result.Detail);
         }
         catch (Exception e)
         {
-            message = "We had some trouble reaching the server. Please try again later";
+            await _ErrorDialogService.ShowErrorDialog();
         }
         finally
         {

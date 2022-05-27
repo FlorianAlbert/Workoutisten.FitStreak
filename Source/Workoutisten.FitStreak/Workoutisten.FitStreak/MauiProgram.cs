@@ -85,7 +85,7 @@ public static class MauiProgram
 
         //PushNotificationManager and ErrorDialogService
         builder.Services.AddTransient<IPushNotificationManager, PushNotificationManager>();
-        //builder.Services.AddTransient<ErrorDialogService>();
+        builder.Services.AddTransient<ErrorDialogService>();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
