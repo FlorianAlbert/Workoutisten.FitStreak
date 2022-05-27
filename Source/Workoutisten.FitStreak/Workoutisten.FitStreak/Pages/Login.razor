@@ -36,10 +36,7 @@
         @if (!(string.IsNullOrEmpty(message)))
         {
             <MudText Typo="Typo.subtitle1">@message</MudText>
-            if (showWaitIndicator)
-            {
-                <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
-            }
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
         }
     </MudPaper>
 </MudStack>
@@ -51,12 +48,9 @@
     string[] errors = { };
     string message = string.Empty;
 
-    bool showWaitIndicator;
-
     async void Login_Button()
     {
         message = "Logging in...";
-        showWaitIndicator = true;
         try
         {
             var response = await _RestClient.LoginAsync(await _Converter.ToDto<LoginModel, AuthenticationRequest>(loginModel));
@@ -76,6 +70,11 @@
         }
         catch (ApiException<ProblemDetails> e)
         {
+            if (e.Result.Status == 403)
+            {
+                _NavigationManager.NavigateTo("/validate");
+                return;
+            }
             await _ErrorDialogService.ShowErrorDialog(e.Result.Status.ToString(), e.Result.Detail);
         }
         catch (Exception e)
@@ -84,7 +83,7 @@
         }
         finally
         {
-            showWaitIndicator = false;
+            message = string.Empty;
             StateHasChanged();
         }
 

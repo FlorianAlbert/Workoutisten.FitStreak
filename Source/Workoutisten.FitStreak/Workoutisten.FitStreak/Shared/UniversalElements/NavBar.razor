@@ -1,4 +1,5 @@
 ﻿@inject CustomAuthenticationStateProvider _AuthenticationStateProvider
+@inject NavigationManager _NavManager
 
 <MudGrid Class="py-4 my-4">
     <MudAppBar Elevation="1" Color="Color.Dark">
@@ -39,5 +40,6 @@
     async void LogOut_Button()
     {
         await _AuthenticationStateProvider.Logout();
+        _NavManager.NavigateTo("/");
     }
 }

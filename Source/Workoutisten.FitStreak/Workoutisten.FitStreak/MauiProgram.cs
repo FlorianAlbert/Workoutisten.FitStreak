@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Maui.LifecycleEvents;
 using MudBlazor.Services;
@@ -64,9 +65,9 @@ public static class MauiProgram
                 httpClient = Services.GetRequiredService<IHttpClientFactory>().CreateClient();
             }
 
-
             return new RestClient($"https://fitstreak.de", httpClient);
         });
+        
 
 
         //Converters

@@ -30,15 +30,14 @@ namespace Workoutisten.FitStreak
         {
             if(response == null) throw new ArgumentNullException(nameof(response));
 
-            TokenHolder.AccessToken = response.Jwt;
-            TokenHolder.RefreshToken = response.RefreshToken;
+            //TokenHolder.AccessToken = response.Jwt;
+            //TokenHolder.RefreshToken = response.RefreshToken;
 
             //maybe do/store/save anything as part of this process
             await SecureStorage.SetAsync("accounttoken", response.Jwt);
             await SecureStorage.SetAsync("refreshtoken", response.RefreshToken);
-            await SecureStorage.SetAsync("user", response.User.FirstName);
-
-
+            //await SecureStorage.SetAsync("user", response.User.FirstName);
+            await SecureStorage.SetAsync("userId", response.User.UserId.ToString());
 
             //Providing the current identity ifnormation
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
