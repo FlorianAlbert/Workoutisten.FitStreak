@@ -7,21 +7,20 @@ namespace Workoutisten.FitStreak.Client.RestClient
     public partial class RestClient
     {
 
-        [Inject]
         public CustomAuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
 
-        public RestClient(CustomAuthenticationStateProvider customAuthenticationStateProvider)
+        public RestClient(string baseUrl, System.Net.Http.HttpClient httpClient, CustomAuthenticationStateProvider customAuthenticationStateProvider) : this(baseUrl, httpClient)
         {
             AuthenticationStateProvider = customAuthenticationStateProvider;
         }
 
-        async partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url)
+        partial void PrepareRequest(HttpClient client, HttpRequestMessage request, string url)
         {
-            var accountToken = await SecureStorage.GetAsync("accounttoken");
-            if (accountToken is not null)
+            var accountToken = SecureStorage.GetAsync("accounttoken");
+            if (accountToken.Result is not null)
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accountToken);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accountToken.Result);
             }
         }
 
@@ -36,21 +35,33 @@ namespace Workoutisten.FitStreak.Client.RestClient
             {
                 try
                 {
-                    //await AuthenticationStateProvider.Login(
-                    //await RefreshTokensAsync(
-                    //    new TokenRefreshRequest()
-                    //    {
-                    //        ExpiredJwt = await SecureStorage.GetAsync("accounttoken"),
-                    //        RefreshToken = await SecureStorage.GetAsync("refreshtoken")
-                    //    }));
+                    await AuthenticationStateProvider.Login(
+                    ConvertRefreshResponseToAuthenticationResponse(
+                        await RefreshTokensAsync(
+                        new TokenRefreshRequest()
+                        {
+                            ExpiredJwt = await SecureStorage.GetAsync("accounttoken"),
+                            RefreshToken = await SecureStorage.GetAsync("refreshtoken")
+                        })));
                 }
                 catch (ApiException e)
                 {
-                    await AuthenticationStateProvider.Logout();
+                    if (e.StatusCode == 401)
+                    {
+                        await AuthenticationStateProvider.Logout();
+                    }
                 }
             }
         }
 
+        private AuthenticationResponse ConvertRefreshResponseToAuthenticationResponse(TokenRefreshResponse tokenRefreshResponse)
+        {
+            return new AuthenticationResponse()
+            {
+                Jwt = tokenRefreshResponse.NewJwt,
+                RefreshToken = tokenRefreshResponse.NewRefreshToken
+            };
+        }
 
     }
 }

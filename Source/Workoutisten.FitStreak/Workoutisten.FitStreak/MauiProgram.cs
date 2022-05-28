@@ -65,11 +65,9 @@ public static class MauiProgram
                 httpClient = Services.GetRequiredService<IHttpClientFactory>().CreateClient();
             }
 
-            return new RestClient($"https://fitstreak.de", httpClient);
+            return new RestClient($"https://fitstreak.de", httpClient, Services.GetRequiredService<CustomAuthenticationStateProvider>());
         });
         
-
-
         //Converters
         builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
         builder.Services.AddSingleton<IConverter<RegisterModel, RegistrationRequest>, RegisterConverter>();

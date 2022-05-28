@@ -47,6 +47,7 @@ namespace Workoutisten.FitStreak.Pages
                 var test = Guid.Parse(await SecureStorage.GetAsync("userId"));
                 CurrentUser = await _RestClient.GetUserAsync(Guid.Parse(await SecureStorage.GetAsync("userId")));
                 LastWorkoutDate = CurrentUser.LastExercise;
+                
             }
             catch (ApiException e)
             {
@@ -82,8 +83,7 @@ namespace Workoutisten.FitStreak.Pages
 
         void StartTimer()
         {
-            LastWorkoutDate = DateTime.Now;
-            Timer = new System.Timers.Timer(1000);
+            Timer = new Timer(1000);
             Timer.Elapsed += OnTimedEvent;
             Timer.AutoReset = true;
             Timer.Enabled = true;
