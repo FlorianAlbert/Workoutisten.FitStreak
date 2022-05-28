@@ -77,7 +77,6 @@ public static class MauiProgram
         builder.Services.AddSingleton<IConverter<ResetPasswordModel, ResetPassword>, ResetPasswordConverter>();
 
         //Authentication
-        builder.Services.AddSingleton<AuthenticationTokenHolderModel>();
         builder.Services.AddAuthorizationCore();
         builder.Services.AddScoped<CustomAuthenticationStateProvider>();
         builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<CustomAuthenticationStateProvider>());

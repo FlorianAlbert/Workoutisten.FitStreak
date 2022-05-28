@@ -1,23 +1,35 @@
-﻿@page "/welcome"
+﻿@using Microsoft.AspNetCore.Components.Authorization
+
+@page "/welcome"
+@page "/"
 
 @inject NavigationManager NavManager
 
-<MudStack>
-    <MudStack AlignItems="AlignItems.Center">
-        <MudImage Class="align-center" Src="Images/fitstreak_logo_white.svg" Width="300" Height="100"></MudImage>
+<AuthorizeView>
+    <Authorized>
+        <RedirectToHomescreen />
+    </Authorized>
+<NotAuthorized>
+    <MudStack>
+        <MudStack AlignItems="AlignItems.Center">
+            <MudImage Class="align-center" Src="Images/fitstreak_logo_white.svg" Width="300" Height="100"></MudImage>
+        </MudStack>
+        <MudPaper Class="rounded-xl p-4 mt-5" Elevation="5">
+            <MudStack>
+                <MudText Typo="Typo.h3"><b>Welcome!</b></MudText>
+                <MudText Typo="Typo.body1">Track your Progress and competete with your friends. <br />Don't lose your <span class="mud-primary-text">Streak</span>! </MudText>
+            </MudStack>
+            <MudStack Class="m-4" Spacing="10">
+                <MudButton Class="rounded-xl p-3" Href="/login" Color="Color.Primary" Variant="Variant.Filled"><MudText Typo="Typo.button"><b>Login</b></MudText></MudButton>
+                <MudButton Class="rounded-xl p-3" Href="/signup" Color="Color.Primary" Variant="Variant.Outlined"><MudText Typo="Typo.button"><b>Sign Up</b></MudText></MudButton>
+            </MudStack>
+        </MudPaper>
     </MudStack>
-    <MudPaper Class="rounded-xl p-4 mt-5" Elevation="5">
-        <MudStack>
-            <MudText Typo="Typo.h3"><b>Welcome!</b></MudText>
-            <MudText Typo="Typo.body1">Track your Progress and competete with your friends. <br/>Don't lose your <span class="mud-primary-text">Streak</span>! </MudText>
-        </MudStack>
-        <MudStack Class="m-4" Spacing="10">
-            <MudButton Class="rounded-xl p-3" Href="/login" Color="Color.Primary" Variant="Variant.Filled"><MudText Typo="Typo.button"><b>Login</b></MudText></MudButton>
-            <MudButton Class="rounded-xl p-3" Href="/signup" Color="Color.Primary" Variant="Variant.Outlined"><MudText Typo="Typo.button"><b>Sign Up</b></MudText></MudButton>
-        </MudStack>
-    </MudPaper>
-</MudStack>
+</NotAuthorized>    
+</AuthorizeView>
 
-@code{
+
+@code {
+
 
 }

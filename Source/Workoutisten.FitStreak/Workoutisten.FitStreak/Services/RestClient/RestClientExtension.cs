@@ -35,14 +35,21 @@ namespace Workoutisten.FitStreak.Client.RestClient
             {
                 try
                 {
-                    await AuthenticationStateProvider.Login(
-                    ConvertRefreshResponseToAuthenticationResponse(
-                        await RefreshTokensAsync(
-                        new TokenRefreshRequest()
-                        {
-                            ExpiredJwt = await SecureStorage.GetAsync("accounttoken"),
-                            RefreshToken = await SecureStorage.GetAsync("refreshtoken")
-                        })));
+                    var accountToken = await SecureStorage.GetAsync("accounttoken");
+                    var refreshToken = await SecureStorage.GetAsync("refreshtoken");
+
+                    if (accountToken is not null && refreshToken is not null)
+                    {
+                        await AuthenticationStateProvider.Login(
+                            ConvertRefreshResponseToAuthenticationResponse(
+                            await RefreshTokensAsync(
+                            new TokenRefreshRequest()
+                            {
+                                ExpiredJwt = accountToken,
+                                RefreshToken = refreshToken
+                            })));
+                    }
+
                 }
                 catch (ApiException e)
                 {
