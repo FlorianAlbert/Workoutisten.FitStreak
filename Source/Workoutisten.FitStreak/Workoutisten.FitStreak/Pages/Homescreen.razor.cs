@@ -15,10 +15,7 @@ namespace Workoutisten.FitStreak.Pages
         public IRestClient _RestClient { get; set; }
 
         [Inject]
-        public ErrorDialogService MyProperty { get; set; }
-
-        //[Inject]
-        //public int MyProperty { get; set; }
+        public ErrorDialogService _ErrorDialogService { get; set; }
 
         double[] Counts { get; set; } = new double[] { 0, 100 };
 
