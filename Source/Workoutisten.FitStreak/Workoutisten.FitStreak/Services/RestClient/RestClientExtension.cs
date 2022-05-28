@@ -36,13 +36,13 @@ namespace Workoutisten.FitStreak.Client.RestClient
             {
                 try
                 {
-                    await AuthenticationStateProvider.Login(
-                    await RefreshTokensAsync(
-                        new TokenRefreshRequest()
-                        {
-                            ExpiredJwt = await SecureStorage.GetAsync("accounttoken"),
-                            RefreshToken = await SecureStorage.GetAsync("refreshtoken")
-                        }));
+                    //await AuthenticationStateProvider.Login(
+                    //await RefreshTokensAsync(
+                    //    new TokenRefreshRequest()
+                    //    {
+                    //        ExpiredJwt = await SecureStorage.GetAsync("accounttoken"),
+                    //        RefreshToken = await SecureStorage.GetAsync("refreshtoken")
+                    //    }));
                 }
                 catch (ApiException e)
                 {

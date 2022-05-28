@@ -31,12 +31,12 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<AuthenticationResponse> RefreshTokensAsync(TokenRefreshRequest body);
+        System.Threading.Tasks.Task<TokenRefreshResponse> RefreshTokensAsync(TokenRefreshRequest body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<AuthenticationResponse> RefreshTokensAsync(TokenRefreshRequest body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<TokenRefreshResponse> RefreshTokensAsync(TokenRefreshRequest body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -587,7 +587,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<AuthenticationResponse> RefreshTokensAsync(TokenRefreshRequest body)
+        public virtual System.Threading.Tasks.Task<TokenRefreshResponse> RefreshTokensAsync(TokenRefreshRequest body)
         {
             return RefreshTokensAsync(body, System.Threading.CancellationToken.None);
         }
@@ -595,7 +595,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<AuthenticationResponse> RefreshTokensAsync(TokenRefreshRequest body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<TokenRefreshResponse> RefreshTokensAsync(TokenRefreshRequest body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/authentication/tokens");
@@ -635,7 +635,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<AuthenticationResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<TokenRefreshResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -645,32 +645,32 @@ namespace Workoutisten.FitStreak.Client.RestClient
                         else
                         if (status_ == 400)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<AuthenticationResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            throw new ApiException<AuthenticationResponse>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            throw new ApiException<ProblemDetails>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         if (status_ == 401)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<AuthenticationResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            throw new ApiException<AuthenticationResponse>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            throw new ApiException<ProblemDetails>("Unauthorized", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         if (status_ == 404)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<AuthenticationResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProblemDetails>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            throw new ApiException<AuthenticationResponse>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                            throw new ApiException<ProblemDetails>("Not Found", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         if (status_ == 503)
@@ -5587,6 +5587,19 @@ namespace Workoutisten.FitStreak.Client.RestClient
         [Newtonsoft.Json.JsonProperty("expiredJwt", Required = Newtonsoft.Json.Required.Always)]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         public string ExpiredJwt { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class TokenRefreshResponse
+    {
+        [Newtonsoft.Json.JsonProperty("newRefreshToken", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string NewRefreshToken { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("newJwt", Required = Newtonsoft.Json.Required.Always)]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string NewJwt { get; set; }
 
     }
 
