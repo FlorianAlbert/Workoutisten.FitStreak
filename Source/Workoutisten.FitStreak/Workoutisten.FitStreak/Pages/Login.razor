@@ -42,10 +42,15 @@
 </MudStack>
 
 @code {
+
     public LoginModel loginModel { get; set; } = new LoginModel();
+
     MudForm form;
+
     bool success;
+
     string[] errors = { };
+
     string message = string.Empty;
 
     async void Login_Button()
