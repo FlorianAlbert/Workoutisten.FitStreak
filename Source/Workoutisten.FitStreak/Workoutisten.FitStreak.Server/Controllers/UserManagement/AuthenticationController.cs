@@ -50,10 +50,10 @@ public class AuthenticationController : ControllerBase
     [HttpPost]
     [Route("tokens", Name = nameof(RefreshTokens))]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(typeof(AuthenticationResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(TokenRefreshResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<IActionResult> RefreshTokens([FromBody] TokenRefreshRequest tokenRefreshRequest)
     {
