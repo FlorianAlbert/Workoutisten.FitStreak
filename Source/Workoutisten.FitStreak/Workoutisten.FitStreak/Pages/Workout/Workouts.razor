@@ -31,28 +31,30 @@
 
     string SearchInput { get; set; }
 
-    List<WorkoutModel> UserWorkouts { get; set; }
+    List<WorkoutModel> UserWorkouts { get; set; } = new List<WorkoutModel>();
 
     List<ExerciseModel> UserExercises { get; set; }
 
-    protected async override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
 
-        try
-        {
-            UserWorkouts = (List<WorkoutModel>)_RestClient.GetWorkoutsAsync().Result.ToList().Select(workout => _Converter.ToEntity<Workout, WorkoutModel>(workout));
-            UserExercises = (List<ExerciseModel>)(await Task.Run( () => _RestClient.GetExercisesAsync().Result.ToList().Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise))));
-        }
-        catch (ApiException<ProblemDetails> e)
-        {
-            await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
-        }
-        catch (Exception e)
-        {
-            await _ErrorDialogService.ShowErrorDialog();
-        }
+        //try
+        //{
+        //    UserWorkouts = (List<WorkoutModel>)_RestClient.GetWorkoutsAsync().Result.ToList().Select(workout => _Converter.ToEntity<Workout, WorkoutModel>(workout));
+        //    UserExercises = (List<ExerciseModel>)(await Task.Run( () => _RestClient.GetExercisesAsync().Result.ToList().Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise))));
+        //}
+        //catch (ApiException<ProblemDetails> e)
+        //{
+        //    await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+        //}
+        //catch (Exception e)
+        //{
+        //    await _ErrorDialogService.ShowErrorDialog();
+        //}
 
-        base.OnInitialized();
+        //base.OnInitializedAsync();
+
+        UserWorkouts = new List<WorkoutModel>() { new WorkoutModel() { WorkoutName = "Test", Description = "Test" } }; 
     }
 
     async void AddNewWorkout()
@@ -72,11 +74,10 @@
 
         if (!dialogResult.Cancelled)
         {
-            var workoutResult = (WorkoutModel)dialogResult.Data;
             try
             {
-                await _RestClient.CreateWorkoutAsync(await _Converter.ToDto<WorkoutModel, Workout>(workoutResult));
-                UserWorkouts.Add(workoutResult);
+                var workout = await _RestClient.CreateWorkoutAsync(await _Converter.ToDto<WorkoutModel, Workout>((WorkoutModel)dialogResult.Data));
+                UserWorkouts.Add(await _Converter.ToEntity<Workout, WorkoutModel>(workout));
             }
             catch (ApiException<ProblemDetails> e)
             {

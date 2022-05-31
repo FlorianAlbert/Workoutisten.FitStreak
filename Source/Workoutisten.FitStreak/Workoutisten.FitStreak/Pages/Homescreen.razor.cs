@@ -44,7 +44,7 @@ namespace Workoutisten.FitStreak.Pages
 
         #region Methods
 
-        protected async override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             try
             {
@@ -55,11 +55,11 @@ namespace Workoutisten.FitStreak.Pages
             }
             catch (ApiException<ProblemDetails> e)
             {
-                //if(e.StatusCode == 404)
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
             }
             catch (Exception e)
             {
-                //Navig
+                await _ErrorDialogService.ShowErrorDialog();
             }
 
 
@@ -70,10 +70,11 @@ namespace Workoutisten.FitStreak.Pages
             else
             {
                 CurrentUser.ExerciseStreak = 0;
-                //_RestClient.UpdateUserAsync()
             }
-            base.OnInitialized();
+
             StateHasChanged();
+
+            base.OnInitializedAsync();
         }
 
         private async void OnTimedEvent(Object source, ElapsedEventArgs e)
