@@ -14,7 +14,7 @@ namespace Workoutisten.FitStreak.Server.Model.Workout
         private ICollection<WorkoutExercise> _WorkoutExercises;
         public virtual ICollection<WorkoutExercise> WorkoutExercises => _WorkoutExercises ??= new List<WorkoutExercise>();
 
-        private ICollection<ExerciseEntry> _WorkoutContextExerciseEntries;
-        public virtual ICollection<ExerciseEntry> WorkoutContextExerciseEntries => _WorkoutContextExerciseEntries ??= new List<ExerciseEntry>();
+        private ICollection<ExerciseGroup> _ExerciseGroups;
+        public virtual ICollection<ExerciseGroup> ExerciseGroups => _ExerciseGroups ??= new List<ExerciseGroup>();
     }
 }

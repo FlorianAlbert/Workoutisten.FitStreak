@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Workoutisten.FitStreak.Server.Database.Implementation.Configurations;
 using Workoutisten.FitStreak.Server.Database.Implementation.Extensions;
+using Workoutisten.FitStreak.Server.Database.Implementation.Trigger;
 using Workoutisten.FitStreak.Server.Model;
 using BaseDbContext = Microsoft.EntityFrameworkCore.DbContext;
 
@@ -11,8 +12,6 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.DbContext
 {
     public class FitStreakDbContext : BaseDbContext
     {
-        public IConfiguration Configuration { get; }
-
         public FitStreakDbContext(DbContextOptions options) : base(options)
         {
         }

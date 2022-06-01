@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise;
 
 [JsonObject("DoneCardioExercise")]
-public class DoneCardioExercise
+public class DoneExercise
 {
     [Required]
     [JsonProperty("DoneExerciseId")]
@@ -17,17 +17,14 @@ public class DoneCardioExercise
     [JsonProperty("ExerciseId")]
     public Guid ExerciseId { get; set; }
 
-    [JsonProperty("WorkoutId")]
-    public Guid? WorkoutId { get; set; }
-
     [JsonProperty("ExerciseGroupId")]
     public Guid? ExerciseGroupId { get; set; }
 
-    [Required]
-    [JsonProperty("Distance")]
-    public double Distance { get; set; }
-
-    [Required]
-    [JsonProperty("Duration")]
-    public TimeSpan Duration { get; set; }
+    private IEnumerable<Guid> _SetIds;
+    [JsonProperty("SetIds")]
+    public IEnumerable<Guid> SetIds
+    {
+        get => _SetIds ??= new List<Guid>();
+        set => _SetIds = value;
+    }
 }

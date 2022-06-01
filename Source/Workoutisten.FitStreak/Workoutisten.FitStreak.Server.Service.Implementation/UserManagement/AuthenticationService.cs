@@ -102,7 +102,7 @@ public class AuthenticationService : IAuthenticationService
     public async Task<Result<TokenResult>> RefreshTokens(string expiredJwt, string refreshToken)
     {
         var userResult = await TokenService.GetUserFromJwtAsync(expiredJwt);
-        if (userResult.Unsccessful) {
+        if (userResult.Unsuccessful) {
             return new Result<TokenResult>
             {
                 StatusCode = userResult.StatusCode,
@@ -134,7 +134,7 @@ public class AuthenticationService : IAuthenticationService
         try
         {
             user.RefreshToken = tokens.RefreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(3);
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await Repository.CreateOrUpdateAsync(user);
             return new Result<TokenResult>
             {

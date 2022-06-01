@@ -22,15 +22,23 @@ using ExerciseEntity = Workoutisten.FitStreak.Server.Model.Excercise.Exercise;
 using ExerciseDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.Exercise.Exercise;
 using WorkoutEntity = Workoutisten.FitStreak.Server.Model.Workout.Workout;
 using WorkoutDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.Workout.Workout;
+using DoneExerciseEntity = Workoutisten.FitStreak.Server.Model.Excercise.DoneExercise;
+using DoneExerciseDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise.DoneExercise;
+using SetEntity = Workoutisten.FitStreak.Server.Model.Excercise.Set;
+using SetDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise.Set;
 using Workoutisten.FitStreak.Server.Database.Implementation.DbContext;
 using Workoutisten.FitStreak.Server.Database.Implementation.Trigger;
-
+using Newtonsoft.Json;
+using Workoutisten.FitStreak.Server.Extensions;
+using EntityFrameworkCore.Triggered;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                .AddNewtonsoftJson(options => options.SerializerSettings.TypeNameHandling = TypeNameHandling.Objects);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -68,39 +76,45 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Add DbContext to the container
-builder.Services.AddDbContext<FitStreakDbContext>(optionsBuilder =>
+if (builder.Configuration["DatabaseProvider"] == "MsSql")
 {
-    if (builder.Configuration["DatabaseProvider"] == "MsSql")
+    builder.Services.AddDbContext<FitStreakDbContext, MsSqlFitStreakDbContext>(optionsBuilder =>
     {
         optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("MsSqlFitStreakDatabase"),
-                optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(MsSqlFitStreakDbContext).Assembly.FullName));
-    }
-    else if (builder.Configuration["DatabaseProvider"] == "MySql")
+                msSqlOptionsBuilder => msSqlOptionsBuilder.MigrationsAssembly(typeof(MsSqlFitStreakDbContext).Assembly.FullName));
+
+        optionsBuilder.UseLazyLoadingProxies();
+        optionsBuilder.UseTriggers(options =>
+        {
+            options.AddAssemblyTriggers(typeof(OnModifiedBaseEntity).Assembly);
+        });
+    });
+}
+else if (builder.Configuration["DatabaseProvider"] == "MySql")
+{
+    builder.Services.AddDbContext<FitStreakDbContext, MySqlFitStreakDbContext>(optionsBuilder =>
     {
         optionsBuilder.UseMySql(builder.Configuration.GetConnectionString("MySqlFitStreakDatabase"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MySqlFitStreakDatabase")),
-            sqLiteOptionsBuilder => sqLiteOptionsBuilder.MigrationsAssembly(typeof(MySqlFitStreakDbContext).Assembly.FullName));
-    }
-    else
-    {
-        throw new NotSupportedException("No supported Database Provider given.");
-    }
+            mySqlOptionsBuilder => mySqlOptionsBuilder.MigrationsAssembly(typeof(MySqlFitStreakDbContext).Assembly.FullName));
 
-    optionsBuilder.UseLazyLoadingProxies();
-    optionsBuilder.UseTriggers(options =>
-    {
-        options.AddAssemblyTriggers(typeof(OnModifiedBaseEntity).Assembly);
+        optionsBuilder.UseLazyLoadingProxies();
+        optionsBuilder.UseTriggers(options =>
+        {
+            options.AddAssemblyTriggers(typeof(OnModifiedBaseEntity).Assembly);
+        });
     });
-});
-
-// Add Triggers to the container
-//builder.Services.AddAssemblyTriggers(typeof(OnModifiedBaseEntity).Assembly);
+}
+else
+{
+    throw new NotSupportedException("No supported Database Provider given.");
+}
 
 // Add own services to the container
 builder.Services.AddScoped<IRepository, Repository>();
 
 // User Management
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-builder.Services.AddScoped<IFriendshipService, FriendshipService>(); 
+builder.Services.AddScoped<IFriendshipService, FriendshipService>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -110,17 +124,20 @@ builder.Services.AddScoped<IAlphaNumericStringGenerator, AlphaNumericStringGener
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Training
-builder.Services.AddScoped<IExerciseEntryService, ExerciseEntryService>();
+builder.Services.AddScoped<IDoneExerciseService, DoneExerciseService>();
 builder.Services.AddScoped<IExerciseGroupService, ExerciseGroupService>();
 builder.Services.AddScoped<IExerciseService, ExerciseService>();
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
+builder.Services.AddScoped<ISetService, SetService>();
 
 // Converter
 builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
 builder.Services.AddTransient<IConverter<User, UserDto>, UserConverter>();
 builder.Services.AddTransient<IConverter<FriendshipRequestEntity, FriendshipRequestDto>, FriendshipConverter>();
 builder.Services.AddTransient<IConverter<ExerciseEntity, ExerciseDto>, ExerciseConverter>();
-builder.Services.AddTransient<IConverter<WorkoutEntity, WorkoutDto>,WorkoutConverter>();
+builder.Services.AddTransient<IConverter<WorkoutEntity, WorkoutDto>, WorkoutConverter>();
+builder.Services.AddTransient<IConverter<DoneExerciseEntity, DoneExerciseDto>, DoneExerciseConverter>();
+builder.Services.AddTransient<IConverter<SetEntity, SetDto>, SetConverter>();
 
 // Add authentication to the container
 builder.Services.AddAuthentication(options =>
@@ -157,11 +174,16 @@ var app = builder.Build();
 // Ensure that the database exists
 using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
 {
-    var logger = scope.ServiceProvider.GetRequiredService<ILogger<OnModifiedBaseEntity>>();
-
     using var dbContext = scope.ServiceProvider.GetRequiredService<FitStreakDbContext>();
 
+    var migrations = dbContext.Database.GetMigrations();
+    var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
+    var appliedMigrations = await dbContext.Database.GetAppliedMigrationsAsync();
+
     dbContext.Database.Migrate();
+
+    pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
+    appliedMigrations = await dbContext.Database.GetAppliedMigrationsAsync();
 }
 
 // Configure the HTTP request pipeline.

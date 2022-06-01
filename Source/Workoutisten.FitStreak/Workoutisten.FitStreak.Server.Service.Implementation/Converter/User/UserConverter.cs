@@ -19,7 +19,10 @@ namespace Workoutisten.FitStreak.Server.Service.Implementation.Converter.User
                 Email = entity.NormalizedEmail,
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
-                CreatedAt = entity.CreatedAt
+                CreatedAt = entity.CreatedAt,
+                LastExercise = entity.Exercises.OrderByDescending(x => x.CreatedAt).Select(x => x.CreatedAt).FirstOrDefault(),
+                ExerciseStreak = entity.Streak,
+                MaxExerciseStreak = entity.MaxStreak
             };
 
             return Task.FromResult(dto);
@@ -37,7 +40,9 @@ namespace Workoutisten.FitStreak.Server.Service.Implementation.Converter.User
                 NormalizedEmail = dto.Email,
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
-                CreatedAt = dto.CreatedAt
+                CreatedAt = dto.CreatedAt,
+                Streak = dto.ExerciseStreak,
+                MaxStreak = dto.MaxExerciseStreak
             };
 
             return Task.FromResult(entity);

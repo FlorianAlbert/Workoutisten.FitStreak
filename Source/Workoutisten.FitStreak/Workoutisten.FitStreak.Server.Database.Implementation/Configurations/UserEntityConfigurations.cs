@@ -29,6 +29,11 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Configurations
                    .WithOne(x => x.RequestingUser)
                    .OnDelete(DeleteBehavior.Cascade)
                    .HasForeignKey(x => x.RequestingUserId);
+            builder.HasMany(x => x.DoneExercises)
+                   .WithOne(x => x.ExercisingUser)
+                   .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(x => x.ParticipatedExerciseGroups)
+                   .WithMany(x => x.Participants);
         }
     }
 }

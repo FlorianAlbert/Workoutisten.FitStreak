@@ -19,7 +19,7 @@ public class WorkoutConverter : IConverter<WorkoutEntity, WorkoutDto>
             WorkoutName = entity.Name,
             Description = entity.Description,
             WorkoutId = entity.Id,
-            DoneExerciseIds = entity.WorkoutContextExerciseEntries.Select(wee => wee.Id).ToArray(),
+            DoneExerciseIds = entity.ExerciseGroups.Select(wee => wee.Id).ToArray(),
             ExerciseIds = entity.WorkoutExercises.Select(we => we.ExerciseId).ToArray()
         };
         return Task.FromResult(dto);

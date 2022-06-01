@@ -51,7 +51,7 @@ public class FriendshipService : IFriendshipService
                 StatusCode = StatusCodes.Status204NoContent
             };
         }
-        catch (EntryNotFoundException)
+        catch (EntryNotFoundException) // TODO: Repository doesn't throw EntryNotFoundException, just throws a DatabaseRepositoryException with a nested EntryNotFoundException
         {
             return new Result
             {
@@ -165,7 +165,7 @@ public class FriendshipService : IFriendshipService
                 StatusCode = StatusCodes.Status204NoContent
             };
         }
-        catch (EntryNotFoundException)
+        catch (EntryNotFoundException) // TODO: Repository doesn't throw EntryNotFoundException, just throws a DatabaseRepositoryException with a nested EntryNotFoundException
         {
             return new Result
             {
@@ -438,7 +438,7 @@ public class FriendshipService : IFriendshipService
                 StatusCode = StatusCodes.Status204NoContent
             };
         }
-        catch (EntryNotFoundException)
+        catch (EntryNotFoundException) // TODO: Repository doesn't throw EntryNotFoundException, just throws a DatabaseRepositoryException with a nested EntryNotFoundException
         {
             return new Result
             {

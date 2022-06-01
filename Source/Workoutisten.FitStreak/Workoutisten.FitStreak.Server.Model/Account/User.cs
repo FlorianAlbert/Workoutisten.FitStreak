@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Workoutisten.FitStreak.Server.Model.Excercise;
+using Workoutisten.FitStreak.Server.Model.Workout;
 
 namespace Workoutisten.FitStreak.Server.Model.Account
 {
@@ -24,6 +25,10 @@ namespace Workoutisten.FitStreak.Server.Model.Account
 
         public bool IsVerified { get; set; }
 
+        public int Streak { get; set; }
+
+        public int MaxStreak { get; set; }
+
         private ICollection<Exercise> _Exercises;
         public virtual ICollection<Exercise> Exercises => _Exercises ??= new List<Exercise>();
 
@@ -44,5 +49,11 @@ namespace Workoutisten.FitStreak.Server.Model.Account
 
         private ICollection<FriendshipRequest> _IngoingFriendshipRequests;
         public virtual ICollection<FriendshipRequest> IngoingFriendshipRequests => _IngoingFriendshipRequests ??= new List<FriendshipRequest>();
+
+        private ICollection<DoneExercise> _DoneExercises;
+        public virtual ICollection<DoneExercise> DoneExercises => _DoneExercises ??= new List<DoneExercise>();
+
+        private ICollection<ExerciseGroup> _ParticipatedExerciseGroups;
+        public virtual ICollection<ExerciseGroup> ParticipatedExerciseGroups => _ParticipatedExerciseGroups ??= new List<ExerciseGroup>();
     }
 }
