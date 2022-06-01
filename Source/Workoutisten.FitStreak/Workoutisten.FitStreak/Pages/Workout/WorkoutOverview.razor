@@ -1,11 +1,12 @@
-﻿
-@using Workoutisten.FitStreak.Client.RestClient
+﻿@using Workoutisten.FitStreak.Client.RestClient
 @using Workoutisten.FitStreak.Data.Models.Workout
 
 @page "/workouts/overview"
 
 @inject IRestClient _RestClient
 @inject NavigationManager _NavManager
+@inject ErrorDialogService _ErrorDialogService
+@inject IConverterWrapper _Converter
 
 <MudPaper Class="rounded-xl p-2 my-3 h-75">
     <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
@@ -20,7 +21,7 @@
     <MudList>
         @*@foreach (var exercise in Workout.Exercises)
         {
-            <ExerciseListElement Category="exercise.Category" Name="@exercise.Name" />
+        <ExerciseListElement Category="exercise.Category" Name="@exercise.Name" />
         }*@
     </MudList>
 </MudPaper>
@@ -33,13 +34,48 @@
     [SupplyParameterFromQuery(Name = "workout")]
     public Guid? WorkoutGuid { get; set; }
 
-    public WorkoutModel Workout { get; set; } = new();
+    WorkoutModel Workout { get; set; } = new();
 
-    protected override void OnInitialized()
+    List<ExerciseModel> WorkoutExercises { get; set; } = new();
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        //Workout anhand der WorkoutGuid initialisieren
+        if (firstRender)
+        {
+            if (WorkoutGuid is null)
+            {
+                await _ErrorDialogService.ShowGeneralErrorDialog();
+                base.OnAfterRenderAsync(firstRender);
+                return;
+            }
+            try
+            {
+                Workout = await _Converter.ToEntity<Workout, WorkoutModel>(await _RestClient.GetWorkoutAsync(WorkoutGuid.Value));
 
-        base.OnInitialized();
+                if (Workout.Exercises.Count == 0)
+                {
+                    await _ErrorDialogService.ShowGeneralErrorDialog();
+                    base.OnAfterRenderAsync(firstRender);
+                    return;
+                }
+
+                Workout.Exercises.ForEach(async exerciseId =>
+                {
+                    WorkoutExercises.Add(await _Converter.ToEntity<Exercise, ExerciseModel>(await _RestClient.GetExerciseAsync(exerciseId)));
+
+                });
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception e)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
+        }
+
+        base.OnAfterRenderAsync(firstRender);
     }
 
     void StartWorkout()

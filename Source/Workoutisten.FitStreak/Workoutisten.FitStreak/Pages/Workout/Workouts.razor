@@ -22,7 +22,7 @@
     <MudList>
         @foreach (var workout in UserWorkouts)
         {
-            <WorkoutListElement Description="@workout.Description" LastTraining="@workout.LastTraining.ToString()" Title="@workout.WorkoutName" />
+            <WorkoutListElement Description="@workout.Description" LastTraining="@workout.LastTraining.ToString()" Title="@workout.WorkoutName" WorkoutGuid="@workout.Guid"/>
         }
     </MudList>
 </MudPaper>
