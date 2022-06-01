@@ -39,7 +39,7 @@
     MudDialogInstance MudDialog { get; set; }
 
     [Parameter]
-    public List<ExerciseModel> UsersExercises { get; set; }
+    public List<ExerciseModel> UserExercises { get; set; }
 
     WorkoutModel NewWorkout = new WorkoutModel();
 
@@ -47,14 +47,14 @@
 
     protected override void OnInitialized()
     {
-        UsersExercises.ForEach(exercise => ExerciseElements.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = exercise, Checked = false }));
+        UserExercises.ForEach(exercise => ExerciseElements.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = exercise, Checked = false }));
 
         base.OnInitialized();
     }
 
     void Submit()
     {
-        NewWorkout.Exercises.AddRange(ExerciseElements.Where(ue => ue.Checked).Select(ue => ue.ExerciseModel));
+        NewWorkout.Exercises.AddRange(ExerciseElements.Where(ue => ue.Checked).Select(ue => ue.ExerciseModel.Guid));
         MudDialog.Close(DialogResult.Ok<WorkoutModel>(NewWorkout));
 
     }

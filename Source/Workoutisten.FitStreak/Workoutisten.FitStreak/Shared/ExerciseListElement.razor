@@ -3,7 +3,7 @@
     <MudCard Elevation="0">
         <MudCardContent>
             <MudText>@Name</MudText>
-            <MudText Typo="Typo.caption">Was machen wir hier hin?</MudText>
+            <MudText Typo="Typo.caption">@Description</MudText>
         </MudCardContent>
     </MudCard>
 </MudListItem>
@@ -25,6 +25,9 @@
 
     [Parameter]
     public MudIcon Icon { get; set; }
+
+    [Parameter]
+    public string Description { get; set; }
 
     private string IconAttribute
     {
