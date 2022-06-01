@@ -4,7 +4,10 @@
 
 @page "/workouts"
 
-@inject IDialogService DialogService
+@inject IDialogService _DialogService
+@inject IRestClient _RestClient
+@inject IConverterWrapper _Converter
+@inject ErrorDialogService _ErrorDialogService
 
 <MudGrid>
     <MudItem xs="10">
@@ -28,35 +31,66 @@
 
     string SearchInput { get; set; }
 
-    List<WorkoutModel> UserWorkouts { get; set; }
+    List<WorkoutModel> UserWorkouts { get; set; } = new List<WorkoutModel>();
 
-    protected override void OnInitialized()
+    List<ExerciseModel> UserExercises { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        UserWorkouts = new List<WorkoutModel>();
+        if (firstRender)
+        {
+            try
+            {
+                UserWorkouts = (await Task.WhenAll((await _RestClient.GetWorkoutsAsync()).Select(workout => _Converter.ToEntity<Workout, WorkoutModel>(workout)))).ToList();
+                UserExercises = (await Task.WhenAll((await _RestClient.GetExercisesAsync()).Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise)))).ToList();
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception e)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
 
-        UserWorkouts.Add(new WorkoutModel() { Description = "Seeeeehr Lange Description oikwajdoiajwdoiawjd", WorkoutName = "Workout1" });
-        UserWorkouts.Add(new WorkoutModel() { Description = "Description", WorkoutName = "Workout2", });
+            base.OnInitializedAsync();
 
-        base.OnInitialized();
+            StateHasChanged();
+        }
     }
 
     async void AddNewWorkout()
     {
+        var parameters = new DialogParameters();
+        parameters.Add("UserExercises", UserExercises);
+
         var options = new DialogOptions
             {
                 CloseOnEscapeKey = true,
                 CloseButton = true,
                 FullWidth = true,
             };
-        var DialogReference = DialogService.Show<AddWorkoutDialog>("New Workout: ", options);
+        var DialogReference = _DialogService.Show<AddWorkoutDialog>("New Workout: ", parameters, options);
 
-        var result = await DialogReference.Result;
+        var dialogResult = await DialogReference.Result;
 
-        if (!result.Cancelled)
+        if (!dialogResult.Cancelled)
         {
-            UserWorkouts.Add((WorkoutModel)result.Data);
-        }
+            try
+            {
+                var workout = await _RestClient.CreateWorkoutAsync(await _Converter.ToDto<WorkoutModel, Workout>((WorkoutModel)dialogResult.Data));
+                UserWorkouts.Add(await _Converter.ToEntity<Workout, WorkoutModel>(workout));
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception e)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
 
+        }
         StateHasChanged();
 
     }

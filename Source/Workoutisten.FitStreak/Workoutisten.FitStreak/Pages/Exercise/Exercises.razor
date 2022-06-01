@@ -6,6 +6,7 @@
 @inject IDialogService _DialogService
 @inject IRestClient _RestClient
 @inject IConverterWrapper _Converter
+@inject ErrorDialogService _ErrorDialogService
 
 <MudGrid>
     <MudItem xs="10">
@@ -22,16 +23,40 @@
         {
             <ExerciseListElement Category="exercise.Category" Name="@exercise.Name" />
         }
-        <ExerciseListElement Category="ExerciseCategoryEnum.Cardio" Name="Exercise 1" />
-        <ExerciseListElement Category="ExerciseCategoryEnum.Strength" Name="Exercise 2" />
     </MudList>
 </MudPaper>
 
 
 @code {
-    public string SearchInput { get; set; }
 
-    public List<ExerciseModel> UserExercises { get; set; } = new List<ExerciseModel>();
+    string SearchInput { get; set; }
+
+    List<ExerciseModel> UserExercises { get; set; } = new List<ExerciseModel>();
+
+    
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                UserExercises = (await Task.WhenAll((await _RestClient.GetExercisesAsync()).Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise)))).ToList();
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception e)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
+        }
+
+        StateHasChanged();
+
+        base.OnAfterRenderAsync(firstRender);
+    }
 
     public async void AddNewExercise()
     {
@@ -44,12 +69,23 @@
 
         var DialogReference = _DialogService.Show<AddExerciseDialog>("New Exercise: ", options);
 
-        var result = await DialogReference.Result;
+        var dialogResult = await DialogReference.Result;
 
-        if (!result.Cancelled)
+        if (!dialogResult.Cancelled)
         {
-            var exercise = await _RestClient.CreateExerciseAsync(await _Converter.ToDto<ExerciseModel, Exercise>((ExerciseModel)result.Data));
-            UserExercises.Add(await _Converter.ToEntity<Exercise, ExerciseModel>(exercise));
+            try
+            {
+                var exercise = await _RestClient.CreateExerciseAsync(await _Converter.ToDto<ExerciseModel, Exercise>((ExerciseModel)dialogResult.Data));
+                UserExercises.Add(await _Converter.ToEntity<Exercise, ExerciseModel>(exercise));
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception e)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
         }
 
         StateHasChanged();

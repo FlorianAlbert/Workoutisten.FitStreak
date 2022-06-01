@@ -1,7 +1,12 @@
-﻿@using Workoutisten.FitStreak.Pages.Dialogs
+﻿@using Workoutisten.FitStreak.Data.Models.User
+@using Workoutisten.FitStreak.Pages.Dialogs
 
 @page "/social"
+
 @inject IDialogService DialogService
+@inject IRestClient _RestClient
+@inject ErrorDialogService _ErrorDialogService
+@inject IConverterWrapper _Converter
 
 <MudStack>
     <MudGrid>
@@ -9,50 +14,50 @@
             <SearchBar SearchInput="@SearchInput" />
         </MudItem>
         <MudItem xs="2" Class="d-flex align-center justify-center ">
-            <AddButtonRounded ButtonClicked="AddNewFriend"/>
+            <AddButtonRounded ButtonClicked="AddNewFriend" />
         </MudItem>
     </MudGrid>
     <MudPaper Class="rounded-xl p-2" MinHeight="600px">
         <MudText Class="mt-2 mb-3" Typo="Typo.h5" Align="Align.Center"><b>Friends</b></MudText>
-        <MudDivider DividerType="DividerType.Middle" Class="Foreground: white"/>
-            @if (pendingFriendRequests)
+        <MudDivider DividerType="DividerType.Middle" Class="Foreground: white" />
+        @if (pendingFriendRequests)
+        {
+            <MudText Class="ml-3 mt-3">Pending Friend Requests:</MudText>
+            for (var i = 0; i < 2; i++)
             {
-                <MudText Class="ml-3 mt-3">Pending Friend Requests:</MudText>
-                for (var i = 0; i < 2; i++)
-                {
-                    <MudListItem>
-                        <MudStack Row="true" AlignItems="AlignItems.Center">
-                            <MudAvatar Color="Color.Warning">
-                                <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
-                            </MudAvatar>
-                            <MudText>Friend</MudText>
-                            <MudSpacer/>
-                            <MudAvatar Class="mr-3" Color="Color.Success" Variant="Variant.Outlined">
-                                <MudIconButton Icon="@Icons.Material.Filled.Check" Color="Color.Inherit" />
-                            </MudAvatar>
-                            <MudAvatar Color="Color.Error" Variant="Variant.Outlined">
-                                <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Inherit" />
-                            </MudAvatar>
-                        </MudStack>
-                    </MudListItem>
-                    <MudDivider/>
-                }
+                <MudListItem>
+                    <MudStack Row="true" AlignItems="AlignItems.Center">
+                        <MudAvatar Color="Color.Warning">
+                            <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
+                        </MudAvatar>
+                        <MudText>Friend</MudText>
+                        <MudSpacer />
+                        <MudAvatar Class="mr-3" Color="Color.Success" Variant="Variant.Outlined">
+                            <MudIconButton Icon="@Icons.Material.Filled.Check" Color="Color.Inherit" />
+                        </MudAvatar>
+                        <MudAvatar Color="Color.Error" Variant="Variant.Outlined">
+                            <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Inherit" />
+                        </MudAvatar>
+                    </MudStack>
+                </MudListItem>
+                <MudDivider />
             }
-        <MudDivider DividerType="DividerType.Middle" Class="Foreground: white"/>
+        }
+        <MudDivider DividerType="DividerType.Middle" Class="Foreground: white" />
         <MudList Clickable="true">
-            @for (int i = 0; i < 10; i++)
+            @foreach(var friend in Followed)
             {
                 <MudListItem>
                     <MudStack Row="true" AlignItems="AlignItems.Center">
                         <MudAvatar Color="Color.Secondary">
                             <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
                         </MudAvatar>
-                        <MudText>Friend</MudText>
-                        <MudSpacer/>
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit"/>
+                        <MudText>@friend.FirstName @friend.LastName</MudText>
+                        <MudSpacer />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" />
                     </MudStack>
                 </MudListItem>
-                <MudDivider/>
+                <MudDivider />
             }
 
         </MudList>
@@ -62,8 +67,36 @@
 
 
 @code {
-    private string SearchInput;
-    private bool pendingFriendRequests = true;
+
+    string SearchInput { get; set; }
+
+    public bool pendingFriendRequests { get; set; }
+
+    public List<UserModel> Followed { get; set; }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                Followed = (await Task.WhenAll((await _RestClient.GetFollowerAsync()).Select(friend => _Converter.ToEntity<User, UserModel>(friend)))).ToList();
+                //Ausgehende Holen
+                //Einkommende holen
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
+
+            StateHasChanged();
+        }
+
+    }
 
     async void AddNewFriend()
     {
@@ -79,7 +112,21 @@
 
         if (!result.Cancelled)
         {
-            //UserFriends.Add((WorkoutModel)result.Data);
+            try
+            {
+                await _RestClient.CreateFriendshipRequestAsync(new FriendRequest() { Email = result.Data as string});
+
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
+
+            StateHasChanged();
         }
 
         StateHasChanged();

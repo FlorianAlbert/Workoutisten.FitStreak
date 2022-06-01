@@ -1,18 +1,8 @@
-﻿
-@*<style>
-    .DialogContentMaxHeight {
-        max-height: 85%;
-    }
-
-    .MudListMaxHeight {
-        max-height: 400px;
-        overflow: auto;
-    }
-</style>*@
+﻿@using System.ComponentModel.DataAnnotations
 
 <MudDialog>
     <DialogContent>
-        <MudTextField T="string" Label="Username" Value="@Input"/>
+        <MudTextField T="string" Label="Email" Value="@Input" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"/>
     </DialogContent>
     <DialogActions>
         <MudContainer Class="d-flex justify-center my-3 ">
@@ -27,6 +17,7 @@
 
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
+
     string Input { get; set; }
 
     void Submit() => MudDialog.Close(DialogResult.Ok<string>(Input));

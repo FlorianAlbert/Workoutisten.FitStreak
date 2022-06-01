@@ -27,7 +27,7 @@ public class RegistrationService : IRegistrationService
         try
         {
             var users = await Repository.GetAllAsync<User>();
-            var userWithEmailExists = users.Any(user => user.NormalizedEmail.Equals(email, StringComparison.InvariantCultureIgnoreCase));
+            var userWithEmailExists = users.Any(user => user.NormalizedEmail == email.NormalizeEmail());
             if (userWithEmailExists)
             {
                 return new Result<bool>

@@ -5,8 +5,10 @@ using Workoutisten.FitStreak.Client.RestClient;
 using Workoutisten.FitStreak.Services;
 using TimeSpan = System.TimeSpan;
 using Timer = System.Timers.Timer;
+using Workoutisten.FitStreak.Data.Models.User;
+using Workoutisten.FitStreak.Data.Converter;
 
-namespace Workoutisten.FitStreak.Pages
+namespace Workoutisten.FitStreak.Pages  
 {
     public partial class Homescreen
     {
@@ -15,10 +17,10 @@ namespace Workoutisten.FitStreak.Pages
         public IRestClient _RestClient { get; set; }
 
         [Inject]
-        public ErrorDialogService MyProperty { get; set; }
+        public ErrorDialogService _ErrorDialogService { get; set; }
 
-        //[Inject]
-        //public int MyProperty { get; set; }
+        [Inject]
+        public IConverterWrapper _Converter { get; set; }
 
         double[] Counts { get; set; } = new double[] { 0, 100 };
 
@@ -41,42 +43,46 @@ namespace Workoutisten.FitStreak.Pages
 
         TimeSpan MaxTimeSpan { get; set; } = new TimeSpan(3, 0, 0, 0);
 
-        User CurrentUser { get; set; }
+        UserModel CurrentUser { get; set; }
 
         #endregion
 
         #region Methods
 
-        protected async override void OnInitialized()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            try
+            if (firstRender)
             {
-                var test = Guid.Parse(await SecureStorage.GetAsync("userId"));
-                CurrentUser = await _RestClient.GetUserAsync(Guid.Parse(await SecureStorage.GetAsync("userId")));
-                LastWorkoutDate = CurrentUser.LastExercise;
+                try
+                {
+                    CurrentUser = await _Converter.ToEntity<User, UserModel>(await _RestClient.GetUserAsync(Guid.Parse(await SecureStorage.GetAsync("userId"))));
+                    LastWorkoutDate = CurrentUser.LastExercise;
 
-            }
-            catch (ApiException<ProblemDetails> e)
-            {
-                //if(e.StatusCode == 404)
-            }
-            catch (Exception e)
-            {
-                //Navig
-            }
+                }
+                catch (ApiException<ProblemDetails> e)
+                {
+                    await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+                }
+                catch (Exception)
+                {
+                    await _ErrorDialogService.ShowErrorDialog();
+                }
 
 
-            if (LastWorkoutDate >= (DateTime.Now - MaxTimeSpan))
-            {
-                StartTimer();
+                if (LastWorkoutDate >= (DateTime.Now - MaxTimeSpan))
+                {
+                    StartTimer();
+                }
+                else
+                {
+                    CurrentUser.Streak = 0;
+                }
+
+                StateHasChanged();
+
+                base.OnAfterRenderAsync(firstRender);
             }
-            else
-            {
-                CurrentUser.ExerciseStreak = 0;
-                //_RestClient.UpdateUserAsync()
-            }
-            base.OnInitialized();
-            StateHasChanged();
+           
         }
 
         private async void OnTimedEvent(Object source, ElapsedEventArgs e)
@@ -89,7 +95,7 @@ namespace Workoutisten.FitStreak.Pages
                 if (remainingTime.TotalSeconds <= 0)
                 {
                     Timer.Stop();
-                    CurrentUser.ExerciseStreak = 0;
+                    CurrentUser.Streak = 0;
                     remainingTimeString = null;
                     return;
                 }

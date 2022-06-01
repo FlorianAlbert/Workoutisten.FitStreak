@@ -20,7 +20,7 @@
                 <MudChart ChartType="MudBlazor.ChartType.Donut" Width="70%" Height="70%" InputData="@Counts" ChartOptions="@chartOptions">
                     <CustomGraphics>
                         <text class="donut-inner-text" x="47%" y="33%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="3" color="white">Your Streak</text>
-                        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#EB5E55" font-size="10">@CurrentUser.ExerciseStreak</text>
+                        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#EB5E55" font-size="10">@CurrentUser.Streak</text>
                         <text class="donut-inner-text" x="47%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="#838486" font-size="2">@(remainingTimeString is null? "You lost your streak" : "Time till Reset:")</text>
                         <text class="donut-inner-text" x="47%" y="70%" dominant-baseline="middle" text-anchor="middle" fill="#838486" font-size="2">@remainingTimeString</text>
                     </CustomGraphics>
@@ -31,7 +31,7 @@
                     <HomescreenButton Image="Images/Workouts.jpg" Title="Workout" Href="/workouts" />
                 </MudItem>
                 <MudItem xs="6">
-                    <HomescreenButton Image="Images/Exercises.jpg" Title="Übungen" Href="/exercises" />
+                    <HomescreenButton Image="Images/Exercises.jpg" Title="Exercises" Href="/exercises" />
                 </MudItem>
                 <MudItem xs="6">
                     <HomescreenButton Image="Images/History.jpg" Title="History" Href="/history" />
