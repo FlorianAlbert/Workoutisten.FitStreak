@@ -10,6 +10,6 @@ namespace Workoutisten.FitStreak.Data.Models.Workout
     {
         public int? Reps { get; set; }
 
-        public int? Weight { get; set; }
+        public double? Weight { get; set; }
     }
 }

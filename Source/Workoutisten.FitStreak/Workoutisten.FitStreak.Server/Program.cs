@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Workoutisten.FitStreak.Server.Database;
 using Workoutisten.FitStreak.Server.Database.Implementation;
 using Workoutisten.FitStreak.Server.Database.Interface;
-using Workoutisten.FitStreak.Server.Extensions;
 using Workoutisten.FitStreak.Server.Service.Implementation.Converter;
+using Workoutisten.FitStreak.Server.Service.Implementation.Converter.Friendship;
 using Workoutisten.FitStreak.Server.Service.Implementation.Converter.User;
+using Workoutisten.FitStreak.Server.Service.Implementation.Converter.Training;
 using Workoutisten.FitStreak.Server.Service.Implementation.Training;
 using Workoutisten.FitStreak.Server.Service.Implementation.UserManagement;
 using Workoutisten.FitStreak.Server.Service.Interface.Converter;
@@ -16,6 +16,15 @@ using Workoutisten.FitStreak.Server.Service.Interface.Training;
 using Workoutisten.FitStreak.Server.Service.Interface.UserManagement;
 using User = Workoutisten.FitStreak.Server.Model.Account.User;
 using UserDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Person.User;
+using FriendshipRequestEntity = Workoutisten.FitStreak.Server.Model.Account.FriendshipRequest;
+using FriendshipRequestDto = Workoutisten.FitStreak.Server.Outbound.Model.UserManagement.Friendship.FriendshipRequest;
+using ExerciseEntity = Workoutisten.FitStreak.Server.Model.Excercise.Exercise;
+using ExerciseDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.Exercise.Exercise;
+using WorkoutEntity = Workoutisten.FitStreak.Server.Model.Workout.Workout;
+using WorkoutDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.Workout.Workout;
+using Workoutisten.FitStreak.Server.Database.Implementation.DbContext;
+using Workoutisten.FitStreak.Server.Database.Implementation.Trigger;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,16 +68,32 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Add DbContext to the container
-builder.Services.AddDbContext<FitStreakDbContext>(options =>
+builder.Services.AddDbContext<FitStreakDbContext>(optionsBuilder =>
 {
-    options.UseLazyLoadingProxies();
-    options.UseSqlServer(builder.Configuration.GetConnectionString("FitStreakDatabase"),
-        optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(FitStreakDbContext).Assembly.FullName));
-    options.UseTriggers();
+    if (builder.Configuration["DatabaseProvider"] == "MsSql")
+    {
+        optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("MsSqlFitStreakDatabase"),
+                optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(MsSqlFitStreakDbContext).Assembly.FullName));
+    }
+    else if (builder.Configuration["DatabaseProvider"] == "MySql")
+    {
+        optionsBuilder.UseMySql(builder.Configuration.GetConnectionString("MySqlFitStreakDatabase"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("MySqlFitStreakDatabase")),
+            sqLiteOptionsBuilder => sqLiteOptionsBuilder.MigrationsAssembly(typeof(MySqlFitStreakDbContext).Assembly.FullName));
+    }
+    else
+    {
+        throw new NotSupportedException("No supported Database Provider given.");
+    }
+
+    optionsBuilder.UseLazyLoadingProxies();
+    optionsBuilder.UseTriggers(options =>
+    {
+        options.AddAssemblyTriggers(typeof(OnModifiedBaseEntity).Assembly);
+    });
 });
 
 // Add Triggers to the container
-builder.Services.AddTriggers();
+//builder.Services.AddAssemblyTriggers(typeof(OnModifiedBaseEntity).Assembly);
 
 // Add own services to the container
 builder.Services.AddScoped<IRepository, Repository>();
@@ -82,6 +107,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPasswordHashingService, PasswordHashingService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAlphaNumericStringGenerator, AlphaNumericStringGenerator>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Training
 builder.Services.AddScoped<IExerciseEntryService, ExerciseEntryService>();
@@ -92,6 +118,9 @@ builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 // Converter
 builder.Services.AddTransient<IConverterWrapper, ConverterWrapper>();
 builder.Services.AddTransient<IConverter<User, UserDto>, UserConverter>();
+builder.Services.AddTransient<IConverter<FriendshipRequestEntity, FriendshipRequestDto>, FriendshipConverter>();
+builder.Services.AddTransient<IConverter<ExerciseEntity, ExerciseDto>, ExerciseConverter>();
+builder.Services.AddTransient<IConverter<WorkoutEntity, WorkoutDto>,WorkoutConverter>();
 
 // Add authentication to the container
 builder.Services.AddAuthentication(options =>
@@ -114,13 +143,24 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Add email to the container
+if (!int.TryParse(builder.Configuration["Smtp:SmtpPort"], out var smtpPort))
+    throw new ArgumentException($"The given SMTP port is not of type integer.", nameof(smtpPort));
+
+builder.Services.AddFluentEmail(builder.Configuration["Smtp:SmtpUser"], builder.Configuration["Smtp:SmtpUsername"])
+                .AddSmtpSender(builder.Configuration["Smtp:SmtpHost"], smtpPort);
+
+
 // Build the web application
 var app = builder.Build();
 
 // Ensure that the database exists
 using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
 {
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<OnModifiedBaseEntity>>();
+
     using var dbContext = scope.ServiceProvider.GetRequiredService<FitStreakDbContext>();
+
     dbContext.Database.Migrate();
 }
 
@@ -134,7 +174,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

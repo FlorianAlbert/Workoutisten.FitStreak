@@ -1,33 +1,73 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Net.Http.Headers;
 using Workoutisten.FitStreak.Data.Models.User;
 
 namespace Workoutisten.FitStreak.Client.RestClient
 {
     public partial class RestClient
     {
-        [Inject]
-        public AuthenticationTokenHolderModel TokenHolder { get; set; }
 
-        partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url)
+        public CustomAuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+
+        public RestClient(string baseUrl, System.Net.Http.HttpClient httpClient, CustomAuthenticationStateProvider customAuthenticationStateProvider) : this(baseUrl, httpClient)
         {
-            if (TokenHolder is not null && TokenHolder.AccessToken is not null)
+            AuthenticationStateProvider = customAuthenticationStateProvider;
+        }
+
+        async Task PrepareRequestAsync(HttpClient client, HttpRequestMessage request, string url, CancellationToken cancellationToken)
+        {
+            var accountToken = await SecureStorage.GetAsync("accounttoken");
+            if (accountToken is not null)
             {
-                request.Headers.Authorization = System.Net.Http.Headers.AuthenticationHeaderValue.Parse(TokenHolder.AccessToken);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accountToken);
             }
         }
 
-        partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder)
+        async Task PrepareRequestAsync(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder, CancellationToken cancellationToken)
         {
-            PrepareRequest(client, request, urlBuilder.ToString());
+            //PrepareRequestAsync(client, request, urlBuilder.ToString(), cancellationToken);
         }
 
-        partial void ProcessResponse(HttpClient client, HttpResponseMessage response)
+        async Task ProcessResponseAsync(HttpClient client, HttpResponseMessage response, CancellationToken cancellationToken)
         {
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                //this.
-                //Wie refreshen wir den Token?
+                try
+                {
+                    var accountToken = await SecureStorage.GetAsync("accounttoken");
+                    var refreshToken = await SecureStorage.GetAsync("refreshtoken");
+
+                    if (accountToken is not null && refreshToken is not null)
+                    {
+                        await AuthenticationStateProvider.Login(
+                            ConvertRefreshResponseToAuthenticationResponse(
+                            await RefreshTokensAsync(
+                            new TokenRefreshRequest()
+                            {
+                                ExpiredJwt = accountToken,
+                                RefreshToken = refreshToken
+                            })));
+                    }
+
+                }
+                catch (ApiException e)
+                {
+                    if (e.StatusCode == 401)
+                    {
+                        await AuthenticationStateProvider.Logout();
+                    }
+                }
             }
+        }
+
+        private AuthenticationResponse ConvertRefreshResponseToAuthenticationResponse(TokenRefreshResponse tokenRefreshResponse)
+        {
+            return new AuthenticationResponse()
+            {
+                Jwt = tokenRefreshResponse.NewJwt,
+                RefreshToken = tokenRefreshResponse.NewRefreshToken
+            };
         }
 
     }

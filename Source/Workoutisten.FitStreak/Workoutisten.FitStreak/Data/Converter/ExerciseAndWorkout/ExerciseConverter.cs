@@ -15,7 +15,7 @@ namespace Workoutisten.FitStreak.Data.Converter.ExerciseAndWorkout
 
             var dto = new Exercise()
             {
-                Description = entity.Description,
+                Description = entity.Description?? string.Empty,
                 Name = entity.Name,
                 ExerciseId = entity.Guid,
                 ExerciseCategory = (ExerciseCategory)entity.Category
@@ -33,10 +33,10 @@ namespace Workoutisten.FitStreak.Data.Converter.ExerciseAndWorkout
 
             var entity = new ExerciseModel()
             {
-               Category = (Enums.ExerciseCategoryEnum)dto.ExerciseCategory,
-               Guid = dto.ExerciseId,
-               Name = dto.Name,
-               Description = dto.Description
+                Category = (Enums.ExerciseCategoryEnum)dto.ExerciseCategory,
+                Guid = dto.ExerciseId.HasValue ? dto.ExerciseId.Value : Guid.Empty,
+                Name = dto.Name,
+                Description = dto.Description ?? string.Empty
             };
 
             return Task.FromResult(entity);

@@ -3,19 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Workoutisten.FitStreak.Server.Database;
+using Workoutisten.FitStreak.Server.Database.Implementation.DbContext;
 
 #nullable disable
 
-namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
+namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.SqlServerMigrations
 {
-    [DbContext(typeof(FitStreakDbContext))]
-    [Migration("20220517111503_AddedRegistrationConfirmationKeyAndPasswordForgottenKey")]
-    partial class AddedRegistrationConfirmationKeyAndPasswordForgottenKey
+    [DbContext(typeof(MsSqlFitStreakDbContext))]
+    partial class MsSqlFitStreakDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,7 +133,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordForgottenKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -148,17 +146,9 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("RegistrationConfirmationKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PasswordForgottenKey")
-                        .IsUnique()
-                        .HasFilter("[PasswordForgottenKey] IS NOT NULL");
-
-                    b.HasIndex("RegistrationConfirmationKey")
-                        .IsUnique()
-                        .HasFilter("[RegistrationConfirmationKey] IS NOT NULL");
 
                     b.ToTable("User");
                 });

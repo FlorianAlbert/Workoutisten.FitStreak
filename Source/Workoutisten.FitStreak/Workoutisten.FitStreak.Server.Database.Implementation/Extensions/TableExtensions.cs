@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Workoutisten.FitStreak.Server.Database.Implementation.DbContext;
 using Workoutisten.FitStreak.Server.Model;
 
 namespace Workoutisten.FitStreak.Server.Database.Implementation.Extensions

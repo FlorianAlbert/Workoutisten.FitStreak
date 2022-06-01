@@ -5,24 +5,107 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Workoutisten.FitStreak.Server.Database;
+using Workoutisten.FitStreak.Server.Database.Implementation.DbContext;
 
 #nullable disable
 
-namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
+namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.SqlServerMigrations
 {
-    [DbContext(typeof(FitStreakDbContext))]
-    [Migration("20220510104019_AddedStrengthAndCardioExerciseEntries")]
-    partial class AddedStrengthAndCardioExerciseEntries
+    [DbContext(typeof(MsSqlFitStreakDbContext))]
+    [Migration("20220525200313_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("EmailUser", b =>
+                {
+                    b.Property<Guid>("EmailsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ReceiversId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("EmailsId", "ReceiversId");
+
+                    b.HasIndex("ReceiversId");
+
+                    b.ToTable("EmailUser");
+                });
+
+            modelBuilder.Entity("UserUser", b =>
+                {
+                    b.Property<Guid>("MyFriendsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsersIAmFriendOfId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MyFriendsId", "UsersIAmFriendOfId");
+
+                    b.HasIndex("UsersIAmFriendOfId");
+
+                    b.ToTable("Friendships", (string)null);
+                });
+
+            modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Account.Email", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Email");
+                });
+
+            modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Account.FriendshipRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("RequestedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RequestingUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RequestingUserId");
+
+                    b.HasIndex("RequestedUserId", "RequestingUserId")
+                        .IsUnique();
+
+                    b.ToTable("FriendshipRequest");
+                });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Account.User", b =>
                 {
@@ -31,7 +114,6 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
@@ -46,25 +128,29 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NormalizedEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("PasswordForgottenKey")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PasswordForgottenKey")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("PasswordForgottenKey")
-                        .IsUnique()
-                        .HasFilter("[PasswordForgottenKey] IS NOT NULL");
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RegistrationConfirmationKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.ToTable("User");
                 });
@@ -80,7 +166,6 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
@@ -91,7 +176,6 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -116,14 +200,12 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("ExerciseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("WorkoutEntryId")
@@ -152,7 +234,6 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("CreatorId")
@@ -163,7 +244,6 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -184,11 +264,9 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -203,14 +281,12 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("ExerciseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LastUpdated")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("WorkoutId")
@@ -250,6 +326,55 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
                         .HasColumnType("float");
 
                     b.HasDiscriminator().HasValue("Strength");
+                });
+
+            modelBuilder.Entity("EmailUser", b =>
+                {
+                    b.HasOne("Workoutisten.FitStreak.Server.Model.Account.Email", null)
+                        .WithMany()
+                        .HasForeignKey("EmailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Workoutisten.FitStreak.Server.Model.Account.User", null)
+                        .WithMany()
+                        .HasForeignKey("ReceiversId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserUser", b =>
+                {
+                    b.HasOne("Workoutisten.FitStreak.Server.Model.Account.User", null)
+                        .WithMany()
+                        .HasForeignKey("MyFriendsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Workoutisten.FitStreak.Server.Model.Account.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersIAmFriendOfId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Account.FriendshipRequest", b =>
+                {
+                    b.HasOne("Workoutisten.FitStreak.Server.Model.Account.User", "RequestedUser")
+                        .WithMany("IngoingFriendshipRequests")
+                        .HasForeignKey("RequestedUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Workoutisten.FitStreak.Server.Model.Account.User", "RequestingUser")
+                        .WithMany("OutgoingFriendshipRequests")
+                        .HasForeignKey("RequestingUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RequestedUser");
+
+                    b.Navigation("RequestingUser");
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Excercise.Exercise", b =>
@@ -321,6 +446,10 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Account.User", b =>
                 {
                     b.Navigation("Exercises");
+
+                    b.Navigation("IngoingFriendshipRequests");
+
+                    b.Navigation("OutgoingFriendshipRequests");
 
                     b.Navigation("Workouts");
                 });

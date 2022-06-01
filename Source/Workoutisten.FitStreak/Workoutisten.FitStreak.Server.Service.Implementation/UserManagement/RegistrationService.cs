@@ -27,7 +27,7 @@ public class RegistrationService : IRegistrationService
         try
         {
             var users = await Repository.GetAllAsync<User>();
-            var userWithEmailExists = users.Any(user => user.NormalizedEmail.Equals(email, StringComparison.InvariantCultureIgnoreCase));
+            var userWithEmailExists = users.Any(user => user.NormalizedEmail == email.NormalizeEmail());
             if (userWithEmailExists)
             {
                 return new Result<bool>
@@ -56,32 +56,32 @@ public class RegistrationService : IRegistrationService
         }
     }
 
-    public async Task<Result<bool>> ConfirmRegistrationAsync(string registrationConfirmationKey)
+    public async Task<Result> ConfirmRegistrationAsync(string email, string registrationConfirmationKey)
     {
         try
         {
             var users = await Repository.GetAllAsync<User>();
-            var user = users.FirstOrDefault(user => user.RegistrationConfirmationKey == registrationConfirmationKey);
-            if (user is null) { 
-                return new Result<bool> 
-                { 
+            var user = users.SingleOrDefault(user => user.NormalizedEmail == email.NormalizeEmail());
+            if (user is null)
+            {
+                return new Result
+                {
                     StatusCode = StatusCodes.Status404NotFound,
-                    Detail = $"There is no registered user with this registrationConfirmationKey to confirm."
-                }; 
+                    Detail = $"There exists no registered user with the email {email}."
+                };
             }
 
             user.IsVerified = true;
             user.RegistrationConfirmationKey = null;
             var updatedUser = await Repository.CreateOrUpdateAsync(user);
-            return new Result<bool> 
+            return new Result
             { 
-                Value = updatedUser.IsVerified, 
-                StatusCode = StatusCodes.Status200OK 
+                StatusCode = StatusCodes.Status204NoContent 
             };
         }
         catch (DatabaseRepositoryException)
         {
-            return new Result<bool> 
+            return new Result
             { 
                 StatusCode = StatusCodes.Status503ServiceUnavailable,
                 Detail = "The Database - Service couldn't connect to the Database."
@@ -109,7 +109,7 @@ public class RegistrationService : IRegistrationService
                 StatusCode = StatusCodes.Status200OK 
             };
         }
-        catch (DatabaseRepositoryException)
+        catch (DatabaseRepositoryException ex)
         {
             return new Result
             {
