@@ -8,7 +8,7 @@ using Timer = System.Timers.Timer;
 using Workoutisten.FitStreak.Data.Models.User;
 using Workoutisten.FitStreak.Data.Converter;
 
-namespace Workoutisten.FitStreak.Pages  
+namespace Workoutisten.FitStreak.Pages
 {
     public partial class Homescreen
     {
@@ -57,6 +57,14 @@ namespace Workoutisten.FitStreak.Pages
                 {
                     CurrentUser = await _Converter.ToEntity<User, UserModel>(await _RestClient.GetUserAsync(Guid.Parse(await SecureStorage.GetAsync("userId"))));
                     LastWorkoutDate = CurrentUser.LastExercise;
+                    if (LastWorkoutDate >= (DateTime.Now - MaxTimeSpan))
+                    {
+                        StartTimer();
+                    }
+                    else
+                    {
+                        CurrentUser.Streak = 0;
+                    }
 
                 }
                 catch (ApiException<ProblemDetails> e)
@@ -68,28 +76,18 @@ namespace Workoutisten.FitStreak.Pages
                     await _ErrorDialogService.ShowErrorDialog();
                 }
 
-
-                if (LastWorkoutDate >= (DateTime.Now - MaxTimeSpan))
-                {
-                    StartTimer();
-                }
-                else
-                {
-                    CurrentUser.Streak = 0;
-                }
-
                 StateHasChanged();
 
                 base.OnAfterRenderAsync(firstRender);
             }
-           
+
         }
 
         private async void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             await InvokeAsync(() =>
             {
-                
+
                 DateTime currentTime = e.SignalTime;
                 var remainingTime = MaxTimeSpan - currentTime.Subtract(LastWorkoutDate);
                 if (remainingTime.TotalSeconds <= 0)
@@ -109,10 +107,10 @@ namespace Workoutisten.FitStreak.Pages
 
         void StartTimer()
         {
-                Timer = new Timer(1000);
-                Timer.Elapsed += OnTimedEvent;
-                Timer.AutoReset = true;
-                Timer.Enabled = true;
+            Timer = new Timer(1000);
+            Timer.Elapsed += OnTimedEvent;
+            Timer.AutoReset = true;
+            Timer.Enabled = true;
         }
 
         #endregion

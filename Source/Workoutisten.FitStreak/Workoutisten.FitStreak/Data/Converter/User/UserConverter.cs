@@ -12,7 +12,7 @@ namespace Workoutisten.FitStreak.Data.Converter.User
     public class UserConverter : IConverter<UserModel, Client.RestClient.User>
     {
 
-        Task<Client.RestClient.User> IConverter<UserModel, Client.RestClient.User>.ToDto(UserModel entity)
+        public Task<Client.RestClient.User> ToDto(UserModel entity)
         {
             if (entity is null)
             {
@@ -33,7 +33,7 @@ namespace Workoutisten.FitStreak.Data.Converter.User
             return Task.FromResult(dto);
         }
 
-        Task<UserModel> IConverter<UserModel, Client.RestClient.User>.ToEntity(Client.RestClient.User dto)
+        public Task<UserModel> ToEntity(Client.RestClient.User dto)
         {
             if (dto is null)
             {
