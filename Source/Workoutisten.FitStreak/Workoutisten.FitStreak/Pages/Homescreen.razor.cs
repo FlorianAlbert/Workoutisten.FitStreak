@@ -54,7 +54,7 @@ namespace Workoutisten.FitStreak.Pages
             {
                 try
                 {
-                    CurrentUser = await _Converter.ToEntity<User, UserModel>(await _RestClient.GetUserAsync(Guid.Parse(await SecureStorage.GetAsync("userId")));
+                    CurrentUser = await _Converter.ToEntity<User, UserModel>(await _RestClient.GetUserAsync(Guid.Parse(await SecureStorage.GetAsync("userId"))));
                     LastWorkoutDate = CurrentUser.LastExercise;
 
                 }
