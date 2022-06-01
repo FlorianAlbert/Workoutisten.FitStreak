@@ -21,7 +21,7 @@
     <MudList>
         @foreach (var exercise in UserExercises)
         {
-            <ExerciseListElement Category="exercise.Category" Name="@exercise.Name" />
+            <ExerciseListElement Category="@exercise.Category" Name="@exercise.Name" Description="@exercise.Description"/>
         }
     </MudList>
 </MudPaper>

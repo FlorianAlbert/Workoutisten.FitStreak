@@ -9,8 +9,10 @@
 
         public DateOnly LastTraining { get; set; }
 
-        //public List<Guid> Exercises { get; set; } = new List<Guid>();
+        public List<Guid> Exercises { get; set; } = new List<Guid>();
 
-        public List<ExerciseModel> Exercises { get; set; } = new List<ExerciseModel>();
+        public DateTime? CreatedAt { get; set; }
+
+        //public List<Guid> DoneExercises { get; set; }
     }
 }
