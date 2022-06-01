@@ -15,21 +15,21 @@ namespace Workoutisten.FitStreak.Client.RestClient
             AuthenticationStateProvider = customAuthenticationStateProvider;
         }
 
-        partial void PrepareRequest(HttpClient client, HttpRequestMessage request, string url)
+        async Task PrepareRequestAsync(HttpClient client, HttpRequestMessage request, string url, CancellationToken cancellationToken)
         {
-            var accountToken = SecureStorage.GetAsync("accounttoken");
-            if (accountToken.Result is not null)
+            var accountToken = await SecureStorage.GetAsync("accounttoken");
+            if (accountToken is not null)
             {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accountToken.Result);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accountToken);
             }
         }
 
-        partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder)
+        async Task PrepareRequestAsync(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder, CancellationToken cancellationToken)
         {
-            PrepareRequest(client, request, urlBuilder.ToString());
+            //PrepareRequestAsync(client, request, urlBuilder.ToString(), cancellationToken);
         }
 
-        async partial void ProcessResponse(HttpClient client, HttpResponseMessage response)
+        async Task ProcessResponseAsync(HttpClient client, HttpResponseMessage response, CancellationToken cancellationToken)
         {
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
