@@ -19,6 +19,7 @@ namespace Workoutisten.FitStreak.Pages
         [Inject]
         public ErrorDialogService _ErrorDialogService { get; set; }
 
+        [Inject]
         public IConverterWrapper _Converter { get; set; }
 
         double[] Counts { get; set; } = new double[] { 0, 100 };
