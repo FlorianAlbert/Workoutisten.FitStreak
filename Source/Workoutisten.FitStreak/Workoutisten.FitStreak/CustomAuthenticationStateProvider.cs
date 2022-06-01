@@ -32,6 +32,7 @@ namespace Workoutisten.FitStreak
             await SecureStorage.SetAsync("accounttoken", response.Jwt);
             await SecureStorage.SetAsync("refreshtoken", response.RefreshToken);
             await SecureStorage.SetAsync("userId", response.User.UserId.ToString());
+            await SecureStorage.SetAsync("userName", response.User.FirstName);
 
             //Providing the current identity ifnormation
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
@@ -59,7 +60,7 @@ namespace Workoutisten.FitStreak
             try
             {
                 var userInfo = await SecureStorage.GetAsync("accounttoken");
-                var userName = await SecureStorage.GetAsync("user");
+                var userName = await SecureStorage.GetAsync("userName");
                 if (userInfo != null)
                 {
                     var claims = new[] { new Claim(ClaimTypes.Name, userName)};

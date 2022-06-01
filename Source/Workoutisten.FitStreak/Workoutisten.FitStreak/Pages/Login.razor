@@ -77,7 +77,7 @@
         {
             if (e.Result.Status == 403)
             {
-                _NavigationManager.NavigateTo("/validate");
+                _NavigationManager.NavigateTo($"/validate?email={loginModel.Email}");
                 return;
             }
             await _ErrorDialogService.ShowErrorDialog(e.Result.Status.ToString(), e.Result.Detail);

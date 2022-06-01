@@ -1,8 +1,18 @@
 ﻿
 <MudPaper Class="rounded-pill pl-5 pr-5 pb-3">
-    <MudTextField @bind-Value="SearchInput" Label="Search" Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search" Class="rounded-pill"/>
+    <MudTextField @bind-Value="SearchInput" 
+                T="string" 
+                Label="Search" 
+                Adornment="Adornment.End" 
+                AdornmentIcon="@Icons.Filled.Search" 
+                Class="rounded-pill"
+                DebounceInterval="500" 
+                OnDebounceIntervalElapsed="DebounceIntervalEllapsed"/>
 </MudPaper>
 @code {
     [Parameter]
     public string SearchInput { get; set; }
+
+    [Parameter]
+    public Action DebounceIntervalEllapsed { get; set; }
 }
