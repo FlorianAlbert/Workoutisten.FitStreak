@@ -2,5 +2,5 @@
 
 public static class StringExtension
 {
-    public static string NormalizeEmail(this string email) => email.ToLower();
+    public static string NormalizeEmail(this string email) => email.Trim().ToLower();
 }

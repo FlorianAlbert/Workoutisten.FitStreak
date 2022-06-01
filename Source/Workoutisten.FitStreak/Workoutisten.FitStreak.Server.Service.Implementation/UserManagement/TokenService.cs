@@ -147,7 +147,7 @@ public class TokenService : ITokenService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(listClaims),
-            Expires = DateTime.UtcNow.AddDays(1),
+            Expires = DateTime.UtcNow.AddMinutes(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
 

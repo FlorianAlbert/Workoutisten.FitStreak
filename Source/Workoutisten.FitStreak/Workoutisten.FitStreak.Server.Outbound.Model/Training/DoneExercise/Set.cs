@@ -1,16 +1,18 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise;
-
-[JsonObject("Set")]
-public class Set
+namespace Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise
 {
-    [Required]
-    [JsonProperty("Weigth")]
-    public double Weigth { get; set; }
+    [JsonObject("Set")]
+    public abstract class Set
+    {
 
-    [Required]
-    [JsonProperty("Repetitions")]
-    public int Repetitions { get; set; }
+        [Required]
+        [JsonProperty("Id")]
+        public Guid Id { get; set; }
+
+        [Required]
+        [JsonProperty("DoneExerciseId")]
+        public Guid DoneExerciseId { get; set; }
+    }
 }

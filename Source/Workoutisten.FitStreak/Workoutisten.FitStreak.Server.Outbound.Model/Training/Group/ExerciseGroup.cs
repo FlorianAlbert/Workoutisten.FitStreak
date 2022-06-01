@@ -19,4 +19,10 @@ public class ExerciseGroup
 
     [JsonProperty("DoneExerciseIds")]
     public Guid[] DoneExerciseIds { get; set; }
+
+    [JsonProperty("ParticipantIds")]
+    public Guid[] ParticipantIds { get; set; }
+
+    [JsonProperty("WorkoutId")]
+    public Guid? WorkoutId { get; set; }
 }

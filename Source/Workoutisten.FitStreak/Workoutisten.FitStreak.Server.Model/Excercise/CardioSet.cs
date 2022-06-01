@@ -1,6 +1,6 @@
 ﻿namespace Workoutisten.FitStreak.Server.Model.Excercise
 {
-    public class CardioExerciseEntry : ExerciseEntry
+    public class CardioSet : Set
     {
         public TimeSpan Duration { get; set; }
 

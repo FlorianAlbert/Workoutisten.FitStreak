@@ -37,7 +37,7 @@ public class ExerciseController : ControllerBase
         if (userId is null) return BadRequest("There was no userId present in the JWT!");
 
         var result = await ExerciseService.GetExercise(userId.Value, exerciseId);
-        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        if (result.Unsuccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
         else
         {
             var dto = await Converter.ToDto<ExerciseEntity, ExerciseDto>(result.Value);
@@ -59,7 +59,7 @@ public class ExerciseController : ControllerBase
         if (userId is null) return BadRequest("There was no userId present in the JWT!");
 
         var result = await ExerciseService.GetExercises(userId.Value);
-        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        if (result.Unsuccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
         else
         {
             var dtos = result.Value?

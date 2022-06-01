@@ -32,7 +32,7 @@ public class RegistrationController : ControllerBase
            return BadRequest("One or more of the following values were empty: email, password, firstname, lastname!");
 
         var canRegisterResult = await RegistrationService.CanRegisterAsync(registrationRequest.Email);
-        if (canRegisterResult.Unsccessful) return Problem(statusCode: canRegisterResult.StatusCode, detail: canRegisterResult.Detail);
+        if (canRegisterResult.Unsuccessful) return Problem(statusCode: canRegisterResult.StatusCode, detail: canRegisterResult.Detail);
 
         var result = await RegistrationService.RegisterAsync(registrationRequest.Email, 
                                                                  registrationRequest.Password, 

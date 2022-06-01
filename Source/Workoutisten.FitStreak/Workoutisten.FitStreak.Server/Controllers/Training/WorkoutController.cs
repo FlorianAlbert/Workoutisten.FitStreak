@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using WorkoutEntity = Workoutisten.FitStreak.Server.Model.Workout.Workout;
 using WorkoutDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.Workout.Workout;
+using ExerciseEntity = Workoutisten.FitStreak.Server.Model.Excercise.Exercise;
+using ExerciseDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.Exercise.Exercise;
 using Workoutisten.FitStreak.Server.Service.Interface.Converter;
 using Workoutisten.FitStreak.Server.Service.Interface.Training;
 using Workoutisten.FitStreak.Server.Extensions;
@@ -36,7 +38,7 @@ public class WorkoutController : ControllerBase
         if (userId is null) return BadRequest("There was no userId present in the JWT!");
 
         var result = await WorkoutService.GetWorkout(userId.Value, workoutId);
-        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        if (result.Unsuccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
         else
         {
             var dto = await Converter.ToDto<WorkoutEntity, WorkoutDto>(result.Value);
@@ -58,7 +60,7 @@ public class WorkoutController : ControllerBase
         if (userId is null) return BadRequest("There was no userId present in the JWT!");
 
         var result = await WorkoutService.GetWorkouts(userId.Value);
-        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        if (result.Unsuccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
         else
         {
             var dtos = result.Value?
@@ -67,6 +69,27 @@ public class WorkoutController : ControllerBase
                 .ToArray();
             return Ok(dtos);
         }
+    }
+
+    [HttpGet]
+    [Route("{workoutId}/exercises", Name = nameof(GetExercisesOfWorkout))]
+    [Authorize]
+    [ProducesResponseType(typeof(ExerciseDto[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+    public async Task<IActionResult> GetExercisesOfWorkout([FromRoute] Guid workoutId)
+    {
+        var userId = await User.GetUserIdAsync();
+        if (userId is null) return BadRequest("There was no userId present in the JWT!");
+
+        var result = await WorkoutService.GetWorkout(userId.Value, workoutId);
+        if (result.Unsuccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        
+        var dtos = await Task.WhenAll(result.Value?.WorkoutExercises.Select(x => Converter.ToDto<ExerciseEntity, ExerciseDto>(x.Exercise)));
+
+        return Ok(dtos);
     }
 
     [HttpPost]
