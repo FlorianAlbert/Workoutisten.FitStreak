@@ -35,26 +35,28 @@
 
     List<ExerciseModel> UserExercises { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        if (firstRender)
+        {
+            try
+            {
+                UserWorkouts = (await Task.WhenAll((await _RestClient.GetWorkoutsAsync()).Select(workout => _Converter.ToEntity<Workout, WorkoutModel>(workout)))).ToList();
+                UserExercises = (await Task.WhenAll((await _RestClient.GetExercisesAsync()).Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise)))).ToList();
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception e)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
 
-        //try
-        //{
-        //    UserWorkouts = (List<WorkoutModel>)_RestClient.GetWorkoutsAsync().Result.ToList().Select(workout => _Converter.ToEntity<Workout, WorkoutModel>(workout));
-        //    UserExercises = (List<ExerciseModel>)(await Task.Run( () => _RestClient.GetExercisesAsync().Result.ToList().Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise))));
-        //}
-        //catch (ApiException<ProblemDetails> e)
-        //{
-        //    await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
-        //}
-        //catch (Exception e)
-        //{
-        //    await _ErrorDialogService.ShowErrorDialog();
-        //}
+            base.OnInitializedAsync();
 
-        //base.OnInitializedAsync();
-
-        UserWorkouts = new List<WorkoutModel>() { new WorkoutModel() { WorkoutName = "Test", Description = "Test" } }; 
+            StateHasChanged();
+        }
     }
 
     async void AddNewWorkout()

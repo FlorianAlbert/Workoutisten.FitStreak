@@ -41,7 +41,7 @@
         {
             try
             {
-                UserExercises = (List<ExerciseModel>)_RestClient.GetExercisesAsync().Result.ToList().Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise));
+                UserExercises = (await Task.WhenAll((await _RestClient.GetExercisesAsync()).Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise)))).ToList();
             }
             catch (ApiException<ProblemDetails> e)
             {
