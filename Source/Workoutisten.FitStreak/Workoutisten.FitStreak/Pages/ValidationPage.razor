@@ -2,7 +2,7 @@
 
 @inject IRestClient _RestClient
 @inject NavigationManager _NavManager
-
+@inject ErrorDialogService _ErrorDialogService
 
 <MudStack>
     <MudStack AlignItems="AlignItems.Center">
@@ -32,13 +32,16 @@
         {
             try
             {
-                await _RestClient.ConfirmRegistrationAsync(new RegistrationConfirmation(){ConfirmationKey = VerificationCode, Email = Email.Trim()});
+                await _RestClient.ConfirmRegistrationAsync(new RegistrationConfirmation(){ConfirmationKey = VerificationCode, Email = Email});
                 _NavManager.NavigateTo("/login");
-
+            }
+            catch(ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
             }
             catch (Exception e)
             {
-
+                await _ErrorDialogService.ShowErrorDialog();
             }
 
         }
