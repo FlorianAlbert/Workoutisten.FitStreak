@@ -129,9 +129,9 @@
         {
             try
             {
-                Followed = (await Task.WhenAll((await _RestClient.GetFollowedUsersAsync()).Select(friend => _Converter.ToEntity<User, UserModel>(friend)))).ToList();
-                OpenFollowedRequests = (await _RestClient.GetOutgoingFriendshipRequestsAsync()).ToList();
-                OpenFollowerRequests = (await _RestClient.GetIncomingFriendshipRequestsAsync()).ToList();
+                Followed = (await Task.WhenAll((await _RestClient.CallControlled(c => c.GetFollowedUsersAsync())).Select(friend => _Converter.ToEntity<User, UserModel>(friend)))).ToList();
+                OpenFollowedRequests = (await _RestClient.CallControlled(c => c.GetOutgoingFriendshipRequestsAsync())).ToList();
+                OpenFollowerRequests = (await _RestClient.CallControlled(c => c.GetIncomingFriendshipRequestsAsync())).ToList();
 
             }
             catch (ApiException<ProblemDetails> e)
@@ -164,7 +164,7 @@
         {
             try
             {
-                await _RestClient.CreateFriendshipRequestAsync(new FriendRequest() { Email = result.Data as string });
+                await _RestClient.CallControlled(c => c.CreateFriendshipRequestAsync(new FriendRequest() { Email = result.Data as string }));
 
             }
             catch (ApiException<ProblemDetails> e)
@@ -185,7 +185,7 @@
     {
         try
         {
-            await _RestClient.AcceptFriendshipRequestAsync(acceptedRequest);
+            await _RestClient.CallControlled(c => c.AcceptFriendshipRequestAsync(acceptedRequest));
             OpenFollowerRequests.Remove(OpenFollowerRequests.First(request => request.FriendshipRequestId.Equals(acceptedRequest)));
             StateHasChanged();
         }
@@ -203,7 +203,7 @@
     {
         try
         {
-            await _RestClient.DeclineFriendshipRequestAsync(declinedRequest);
+            await _RestClient.CallControlled(c => c.DeclineFriendshipRequestAsync(declinedRequest));
             OpenFollowerRequests.Remove(OpenFollowerRequests.First(request => request.FriendshipRequestId.Equals(declinedRequest)));
             StateHasChanged();
         }
@@ -221,7 +221,7 @@
     {
         try
         {
-            await _RestClient.AcceptFriendshipRequestAsync(revokedFriendshipRequest);
+            await _RestClient.CallControlled(c => c.AcceptFriendshipRequestAsync(revokedFriendshipRequest));
             OpenFollowedRequests.Remove(OpenFollowedRequests.First(request => request.FriendshipRequestId.Equals(revokedFriendshipRequest)));
             StateHasChanged();
         }

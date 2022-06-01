@@ -95,7 +95,7 @@
         StateHasChanged();
         try
         {
-            await _RestClient.RequestRegistrationAsync(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel));
+            await _RestClient.CallControlled(async c => await c.RequestRegistrationAsync(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel)));
             _NavigationManager.NavigateTo($"/validate?email={registerModel.Email}");
         }
         catch (ApiException<ProblemDetails> e)

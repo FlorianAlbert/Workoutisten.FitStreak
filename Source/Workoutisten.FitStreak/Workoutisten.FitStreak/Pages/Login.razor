@@ -58,7 +58,7 @@
         message = "Logging in...";
         try
         {
-            var response = await _RestClient.LoginAsync(await _Converter.ToDto<LoginModel, AuthenticationRequest>(loginModel));
+            var response = await _RestClient.CallControlled(async c => await c.LoginAsync(await _Converter.ToDto<LoginModel, AuthenticationRequest>(loginModel)));
 
             if (/*IsVerified*/ true)
             {

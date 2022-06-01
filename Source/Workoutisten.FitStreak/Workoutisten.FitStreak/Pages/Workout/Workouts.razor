@@ -41,8 +41,8 @@
         {
             try
             {
-                UserWorkouts = (await Task.WhenAll((await _RestClient.GetWorkoutsAsync()).Select(workout => _Converter.ToEntity<Workout, WorkoutModel>(workout)))).ToList();
-                UserExercises = (await Task.WhenAll((await _RestClient.GetExercisesAsync()).Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise)))).ToList();
+                UserWorkouts = (await Task.WhenAll((await _RestClient.CallControlled(c => c.GetWorkoutsAsync())).Select(workout => _Converter.ToEntity<Workout, WorkoutModel>(workout)))).ToList();
+                UserExercises = (await Task.WhenAll((await _RestClient.CallControlled(c => c.GetExercisesAsync())).Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise)))).ToList();
             }
             catch (ApiException<ProblemDetails> e)
             {
@@ -78,7 +78,7 @@
         {
             try
             {
-                var workout = await _RestClient.CreateWorkoutAsync(await _Converter.ToDto<WorkoutModel, Workout>((WorkoutModel)dialogResult.Data));
+                var workout = await _RestClient.CallControlled(async c => await c.CreateWorkoutAsync(await _Converter.ToDto<WorkoutModel, Workout>((WorkoutModel)dialogResult.Data)));
                 UserWorkouts.Add(await _Converter.ToEntity<Workout, WorkoutModel>(workout));
             }
             catch (ApiException<ProblemDetails> e)

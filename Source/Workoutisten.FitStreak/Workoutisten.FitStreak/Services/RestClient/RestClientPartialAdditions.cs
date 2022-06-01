@@ -40,14 +40,13 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
                     if (accountToken is not null && refreshToken is not null)
                     {
-                        await AuthenticationStateProvider.Login(
-                            ConvertRefreshResponseToAuthenticationResponse(
+                        await AuthenticationStateProvider.RefreshTokens(
                             await RefreshTokensAsync(
                             new TokenRefreshRequest()
                             {
                                 ExpiredJwt = accountToken,
                                 RefreshToken = refreshToken
-                            })));
+                            }));
                     }
 
                 }
@@ -61,14 +60,6 @@ namespace Workoutisten.FitStreak.Client.RestClient
             }
         }
 
-        private AuthenticationResponse ConvertRefreshResponseToAuthenticationResponse(TokenRefreshResponse tokenRefreshResponse)
-        {
-            return new AuthenticationResponse()
-            {
-                Jwt = tokenRefreshResponse.NewJwt,
-                RefreshToken = tokenRefreshResponse.NewRefreshToken
-            };
-        }
 
     }
 }

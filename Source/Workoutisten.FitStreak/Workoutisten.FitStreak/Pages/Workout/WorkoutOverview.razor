@@ -19,10 +19,10 @@
 
 
     <MudList>
-        @*@foreach (var exercise in Workout.Exercises)
+        @foreach (var exercise in WorkoutExercises)
         {
-        <ExerciseListElement Category="exercise.Category" Name="@exercise.Name" />
-        }*@
+        <ExerciseListElement Category="@exercise.Category" Name="@exercise.Name" Description="@exercise.Description"/>
+        }
     </MudList>
 </MudPaper>
 
@@ -50,20 +50,15 @@
             }
             try
             {
-                Workout = await _Converter.ToEntity<Workout, WorkoutModel>(await _RestClient.GetWorkoutAsync(WorkoutGuid.Value));
+                Workout = await _Converter.ToEntity<Workout, WorkoutModel>(await _RestClient.CallControlled(c => c.GetWorkoutAsync(WorkoutGuid.Value)));
+                WorkoutExercises = (await Task.WhenAll((await _RestClient.CallControlled(c => c.GetExercisesOfWorkoutAsync(Workout.Guid))).Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise)))).ToList();
 
-                if (Workout.Exercises.Count == 0)
+                if (WorkoutExercises.Count == 0)
                 {
                     await _ErrorDialogService.ShowGeneralErrorDialog();
                     base.OnAfterRenderAsync(firstRender);
                     return;
                 }
-
-                Workout.Exercises.ForEach(async exerciseId =>
-                {
-                    WorkoutExercises.Add(await _Converter.ToEntity<Exercise, ExerciseModel>(await _RestClient.GetExerciseAsync(exerciseId)));
-
-                });
             }
             catch (ApiException<ProblemDetails> e)
             {
@@ -74,6 +69,7 @@
                 await _ErrorDialogService.ShowErrorDialog();
             }
         }
+        StateHasChanged();
 
         base.OnAfterRenderAsync(firstRender);
     }

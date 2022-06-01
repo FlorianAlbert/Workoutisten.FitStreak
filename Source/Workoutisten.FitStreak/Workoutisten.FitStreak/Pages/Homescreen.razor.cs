@@ -55,7 +55,8 @@ namespace Workoutisten.FitStreak.Pages
             {
                 try
                 {
-                    CurrentUser = await _Converter.ToEntity<User, UserModel>(await _RestClient.GetUserAsync(Guid.Parse(await SecureStorage.GetAsync("userId"))));
+                    var userId = Guid.Parse(await SecureStorage.GetAsync("userId"));
+                    CurrentUser = await _Converter.ToEntity<User, UserModel>(await _RestClient.CallControlled(c => c.GetUserAsync(userId)));
                     LastWorkoutDate = CurrentUser.LastExercise;
                     if (LastWorkoutDate >= (DateTime.Now - MaxTimeSpan))
                     {
@@ -71,7 +72,7 @@ namespace Workoutisten.FitStreak.Pages
                 {
                     await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     await _ErrorDialogService.ShowErrorDialog();
                 }
