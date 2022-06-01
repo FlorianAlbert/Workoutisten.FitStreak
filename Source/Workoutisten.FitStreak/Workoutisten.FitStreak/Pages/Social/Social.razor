@@ -11,68 +11,117 @@
 <MudStack>
     <MudGrid>
         <MudItem xs="10">
-            <SearchBar SearchInput="@SearchInput" />
+            <MudTextField @bind-Value="SearchInput" 
+                T="string" 
+                Label="Search" 
+                Adornment="Adornment.End" 
+                AdornmentIcon="@Icons.Filled.Search" 
+                Class="rounded-pill"
+                DebounceInterval="500" 
+                OnDebounceIntervalElapsed=" () => StateHasChanged()"/>
         </MudItem>
         <MudItem xs="2" Class="d-flex align-center justify-center ">
             <AddButtonRounded ButtonClicked="AddNewFriend" />
         </MudItem>
     </MudGrid>
+
     <MudPaper Class="rounded-xl p-2" MinHeight="600px">
         <MudText Class="mt-2 mb-3" Typo="Typo.h5" Align="Align.Center"><b>Friends</b></MudText>
         <MudDivider DividerType="DividerType.Middle" Class="Foreground: white" />
-        @if (pendingFriendRequests)
+        @if (OpenFollowerRequests.Count != 0)
         {
-            <MudText Class="ml-3 mt-3">Pending Friend Requests:</MudText>
-            for (var i = 0; i < 2; i++)
-            {
-                <MudListItem>
-                    <MudStack Row="true" AlignItems="AlignItems.Center">
-                        <MudAvatar Color="Color.Warning">
-                            <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
-                        </MudAvatar>
-                        <MudText>Friend</MudText>
-                        <MudSpacer />
-                        <MudAvatar Class="mr-3" Color="Color.Success" Variant="Variant.Outlined">
-                            <MudIconButton Icon="@Icons.Material.Filled.Check" Color="Color.Inherit" />
-                        </MudAvatar>
-                        <MudAvatar Color="Color.Error" Variant="Variant.Outlined">
-                            <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Inherit" />
-                        </MudAvatar>
-                    </MudStack>
-                </MudListItem>
-                <MudDivider />
-            }
+            <MudList Clickable="true">
+                <MudText Class="ml-3 mt-3">Pending follower requests:</MudText>
+                @foreach (var openFollowRequest in OpenFollowerRequests)
+                {
+                    if ( openFollowRequest.RequestingUser.FirstName.Contains(SearchInput) || openFollowRequest.RequestingUser.LastName.Contains(SearchInput))
+                    {
+                        <MudListItem>
+                            <MudStack Row="true" AlignItems="AlignItems.Center">
+                                <MudAvatar Color="Color.Warning">
+                                    <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
+                                </MudAvatar>
+                                <MudText>@openFollowRequest.RequestingUser.FirstName @openFollowRequest.RequestingUser.LastName</MudText>
+                                <MudSpacer />
+                                <MudAvatar Class="mr-3" Color="Color.Success" Variant="Variant.Outlined">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Check" Color="Color.Inherit" OnClick="() => AcceptFollowerRequest(openFollowRequest.FriendshipRequestId)" />
+                                </MudAvatar>
+                                <MudAvatar Color="Color.Error" Variant="Variant.Outlined">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Inherit" OnClick="() => DeclineFollowerRequest(openFollowRequest.FriendshipRequestId)" />
+                                </MudAvatar>
+                            </MudStack>
+                        </MudListItem>
+                        <MudDivider />
+                    }
+                }
+            </MudList>
         }
-        <MudDivider DividerType="DividerType.Middle" Class="Foreground: white" />
-        <MudList Clickable="true">
-            @foreach(var friend in Followed)
-            {
-                <MudListItem>
-                    <MudStack Row="true" AlignItems="AlignItems.Center">
-                        <MudAvatar Color="Color.Secondary">
-                            <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
-                        </MudAvatar>
-                        <MudText>@friend.FirstName @friend.LastName</MudText>
-                        <MudSpacer />
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" />
-                    </MudStack>
-                </MudListItem>
-                <MudDivider />
-            }
+        @if (Followed.Count != 0)
+        {
+            <MudDivider DividerType="DividerType.Middle" Class="Foreground: white" />
+            <MudList Clickable="true">
+                <MudText Class="ml-3 mt-3">Following:</MudText>
+                @foreach (var friend in Followed)
+                {
+                    if (friend.FirstName.Contains(SearchInput) || friend.LastName.Contains(SearchInput))
+                    {
+                        <MudListItem>
+                            <MudStack Row="true" AlignItems="AlignItems.Center">
+                                <MudAvatar Color="Color.Secondary">
+                                    <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
+                                </MudAvatar>
+                                <MudText>@friend.FirstName @friend.LastName</MudText>
+                                <MudSpacer />
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit" />
+                            </MudStack>
+                        </MudListItem>
+                        <MudDivider />
+                    }
+                }
 
-        </MudList>
+            </MudList>
+        }
+
+        @if (OpenFollowedRequests.Count != 0)
+        {
+            <MudDivider DividerType="DividerType.Middle" Class="Foreground: white" />
+            <MudList Clickable="true">
+                <MudText Class="ml-3 mt-3">Pending requests:</MudText>
+                @foreach (var outgoingRequest in OpenFollowedRequests)
+                {
+                    if (outgoingRequest.RequestedUser.Email.Contains(SearchInput))
+                    {
+                    <MudListItem>
+                        <MudStack Row="true" AlignItems="AlignItems.Center">
+                            <MudAvatar Color="Color.Secondary">
+                                <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
+                            </MudAvatar>
+                            <MudText>@outgoingRequest.RequestedUser.Email</MudText>
+                            <MudSpacer />
+                            <MudAvatar Color="Color.Error" Variant="Variant.Outlined">
+                                <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Inherit" OnClick="() => RevokeFollowRequest(outgoingRequest.FriendshipRequestId)" />
+                            </MudAvatar>
+                        </MudStack>
+                    </MudListItem>
+                    <MudDivider />
+                }
+                }
+
+            </MudList>
+        }
     </MudPaper>
 
 </MudStack>
 
 
 @code {
+    string SearchInput { get; set; } = string.Empty;
 
-    string SearchInput { get; set; }
+    public List<UserModel> Followed { get; set; } = new();
 
-    public bool pendingFriendRequests { get; set; }
+    public List<FriendshipRequest> OpenFollowedRequests { get; set; } = new();
 
-    public List<UserModel> Followed { get; set; }
+    public List<FriendshipRequest> OpenFollowerRequests { get; set; } = new();
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
@@ -80,9 +129,10 @@
         {
             try
             {
-                Followed = (await Task.WhenAll((await _RestClient.GetFollowerAsync()).Select(friend => _Converter.ToEntity<User, UserModel>(friend)))).ToList();
-                //Ausgehende Holen
-                //Einkommende holen
+                Followed = (await Task.WhenAll((await _RestClient.GetFollowedUsersAsync()).Select(friend => _Converter.ToEntity<User, UserModel>(friend)))).ToList();
+                OpenFollowedRequests = (await _RestClient.GetOutgoingFriendshipRequestsAsync()).ToList();
+                OpenFollowerRequests = (await _RestClient.GetIncomingFriendshipRequestsAsync()).ToList();
+
             }
             catch (ApiException<ProblemDetails> e)
             {
@@ -114,7 +164,7 @@
         {
             try
             {
-                await _RestClient.CreateFriendshipRequestAsync(new FriendRequest() { Email = result.Data as string});
+                await _RestClient.CreateFriendshipRequestAsync(new FriendRequest() { Email = result.Data as string });
 
             }
             catch (ApiException<ProblemDetails> e)
@@ -125,11 +175,63 @@
             {
                 await _ErrorDialogService.ShowErrorDialog();
             }
-
-            StateHasChanged();
         }
 
         StateHasChanged();
 
+    }
+
+    async Task AcceptFollowerRequest(Guid acceptedRequest)
+    {
+        try
+        {
+            await _RestClient.AcceptFriendshipRequestAsync(acceptedRequest);
+            OpenFollowerRequests.Remove(OpenFollowerRequests.First(request => request.FriendshipRequestId.Equals(acceptedRequest)));
+            StateHasChanged();
+        }
+        catch (ApiException<ProblemDetails> e)
+        {
+            await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+        }
+        catch (Exception)
+        {
+            await _ErrorDialogService.ShowErrorDialog();
+        }
+    }
+
+    async Task DeclineFollowerRequest(Guid declinedRequest)
+    {
+        try
+        {
+            await _RestClient.DeclineFriendshipRequestAsync(declinedRequest);
+            OpenFollowerRequests.Remove(OpenFollowerRequests.First(request => request.FriendshipRequestId.Equals(declinedRequest)));
+            StateHasChanged();
+        }
+        catch (ApiException<ProblemDetails> e)
+        {
+            await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+        }
+        catch (Exception)
+        {
+            await _ErrorDialogService.ShowErrorDialog();
+        }
+    }
+
+    async Task RevokeFollowRequest(Guid revokedFriendshipRequest)
+    {
+        try
+        {
+            await _RestClient.AcceptFriendshipRequestAsync(revokedFriendshipRequest);
+            OpenFollowedRequests.Remove(OpenFollowedRequests.First(request => request.FriendshipRequestId.Equals(revokedFriendshipRequest)));
+            StateHasChanged();
+        }
+        catch (ApiException<ProblemDetails> e)
+        {
+            await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+        }
+        catch (Exception)
+        {
+            await _ErrorDialogService.ShowErrorDialog();
+        }
     }
 }
