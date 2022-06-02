@@ -26,11 +26,11 @@ using DoneExerciseEntity = Workoutisten.FitStreak.Server.Model.Excercise.DoneExe
 using DoneExerciseDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise.DoneExercise;
 using SetEntity = Workoutisten.FitStreak.Server.Model.Excercise.Set;
 using SetDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise.Set;
+using ExerciseGroupEntity = Workoutisten.FitStreak.Server.Model.Workout.ExerciseGroup;
+using ExerciseGroupDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.Group.ExerciseGroup;
 using Workoutisten.FitStreak.Server.Database.Implementation.DbContext;
 using Workoutisten.FitStreak.Server.Database.Implementation.Trigger;
 using Newtonsoft.Json;
-using Workoutisten.FitStreak.Server.Extensions;
-using EntityFrameworkCore.Triggered;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -138,6 +138,7 @@ builder.Services.AddTransient<IConverter<ExerciseEntity, ExerciseDto>, ExerciseC
 builder.Services.AddTransient<IConverter<WorkoutEntity, WorkoutDto>, WorkoutConverter>();
 builder.Services.AddTransient<IConverter<DoneExerciseEntity, DoneExerciseDto>, DoneExerciseConverter>();
 builder.Services.AddTransient<IConverter<SetEntity, SetDto>, SetConverter>();
+builder.Services.AddTransient<IConverter<ExerciseGroupEntity, ExerciseGroupDto>, ExerciseGroupConverter>();
 
 // Add authentication to the container
 builder.Services.AddAuthentication(options =>

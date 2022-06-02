@@ -4,7 +4,7 @@ using Workoutisten.FitStreak.Server.Service.Interface.Data;
 namespace Workoutisten.FitStreak.Server.Service.Interface.Training;
 public interface IExerciseGroupService
 {
-    Task<Result<ExerciseGroup>> CreateNewExerciseGroup(Guid userId, Guid? workoutId = null);
+    Task<Result<ExerciseGroup>> CreateNewExerciseGroup(Guid userId, string name, Guid? workoutId = null);
 
     Task<Result> DeleteExerciseGroup(Guid userId, Guid exerciseGroupId);
 
