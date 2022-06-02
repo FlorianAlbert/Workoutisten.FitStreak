@@ -67,9 +67,7 @@
                     {
                         <MudListItem>
                             <MudStack Row="true" AlignItems="AlignItems.Center">
-                                <MudAvatar Color="Color.Secondary">
-                                    <MudIconButton Icon="@Icons.Material.Filled.AccountCircle" Color="Color.Inherit" />
-                                </MudAvatar>
+                                <MudAvatar Color="Color.Primary" Variant="Variant.Outlined"><b style="color:white">@friend.Streak</b></MudAvatar>
                                 <MudText>@friend.FirstName @friend.LastName</MudText>
                                 <MudSpacer />
                                 <MudIconButton Icon="@Icons.Material.Filled.Edit" />
@@ -78,7 +76,6 @@
                         <MudDivider />
                     }
                 }
-
             </MudList>
         }
 

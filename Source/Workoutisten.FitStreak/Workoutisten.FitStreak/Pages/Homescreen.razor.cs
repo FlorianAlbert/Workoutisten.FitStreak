@@ -89,7 +89,7 @@ namespace Workoutisten.FitStreak.Pages
             await InvokeAsync(() =>
             {
 
-                DateTime currentTime = e.SignalTime;
+                DateTime currentTime = e.SignalTime.ToUniversalTime();
                 var remainingTime = MaxTimeSpan - currentTime.Subtract(LastWorkoutDate);
                 if (remainingTime.TotalSeconds <= 0)
                 {
