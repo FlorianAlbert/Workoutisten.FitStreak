@@ -80,10 +80,8 @@ namespace Workoutisten.FitStreak.Pages
                 }
 
                 StateHasChanged();
-
-                base.OnAfterRenderAsync(firstRender);
             }
-
+            base.OnAfterRenderAsync(firstRender);
         }
 
         private async void OnTimedEvent(Object source, ElapsedEventArgs e)

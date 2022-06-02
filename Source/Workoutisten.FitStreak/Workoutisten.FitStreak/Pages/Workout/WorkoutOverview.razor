@@ -69,8 +69,8 @@
             {
                 await _ErrorDialogService.ShowErrorDialog();
             }
+            StateHasChanged();
         }
-        StateHasChanged();
 
         base.OnAfterRenderAsync(firstRender);
     }
