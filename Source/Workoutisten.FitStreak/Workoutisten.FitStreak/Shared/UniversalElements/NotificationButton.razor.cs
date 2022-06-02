@@ -35,12 +35,12 @@ namespace Workoutisten.FitStreak.Shared.UniversalElements
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            _messages = new Dictionary<string, bool>() {
-                {"test", true },
-                {"Notification 1", false },
-                {"Notification 2", false }
-            };
-            _newNotificationsAvailable = true;
+            //_messages = new Dictionary<string, bool>() {
+            //    {"test", true },
+            //    {"Notification 1", false },
+            //    {"Notification 2", false }
+            //};
+            //_newNotificationsAvailable = true;
         }
     }
 }
