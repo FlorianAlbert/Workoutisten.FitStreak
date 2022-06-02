@@ -12,5 +12,5 @@ public class CardioSet : Set
 
     [Required]
     [JsonProperty("Duration")]
-    public TimeSpan Duration { get; set; }
+    public long Ticks { get; set; }
 }

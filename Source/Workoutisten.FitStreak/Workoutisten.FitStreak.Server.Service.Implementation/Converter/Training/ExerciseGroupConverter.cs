@@ -20,7 +20,8 @@ public class ExerciseGroupConverter : IConverter<ExerciseGroupEntity, ExerciseGr
             DoneExerciseIds = entity.DoneExercises.Select(x => x.Id).ToArray(),
             ExerciseGroupId = entity.Id,
             ParticipantIds = entity.Participants.Select(x => x.Id).ToArray(),
-            WorkoutId = entity.Workout.Id
+            WorkoutId = entity.Workout.Id,
+            GroupName = entity.Name
         });
     }
 

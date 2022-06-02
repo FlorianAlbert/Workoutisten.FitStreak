@@ -57,7 +57,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
             var userId = await User.GetUserIdAsync();
             if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
 
-            var setResult = await SetService.CreateCardioSet(userId.Value, set.DoneExerciseId, set.Distance, set.Duration);
+            var setResult = await SetService.CreateCardioSet(userId.Value, set.DoneExerciseId, set.Distance, TimeSpan.FromTicks(set.Ticks));
 
             if (setResult.Unsuccessful) return Problem(statusCode: setResult.StatusCode, detail: setResult.Detail);
 
@@ -161,7 +161,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
             var userId = await User.GetUserIdAsync();
             if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
 
-            var setResult = await SetService.UpdateCardioSet(userId.Value, set.DoneExerciseId, set.Distance, set.Duration);
+            var setResult = await SetService.UpdateCardioSet(userId.Value, set.DoneExerciseId, set.Distance, TimeSpan.FromTicks(set.Ticks));
 
             if (setResult.Unsuccessful) return Problem(statusCode: setResult.StatusCode, detail: setResult.Detail);
 
