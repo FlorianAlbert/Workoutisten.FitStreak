@@ -62,4 +62,5 @@ namespace Workoutisten.FitStreak.Client.RestClient
             }
         }
     }
+
 }

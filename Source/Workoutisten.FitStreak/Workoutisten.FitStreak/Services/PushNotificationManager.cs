@@ -100,7 +100,7 @@ namespace Workoutisten.FitStreak.Services
         private void ShowNotification(NotificationRequest notificationToShow)
         {
 #if ANDROID
-            NotificationCenter.Current.Show(notificationToShow);
+            LocalNotificationCenter.Current.Show(notificationToShow);
 #endif
         }
     }

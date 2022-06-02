@@ -11,14 +11,14 @@ public class MainActivity : MauiAppCompatActivity
 {
     protected override void OnCreate(Bundle savedInstanceState)
     {
-        NotificationCenter.CreateNotificationChannel();
-        NotificationCenter.NotifyNotificationTapped(Intent);
+        LocalNotificationCenter.CreateNotificationChannel();
+        LocalNotificationCenter.NotifyNotificationTapped(Intent);
 
         base.OnCreate(savedInstanceState);
     }
     protected override void OnNewIntent(Intent intent)
     {
-        NotificationCenter.NotifyNotificationTapped(intent);
+        LocalNotificationCenter.NotifyNotificationTapped(intent);
         base.OnNewIntent(intent);
     }
 }

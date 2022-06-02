@@ -471,6 +471,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
         private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
         {
             var settings = new Newtonsoft.Json.JsonSerializerSettings();
+            
             UpdateJsonSerializerSettings(settings);
             return settings;
         }
@@ -481,7 +482,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
             set { _baseUrl = value; }
         }
 
-        protected Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return _settings.Value; } }
+        public Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return _settings.Value; } }
 
         partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings);
 

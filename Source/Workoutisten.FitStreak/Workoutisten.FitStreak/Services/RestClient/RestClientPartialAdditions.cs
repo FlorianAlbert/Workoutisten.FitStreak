@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using Workoutisten.FitStreak.Data.Models.User;
 
@@ -60,6 +61,10 @@ namespace Workoutisten.FitStreak.Client.RestClient
             }
         }
 
+        partial void UpdateJsonSerializerSettings(JsonSerializerSettings settings)
+        {
+            //settings.TypeNameHandling = TypeNameHandling.Objects;
+        }
 
     }
 }
