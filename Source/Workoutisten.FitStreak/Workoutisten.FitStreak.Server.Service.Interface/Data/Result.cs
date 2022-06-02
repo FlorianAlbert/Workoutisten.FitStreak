@@ -8,7 +8,7 @@ public class Result
 
     public bool Successful => StatusCode >= 200 && StatusCode < 300;
 
-    public bool Unsccessful => !Successful;
+    public bool Unsuccessful => !Successful;
 }
 
 public class Result<TValue> : Result

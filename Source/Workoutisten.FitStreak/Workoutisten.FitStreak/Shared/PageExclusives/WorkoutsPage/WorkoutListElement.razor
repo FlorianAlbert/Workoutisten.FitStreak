@@ -29,12 +29,14 @@
     [Parameter]
     public bool LastElement { get; set; }
 
-    string OverviewHref;
+    [Parameter]
+    public Guid WorkoutGuid { get; set; }
+
+    private string OverviewHref;
 
     protected override void OnInitialized()
     {
-        OverviewHref = $"/workouts/overview?workoutname={Title}";
-        //OverviewHref = "/exercises";
+        OverviewHref = $"/workouts/overview?workout={WorkoutGuid}";
         base.OnInitialized();
     }
 

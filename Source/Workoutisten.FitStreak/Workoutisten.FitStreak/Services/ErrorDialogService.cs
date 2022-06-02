@@ -49,5 +49,20 @@ namespace Workoutisten.FitStreak.Services
 
             await DialogReference.Result;
         }
+
+        public async Task ShowGeneralErrorDialog()
+        {
+            var parameters = new DialogParameters();
+            parameters.Add("ErrorMessage", "We ran into some troubles with the App. Please try again later");
+
+            var options = new DialogOptions
+            {
+                CloseOnEscapeKey = true,
+                FullWidth = true,
+            };
+            var DialogReference = DialogService.Show<ServerErrorDialog>($"Application error", parameters, options);
+
+            await DialogReference.Result;
+        }
     }
 }

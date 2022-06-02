@@ -1,6 +1,6 @@
 ﻿namespace Workoutisten.FitStreak.Server.Model.Excercise
 {
-    public class StrengthExerciseEntry : ExerciseEntry
+    public class StrengthSet : Set
     {
         public int Repetitions { get; set; }
 

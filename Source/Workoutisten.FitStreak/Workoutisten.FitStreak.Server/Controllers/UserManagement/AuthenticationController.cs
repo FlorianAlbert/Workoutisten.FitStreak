@@ -38,7 +38,7 @@ public class AuthenticationController : ControllerBase
             return BadRequest("One or more of the following values were empty: email, password!");
 
         var result = await AuthenticationService.LoginAsync(authenticationRequest.Email, authenticationRequest.Password);
-        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        if (result.Unsuccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
         else return Ok(new AuthenticationResponse
         {
             RefreshToken = result.Value.Tokens.RefreshToken,
@@ -62,7 +62,7 @@ public class AuthenticationController : ControllerBase
             return BadRequest("One or more of the following values were empty: refreshToken, expiredJwt!");
 
         var result = await AuthenticationService.RefreshTokens(tokenRefreshRequest.ExpiredJwt, tokenRefreshRequest.RefreshToken);
-        if (result.Unsccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+        if (result.Unsuccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
         else return Ok(new TokenRefreshResponse
         {
             NewJwt = result.Value.Jwt,

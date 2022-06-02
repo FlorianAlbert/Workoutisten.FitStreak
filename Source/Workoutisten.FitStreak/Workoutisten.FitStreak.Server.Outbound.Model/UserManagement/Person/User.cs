@@ -29,6 +29,9 @@ public class User
     [JsonProperty("ExerciseStreak")]
     public int ExerciseStreak { get; set; }
 
+    [JsonProperty("MaxExerciseStreak")]
+    public int MaxExerciseStreak { get; set; }
+
     [JsonProperty("LastExercise")]
     public DateTime LastExercise { get; set; }
 }

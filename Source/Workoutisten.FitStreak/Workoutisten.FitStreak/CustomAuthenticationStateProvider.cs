@@ -38,6 +38,12 @@ namespace Workoutisten.FitStreak
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
+        public async Task RefreshTokens(TokenRefreshResponse response)
+        {
+            await SecureStorage.SetAsync("accounttoken", response.NewJwt);
+            await SecureStorage.SetAsync("refreshtoken", response.NewRefreshToken);
+        }
+
         /// <summary>
         /// This method should be called to log-off the user from the application, which simply removed the stored token and then
         /// notifies of the change

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.SqlServerMigrations
+namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSqlMigrations
 {
     public partial class InitialMigration : Migration
     {
@@ -38,25 +38,14 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.SqlSe
                     PasswordForgottenKey = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    Streak = table.Column<int>(type: "int", nullable: false),
+                    MaxStreak = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WorkoutEntry",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WorkoutEntry", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -179,40 +168,22 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.SqlSe
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExerciseEntry",
+                name: "ExerciseGroup",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExerciseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WorkoutEntryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     WorkoutId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Duration = table.Column<long>(type: "bigint", nullable: true),
-                    Distance = table.Column<double>(type: "float", nullable: true),
-                    Repetitions = table.Column<int>(type: "int", nullable: true),
-                    Weight = table.Column<double>(type: "float", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExerciseEntry", x => x.Id);
+                    table.PrimaryKey("PK_ExerciseGroup", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExerciseEntry_Exercise_ExerciseId",
-                        column: x => x.ExerciseId,
-                        principalTable: "Exercise",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ExerciseEntry_Workout_WorkoutId",
+                        name: "FK_ExerciseGroup_Workout_WorkoutId",
                         column: x => x.WorkoutId,
                         principalTable: "Workout",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_ExerciseEntry_WorkoutEntry_WorkoutEntryId",
-                        column: x => x.WorkoutEntryId,
-                        principalTable: "WorkoutEntry",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                 });
@@ -244,6 +215,104 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.SqlSe
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "DoneExercise",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExerciseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExerciseGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ExercisingUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DoneExercise", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DoneExercise_Exercise_ExerciseId",
+                        column: x => x.ExerciseId,
+                        principalTable: "Exercise",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DoneExercise_ExerciseGroup_ExerciseGroupId",
+                        column: x => x.ExerciseGroupId,
+                        principalTable: "ExerciseGroup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_DoneExercise_User_ExercisingUserId",
+                        column: x => x.ExercisingUserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ExerciseGroupUser",
+                columns: table => new
+                {
+                    ParticipantsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ParticipatedExerciseGroupsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExerciseGroupUser", x => new { x.ParticipantsId, x.ParticipatedExerciseGroupsId });
+                    table.ForeignKey(
+                        name: "FK_ExerciseGroupUser_ExerciseGroup_ParticipatedExerciseGroupsId",
+                        column: x => x.ParticipatedExerciseGroupsId,
+                        principalTable: "ExerciseGroup",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExerciseGroupUser_User_ParticipantsId",
+                        column: x => x.ParticipantsId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Set",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DoneExerciseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Duration = table.Column<long>(type: "bigint", nullable: true),
+                    Distance = table.Column<double>(type: "float", nullable: true),
+                    Repetitions = table.Column<int>(type: "int", nullable: true),
+                    Weight = table.Column<double>(type: "float", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Set", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Set_DoneExercise_DoneExerciseId",
+                        column: x => x.DoneExerciseId,
+                        principalTable: "DoneExercise",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoneExercise_ExerciseGroupId",
+                table: "DoneExercise",
+                column: "ExerciseGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoneExercise_ExerciseId",
+                table: "DoneExercise",
+                column: "ExerciseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DoneExercise_ExercisingUserId",
+                table: "DoneExercise",
+                column: "ExercisingUserId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_EmailUser_ReceiversId",
                 table: "EmailUser",
@@ -255,19 +324,14 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.SqlSe
                 column: "CreatorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExerciseEntry_ExerciseId",
-                table: "ExerciseEntry",
-                column: "ExerciseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExerciseEntry_WorkoutEntryId",
-                table: "ExerciseEntry",
-                column: "WorkoutEntryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExerciseEntry_WorkoutId",
-                table: "ExerciseEntry",
+                name: "IX_ExerciseGroup_WorkoutId",
+                table: "ExerciseGroup",
                 column: "WorkoutId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExerciseGroupUser_ParticipatedExerciseGroupsId",
+                table: "ExerciseGroupUser",
+                column: "ParticipatedExerciseGroupsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FriendshipRequest_RequestedUserId_RequestingUserId",
@@ -284,6 +348,11 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.SqlSe
                 name: "IX_Friendships_UsersIAmFriendOfId",
                 table: "Friendships",
                 column: "UsersIAmFriendOfId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Set_DoneExerciseId",
+                table: "Set",
+                column: "DoneExerciseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Workout_CreatorId",
@@ -308,7 +377,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.SqlSe
                 name: "EmailUser");
 
             migrationBuilder.DropTable(
-                name: "ExerciseEntry");
+                name: "ExerciseGroupUser");
 
             migrationBuilder.DropTable(
                 name: "FriendshipRequest");
@@ -317,16 +386,22 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.SqlSe
                 name: "Friendships");
 
             migrationBuilder.DropTable(
+                name: "Set");
+
+            migrationBuilder.DropTable(
                 name: "WorkoutExercise");
 
             migrationBuilder.DropTable(
                 name: "Email");
 
             migrationBuilder.DropTable(
-                name: "WorkoutEntry");
+                name: "DoneExercise");
 
             migrationBuilder.DropTable(
                 name: "Exercise");
+
+            migrationBuilder.DropTable(
+                name: "ExerciseGroup");
 
             migrationBuilder.DropTable(
                 name: "Workout");
