@@ -28,12 +28,12 @@
 else if (ExerciseCategory == ExerciseCategoryEnum.Cardio)
 {
     <MudGrid>
-        <MudItem xs="2" />
-        <MudItem xs="8">
+        @*<MudItem xs="1" />*@
+        <MudItem xs="12">
             <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
                 <MudTextField T="int" Label="h" Variant="Variant.Filled" Value="@_Hours" ValueChanged="@_HoursChanged" Immediate="true"/>
                 :
-                <MudTextField T="int" Label="m" Variant="Variant.Filled" @bind-Value="@_Minutes" ValueChanged="@_MinutesChanged" Immediate="true"/>
+                <MudTextField T="int" Label="m" Variant="Variant.Filled" Value="@_Minutes" ValueChanged="@_MinutesChanged" Immediate="true"/>
                 :
                 <MudTextField T="int" Label="s" Variant="Variant.Filled" Value="@_Seconds" ValueChanged="@_SecondsChanged" Immediate="true"/>
 
@@ -43,7 +43,7 @@ else if (ExerciseCategory == ExerciseCategoryEnum.Cardio)
 
             </MudStack>
         </MudItem>
-        <MudItem xs="2" />
+        @*<MudItem xs="1" />*@
         <MudItem xs="2" />
         <MudItem xs="8">
             <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">

@@ -6,7 +6,6 @@
 @inject ErrorDialogService _ErrorDialogService
 
 <MudText Class="m-3" Typo="Typo.h5" Align="Align.Center">History</MudText>
-@*<MudText Align="Align.Center">You last worked out on 16.05.22 at 16:00</MudText>*@
 <MudDivider Class="Foreground: white"/>
 <MudTimeline TimelineAlign="TimelineAlign.Start" TimelinePosition="TimelinePosition.Left">
     @foreach (var doneExercise in DoneExercises)
@@ -16,8 +15,7 @@
                 <MudPaper  Elevation="3" Class="p-3">
                     <MudText Color="Color.Primary" Typo="Typo.caption" GutterBottom="true">@doneExercise.CreatedAt </MudText>
                     <MudExpansionPanels>
-                        @*@for (var i = 0; i < 4; i++)*@
-                        @*{*@
+                        
                             <MudExpansionPanel Dense="true" Class="mud-theme-dark"> 
                                 <TitleContent>
                                     <div class="d-flex gap-4">
@@ -62,7 +60,7 @@
         {
             try
             {
-                DoneExercises = (await Task.WhenAll((await _RestClient.CallControlled(c => c.GetDoneExercisesAsync())).Select(exercise => _Converter.ToEntity<DoneExercise, DoneExerciseModel>(exercise)))).ToList();
+                DoneExercises = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetDoneExercisesAsync())).Select(async exercise => await _Converter.ToEntity<DoneExercise, DoneExerciseModel>(exercise)))).ToList();
                 foreach(var doneExercise in DoneExercises)
                 {
                     doneExercise.ExerciseModel = await _Converter.ToEntity<Exercise, ExerciseModel>(await _RestClient.CallControlled(c => c.GetExerciseAsync(doneExercise.ExerciseId)));
@@ -81,9 +79,9 @@
                 await _ErrorDialogService.ShowErrorDialog();
             }
 
-            base.OnInitializedAsync();
 
             StateHasChanged();
         }
+            base.OnAfterRenderAsync(firstRender);
     }
 }
