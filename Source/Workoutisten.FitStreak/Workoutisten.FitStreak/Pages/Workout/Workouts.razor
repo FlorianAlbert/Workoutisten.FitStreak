@@ -52,11 +52,9 @@
             {
                 await _ErrorDialogService.ShowErrorDialog();
             }
-
-            base.OnInitializedAsync();
-
             StateHasChanged();
         }
+        base.OnAfterRenderAsync(firstRender);
     }
 
     async void AddNewWorkout()

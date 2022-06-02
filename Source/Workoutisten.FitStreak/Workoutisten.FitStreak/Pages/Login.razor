@@ -60,18 +60,9 @@
         {
             var response = await _RestClient.CallControlled(async c => await c.LoginAsync(await _Converter.ToDto<LoginModel, AuthenticationRequest>(loginModel)));
 
-            if (/*IsVerified*/ true)
-            {
-                message = "Success";
-                await _AuthenticationStateProvider.Login(response);
-                _NavigationManager.NavigateTo("/home");
-            }
-            //else
-            //{
-            //    _NavigationManager.NavigateTo($"/validate?email={loginModel.Email}");
-            //}
-
-
+            message = "Success";
+            await _AuthenticationStateProvider.Login(response);
+            _NavigationManager.NavigateTo("/home");
         }
         catch (ApiException<ProblemDetails> e)
         {
