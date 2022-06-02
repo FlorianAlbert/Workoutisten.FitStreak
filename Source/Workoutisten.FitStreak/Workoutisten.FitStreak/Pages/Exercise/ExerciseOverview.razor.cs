@@ -39,6 +39,9 @@ namespace Workoutisten.FitStreak.Pages.Exercise
         [Inject]
         public ErrorDialogService _ErrorDialogService { get; set; }
 
+        [Inject]
+        public NavigationManager _NavigationManager { get; set; }
+
         ExerciseModel CurrentExercise { get; set; }
 
         List<ExerciseModel> ExerciseList { get; set; } = new();
@@ -63,6 +66,12 @@ namespace Workoutisten.FitStreak.Pages.Exercise
         Stopwatch _Stopwatch { get; set; } = new();
 
         bool _TimerIconToggle { get; set; }
+
+        int _Hours;
+
+        int _Minutes;
+
+        int _Seconds;
         #endregion
 
         #region Methods
@@ -119,29 +128,6 @@ namespace Workoutisten.FitStreak.Pages.Exercise
                 }
                 StateHasChanged();
             }
-            //Exercises anhand der ExerciseGuids oder der WorkoutGuid holen
-
-            #region ToDelete
-            //WorkoutName = "Workout 1 awdawdawdasdas";
-
-            //var ex1 = new ExerciseModel() { Name = "Exercise 1", Category = ExerciseCategoryEnum.Strength };
-            //CurrentExercise = ex1;
-            //var ex2 = new ExerciseModel() { Name = "Exercise 2", Category = ExerciseCategoryEnum.Strength };
-            //var ex3 = new ExerciseModel() { Name = "Exercise 3", Category = ExerciseCategoryEnum.Cardio };
-            //var ex4 = new ExerciseModel() { Name = "Exercise 4", Category = ExerciseCategoryEnum.Cardio };
-
-            //ExerciseList.Add(ex1);
-            //ExerciseList.Add(ex2);
-            //ExerciseList.Add(ex3);
-            //ExerciseList.Add(ex4);
-
-            //StrengthExerciseSets.Add(ex1, new List<StrengthExerciseSetModel>() { /*new StrengthExerciseSetModel() { SetNumber = 1, Reps = 12, Weight = 10 }, new StrengthExerciseSetModel() { SetNumber = 2, Reps = 12, Weight = 10 }*/ });
-            //StrengthExerciseSets.Add(ex2, new List<StrengthExerciseSetModel>() { new StrengthExerciseSetModel() { SetNumber = 1, Reps = 12, Weight = 10 }, new StrengthExerciseSetModel() { SetNumber = 2, Reps = 12, Weight = 10 }, new StrengthExerciseSetModel() { SetNumber = 3, Reps = 12, Weight = 10 } });
-            //CardioExerciseSets.Add(ex3, new List<CardioExerciseSetModel>() { new CardioExerciseSetModel() { SetNumber = 1, Duration = new TimeSpan(0, 1, 0), Distance = 10 } });
-            //CardioExerciseSets.Add(ex4, new List<CardioExerciseSetModel>() { /*new CardioExerciseSetModel() { SetNumber = 1, Reps = 12, Weight = 10 }*/ });
-
-            //Exercises.
-            #endregion
 
             base.OnAfterRenderAsync(firstRender);
         }
@@ -153,7 +139,7 @@ namespace Workoutisten.FitStreak.Pages.Exercise
 
         void CompleteWorkout()
         {
-            //To be done
+            _NavigationManager.NavigateTo("/home");
         }
 
         void GetNextExercise()
@@ -193,20 +179,19 @@ namespace Workoutisten.FitStreak.Pages.Exercise
                 }
                 else if (setModel is CardioExerciseSetModel cardioSetModel)
                 {
+                    if (!cardioSetModel.Duration.HasValue)
+                    {
+                        cardioSetModel.Duration = new TimeSpan(_Hours, _Minutes, _Seconds);
+                    }
                     var set = new CardioSet()
                     {
                         DoneExerciseId = doneExercise.DoneExerciseId,
                         Distance = cardioSetModel.Distance ?? 0,
-                        Duration = cardioSetModel.Duration.HasValue ?
-                        new Client.RestClient.TimeSpan()
-                        {
-                            Ticks = cardioSetModel.Duration.Value.Ticks
-                        } :
-                            new Client.RestClient.TimeSpan() { Ticks = 0 }
+                        Ticks = cardioSetModel.Duration.HasValue ? cardioSetModel.Duration.Value.Ticks : 0
                     };
                     set = await _RestClient.CallControlled(c => c.CreateCardioSetAsync(set));
 
-                    CardioExerciseSets[CurrentExercise].Add(new CardioExerciseSetModel() { Distance = set.Distance, Duration = new TimeSpan(set.Duration.Ticks), SetNumber = CardioExerciseSets[CurrentExercise].Count });
+                    CardioExerciseSets[CurrentExercise].Add(new CardioExerciseSetModel() { Distance = set.Distance, Duration = new TimeSpan(set.Ticks), SetNumber = CardioExerciseSets[CurrentExercise].Count });
                 }
             }
             catch (ApiException<ProblemDetails> e)

@@ -471,7 +471,6 @@ namespace Workoutisten.FitStreak.Client.RestClient
         private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
         {
             var settings = new Newtonsoft.Json.JsonSerializerSettings();
-            
             UpdateJsonSerializerSettings(settings);
             return settings;
         }
@@ -4216,6 +4215,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
                     await PrepareRequestAsync(client_, request_, url_, cancellationToken).ConfigureAwait(false);
 
                     var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var json = await response_.Content.ReadAsStringAsync();
                     var disposeResponse_ = true;
                     try
                     {
@@ -5845,9 +5845,8 @@ namespace Workoutisten.FitStreak.Client.RestClient
         [Newtonsoft.Json.JsonProperty("distance", Required = Newtonsoft.Json.Required.Always)]
         public double Distance { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("duration", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required]
-        public TimeSpan Duration { get; set; } = new TimeSpan();
+        [Newtonsoft.Json.JsonProperty("ticks", Required = Newtonsoft.Json.Required.Always)]
+        public long Ticks { get; set; }
 
     }
 
@@ -6100,44 +6099,6 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         [Newtonsoft.Json.JsonProperty("repetitions", Required = Newtonsoft.Json.Required.Always)]
         public int Repetitions { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.16.0.0 (NJsonSchema v10.7.1.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class TimeSpan
-    {
-        [Newtonsoft.Json.JsonProperty("ticks", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long Ticks { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("days", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Days { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("hours", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Hours { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("milliseconds", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Milliseconds { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("minutes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Minutes { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("seconds", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Seconds { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("totalDays", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double TotalDays { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("totalHours", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double TotalHours { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("totalMilliseconds", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double TotalMilliseconds { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("totalMinutes", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double TotalMinutes { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("totalSeconds", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double TotalSeconds { get; set; }
 
     }
 
