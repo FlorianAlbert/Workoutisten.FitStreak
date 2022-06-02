@@ -69,9 +69,9 @@ namespace Workoutisten.FitStreak.Pages
                     }
 
                 }
-                catch (ApiException<ProblemDetails> e)
+                catch (ApiException e)
                 {
-                    await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+                    //await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
                     _NavigationManager.NavigateTo("/welcome");
                 }
                 catch (Exception e)

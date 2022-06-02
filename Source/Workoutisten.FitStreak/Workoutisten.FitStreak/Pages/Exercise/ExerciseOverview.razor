@@ -8,13 +8,13 @@
 
 <MudGrid>
     <MudItem xs="5" Class="MudTextHiddenOverflow">
-        <MudText Typo="Typo.h5">@WorkoutName</MudText>
+        <MudText Typo="Typo.h5">@(Workout is not null? Workout.WorkoutName : string.Empty)</MudText>
     </MudItem>
     <MudItem xs="3">
-        <MudButton Class="rounded-xl" Color="Color.Warning" Variant="Variant.Filled" OnClick="CancelExercise"><MudText Typo="Typo.button">CANCEL</MudText></MudButton>
+        <MudButton Class="rounded-xl" Color="Color.Warning" Variant="Variant.Filled" OnClick="CancelWorkout"><MudText Typo="Typo.button">CANCEL</MudText></MudButton>
     </MudItem>
     <MudItem xs="3">
-        <FitStreakButton Label="COMPLETE" OnClick="@CompleteExercise" />
+        <FitStreakButton Label="COMPLETE" OnClick="@CompleteWorkout" />
     </MudItem>
 </MudGrid>
 
@@ -115,7 +115,7 @@
 <MudPaper Class="rounded-xl p-2 my-3">
     <MudGrid>
         @*<MudItem xs="1" />*@
-        <MudItem xs="3" Class="d-flex justify-center">
+        <MudItem xs="3" Class="d-flex">
             <MudIconButton Icon="@Icons.Filled.Refresh" Variant="Variant.Filled" Color="Color.Primary" Class="rounded-circle" OnClick="ResetTimer"/>
         </MudItem>
         <MudItem xs="1" Class="d-flex justify-end align-center">
@@ -127,7 +127,7 @@
         <MudItem xs="1" Class="d-flex justify-start align-center">
             <MudIconButton Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Dark" Class="rounded-circle" OnClick="( () => Task.Run( () => TimerValue = TimerValue.Add(new System.TimeSpan(0, 0, 15))))" />
         </MudItem>
-        <MudItem xs="3" Class="d-flex justify-center">
+        <MudItem xs="3" Class="d-flex">
             <MudToggleIconButton Toggled="@_TimerIconToggle" ToggledChanged="ToggleTimer" Variant="Variant.Filled" Class="rounded-circle"
                                  Icon="@Icons.Filled.PlayArrow" Color="Color.Primary"
                                  ToggledIcon="@Icons.Filled.Pause" ToggledColor="Color.Warning" />

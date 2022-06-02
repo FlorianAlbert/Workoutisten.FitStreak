@@ -2,10 +2,13 @@
 using MudBlazor;
 using System.Diagnostics;
 using System.Timers;
+using Workoutisten.FitStreak.Client.RestClient;
 using Workoutisten.FitStreak.Data.Converter;
 using Workoutisten.FitStreak.Data.Enums;
 using Workoutisten.FitStreak.Data.Models.Workout;
 using Workoutisten.FitStreak.Pages.Dialogs;
+using Workoutisten.FitStreak.Services;
+using TimeSpan = System.TimeSpan;
 
 namespace Workoutisten.FitStreak.Pages.Exercise
 {
@@ -22,11 +25,19 @@ namespace Workoutisten.FitStreak.Pages.Exercise
 
         //[Parameter]
         //[SupplyParameterFromQuery(Name = "workoutname")]
-        public string? WorkoutName { get; set; }
+        public WorkoutModel Workout { get; set; }
         #endregion
 
         #region Properties
 
+        [Inject]
+        public IRestClient _RestClient { get; set; }
+
+        [Inject]
+        public IConverterWrapper _Converter { get; set; }
+
+        [Inject]
+        public ErrorDialogService _ErrorDialogService { get; set; }
 
         ExerciseModel CurrentExercise { get; set; }
 
@@ -38,6 +49,10 @@ namespace Workoutisten.FitStreak.Pages.Exercise
         StrengthExerciseSetModel NewStrengthExerciseSetModel { get; set; } = new();
 
         CardioExerciseSetModel NewCardioExerciseSetModel { get; set; } = new();
+
+        public ExerciseGroup ExerciseGroup { get; set; }
+
+        public List<DoneExercise> DoneExercises { get; set; } = new();
 
         TimeSpan TimerValue { get; set; } = new TimeSpan(0, 2, 0);
 
@@ -51,41 +66,93 @@ namespace Workoutisten.FitStreak.Pages.Exercise
         #endregion
 
         #region Methods
-        protected override void OnInitialized()
+        protected async override Task OnAfterRenderAsync(bool firstRender)
         {
+            if (firstRender)
+            {
+                if (WorkoutGuid.HasValue)
+                {
+                    try
+                    {
+                        Workout = await _Converter.ToEntity<Client.RestClient.Workout, WorkoutModel>(await _RestClient.CallControlled(c => c.GetWorkoutAsync(WorkoutGuid.Value)));
+                        ExerciseList = (await Task.WhenAll((await _RestClient.CallControlled(c => c.GetExercisesOfWorkoutAsync(Workout.Guid))).Select(exercise => _Converter.ToEntity<Client.RestClient.Exercise, ExerciseModel>(exercise)))).ToList();
+
+                        if (ExerciseList.Count == 0)
+                        {
+                            await _ErrorDialogService.ShowGeneralErrorDialog();
+                            base.OnAfterRenderAsync(firstRender);
+                            return;
+                        }
+
+                        CurrentExercise = ExerciseList[0];
+
+                        ExerciseList.ForEach(exercise =>
+                        {
+                            if (exercise.Category == ExerciseCategoryEnum.Cardio)
+                            {
+                                CardioExerciseSets.Add(exercise, new List<CardioExerciseSetModel>());
+                            }
+                            else
+                            {
+                                StrengthExerciseSets.Add(exercise, new List<StrengthExerciseSetModel>());
+                            }
+                        });
+
+                        ExerciseGroup = await _RestClient.CallControlled(async c => await c.CreateExerciseGroupAsync(
+                            new ExerciseGroup()
+                            {
+                                GroupName = $"{Workout.WorkoutName} {DateTime.Now.ToString(@"dd\:MM\:yyyy\HH:\mm")}",
+                                WorkoutId = WorkoutGuid,
+                                ParticipantIds = new List<Guid>() { Guid.Parse(await SecureStorage.GetAsync("userId"))},
+                                DoneExerciseIds = new List<Guid>()
+                            }));
+
+                    }
+                    catch (ApiException<ProblemDetails> e)
+                    {
+                        await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+                    }
+                    catch (Exception e)
+                    {
+                        await _ErrorDialogService.ShowErrorDialog();
+                    }
+                }
+            }
             //Exercises anhand der ExerciseGuids oder der WorkoutGuid holen
 
             #region ToDelete
-            WorkoutName = "Workout 1 awdawdawdasdas";
+            //WorkoutName = "Workout 1 awdawdawdasdas";
 
-            var ex1 = new ExerciseModel() { Name = "Exercise 1", Category = ExerciseCategoryEnum.Strength };
-            CurrentExercise = ex1;
-            var ex2 = new ExerciseModel() { Name = "Exercise 2", Category = ExerciseCategoryEnum.Strength };
-            var ex3 = new ExerciseModel() { Name = "Exercise 3", Category = ExerciseCategoryEnum.Cardio };
-            var ex4 = new ExerciseModel() { Name = "Exercise 4", Category = ExerciseCategoryEnum.Cardio };
+            //var ex1 = new ExerciseModel() { Name = "Exercise 1", Category = ExerciseCategoryEnum.Strength };
+            //CurrentExercise = ex1;
+            //var ex2 = new ExerciseModel() { Name = "Exercise 2", Category = ExerciseCategoryEnum.Strength };
+            //var ex3 = new ExerciseModel() { Name = "Exercise 3", Category = ExerciseCategoryEnum.Cardio };
+            //var ex4 = new ExerciseModel() { Name = "Exercise 4", Category = ExerciseCategoryEnum.Cardio };
 
-            ExerciseList.Add(ex1);
-            ExerciseList.Add(ex2);
-            ExerciseList.Add(ex3);
-            ExerciseList.Add(ex4);
+            //ExerciseList.Add(ex1);
+            //ExerciseList.Add(ex2);
+            //ExerciseList.Add(ex3);
+            //ExerciseList.Add(ex4);
 
-            StrengthExerciseSets.Add(ex1, new List<StrengthExerciseSetModel>() { /*new StrengthExerciseSetModel() { SetNumber = 1, Reps = 12, Weight = 10 }, new StrengthExerciseSetModel() { SetNumber = 2, Reps = 12, Weight = 10 }*/ });
-            StrengthExerciseSets.Add(ex2, new List<StrengthExerciseSetModel>() { new StrengthExerciseSetModel() { SetNumber = 1, Reps = 12, Weight = 10 }, new StrengthExerciseSetModel() { SetNumber = 2, Reps = 12, Weight = 10 }, new StrengthExerciseSetModel() { SetNumber = 3, Reps = 12, Weight = 10 } });
-            CardioExerciseSets.Add(ex3, new List<CardioExerciseSetModel>() { new CardioExerciseSetModel() { SetNumber = 1, Duration = new TimeSpan(0, 1, 0), Distance = 10 } });
-            CardioExerciseSets.Add(ex4, new List<CardioExerciseSetModel>() { /*new CardioExerciseSetModel() { SetNumber = 1, Reps = 12, Weight = 10 }*/ });
+            //StrengthExerciseSets.Add(ex1, new List<StrengthExerciseSetModel>() { /*new StrengthExerciseSetModel() { SetNumber = 1, Reps = 12, Weight = 10 }, new StrengthExerciseSetModel() { SetNumber = 2, Reps = 12, Weight = 10 }*/ });
+            //StrengthExerciseSets.Add(ex2, new List<StrengthExerciseSetModel>() { new StrengthExerciseSetModel() { SetNumber = 1, Reps = 12, Weight = 10 }, new StrengthExerciseSetModel() { SetNumber = 2, Reps = 12, Weight = 10 }, new StrengthExerciseSetModel() { SetNumber = 3, Reps = 12, Weight = 10 } });
+            //CardioExerciseSets.Add(ex3, new List<CardioExerciseSetModel>() { new CardioExerciseSetModel() { SetNumber = 1, Duration = new TimeSpan(0, 1, 0), Distance = 10 } });
+            //CardioExerciseSets.Add(ex4, new List<CardioExerciseSetModel>() { /*new CardioExerciseSetModel() { SetNumber = 1, Reps = 12, Weight = 10 }*/ });
 
             //Exercises.
             #endregion
 
-            base.OnInitialized();
+            StateHasChanged();
+
+            base.OnAfterRenderAsync(firstRender);
         }
 
-        void CancelExercise()
+        void CancelWorkout()
         {
             //To be done
         }
 
-        void CompleteExercise()
+        void CompleteWorkout()
         {
             //To be done
         }
@@ -108,30 +175,52 @@ namespace Workoutisten.FitStreak.Pages.Exercise
             }
         }
 
-        void AddSet(object setModel)
+        async Task AddSet(object setModel)
         {
-            if (setModel.GetType() == typeof(StrengthExerciseSetModel))
+            try
             {
-                var newSet = (StrengthExerciseSetModel)setModel;
-                StrengthExerciseSets[CurrentExercise].Add(
-                                new StrengthExerciseSetModel
-                                {
-                                    SetNumber = StrengthExerciseSets[CurrentExercise].Count() + 1,
-                                    Reps = (newSet.Reps is null) ? 0 : newSet.Reps,
-                                    Weight = (newSet.Weight is null) ? 0 : newSet.Weight
-                                });
+                var doneExercise = DoneExercises.SingleOrDefault(exercise => exercise.ExerciseId.Equals(CurrentExercise.Guid));
+                if (doneExercise is null)
+                {
+                    doneExercise = await _RestClient.CallControlled(async c => await c.CreateDoneExerciseAsync(new DoneExercise() { ExerciseGroupId = ExerciseGroup.ExerciseGroupId, ExerciseId = CurrentExercise.Guid }));
+                    DoneExercises.Add(doneExercise);
+                }
+
+                if (setModel is StrengthExerciseSetModel strengthSetModel)
+                {
+                    var set = new StrengthSet() { DoneExerciseId = doneExercise.DoneExerciseId, Repetitions = strengthSetModel.Reps ?? 0, Weight = strengthSetModel.Weight ?? 0 };
+                    set = await _RestClient.CallControlled(c => c.CreateStrengthSetAsync(set));
+                    StrengthExerciseSets[CurrentExercise].Add(new StrengthExerciseSetModel() { Reps = set.Repetitions, Weight = set.Weight, SetNumber = StrengthExerciseSets[CurrentExercise].Count });
+                }
+                else if (setModel is CardioExerciseSetModel cardioSetModel)
+                {
+                    var set = new CardioSet()
+                    {
+                        DoneExerciseId = doneExercise.DoneExerciseId,
+                        Distance = cardioSetModel.Distance ?? 0,
+                        Duration = cardioSetModel.Duration.HasValue ?
+                        new Client.RestClient.TimeSpan()
+                        {
+                            Hours = cardioSetModel.Duration.Value.Hours,
+                            Minutes = cardioSetModel.Duration.Value.Minutes,
+                            Seconds = cardioSetModel.Duration.Value.Seconds
+                        } :
+                            new Client.RestClient.TimeSpan() { Hours = 0, Minutes = 0, Seconds = 0 }
+                    };
+                    set = await _RestClient.CallControlled(c => c.CreateCardioSetAsync(set));
+
+                    CardioExerciseSets[CurrentExercise].Add(new CardioExerciseSetModel() { Distance = set.Distance, Duration = new TimeSpan(set.Duration.Ticks), SetNumber = CardioExerciseSets[CurrentExercise].Count });
+                }
             }
-            else if (setModel.GetType() == typeof(CardioExerciseSetModel))
+            catch (ApiException<ProblemDetails> e)
             {
-                var newSet = (CardioExerciseSetModel)setModel;
-                CardioExerciseSets[CurrentExercise].Add(
-                                new CardioExerciseSetModel
-                                {
-                                    SetNumber = CardioExerciseSets[CurrentExercise].Count() + 1,
-                                    Distance = (newSet.Distance is null) ? 0 : newSet.Distance,
-                                    Duration = (newSet.Distance.HasValue) ? (System.TimeSpan)newSet.Duration : new TimeSpan(0)
-                                });
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
             }
+            catch (Exception e)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
+
 
             StateHasChanged();
         }
