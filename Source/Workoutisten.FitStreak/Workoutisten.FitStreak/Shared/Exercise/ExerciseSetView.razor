@@ -8,7 +8,7 @@
         <MudItem xs="2" />
         <MudItem xs="8">
             <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
-                <MudTextField @bind-Value="StrengthExerciseSet.Reps" Label="Reps" Variant="Variant.Filled" MaxLength="3" Val />
+                <MudTextField @bind-Value="StrengthExerciseSet.Reps" Label="Reps" Variant="Variant.Filled" MaxLength="3" />
                 <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Remove" Variant="Variant.Filled" Color="Color.Warning" OnClick="@( () => Task.Run( () => (StrengthExerciseSet.Reps == null || StrengthExerciseSet.Reps == 0)? StrengthExerciseSet.Reps = 0 : StrengthExerciseSet.Reps--))" />
                 <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" OnClick="@( () => Task.Run( () => (StrengthExerciseSet.Reps == null)? StrengthExerciseSet.Reps = 1 : StrengthExerciseSet.Reps++))" />
             </MudStack>
@@ -29,15 +29,12 @@ else if (ExerciseCategory == ExerciseCategoryEnum.Cardio)
 {
     <MudGrid>
         <MudItem xs="2" />
-        <MudItem xs="8">
+        <MudItem xs="10">
             <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
-                @*<MudTextField T="int" Label="h" Variant="Variant.Filled" @bind-Text="@(CardioExerciseSet.Duration.HasValue? ((System.TimeSpan)CardioExerciseSet.Duration).Hours.ToString() : "0")"/>*@
                 <MudTextField T="int" Label="h" Variant="Variant.Filled" @bind-Value="_Hours" />
                 :
-                @*<MudTextField T="int" Label="m" Variant="Variant.Filled" Text="@(CardioExerciseSet.Duration.HasValue? ((System.TimeSpan)CardioExerciseSet.Duration).Minutes.ToString() : "0")" />*@
                 <MudTextField T="int" Label="m" Variant="Variant.Filled" @bind-Value="_Minutes" />
                 :
-                @*<MudTextField T="int" Label="s" Variant="Variant.Filled" Text="@(CardioExerciseSet.Duration.HasValue? ((System.TimeSpan)CardioExerciseSet.Duration).Seconds.ToString() : "0")" />*@
                 <MudTextField T="int" Label="s" Variant="Variant.Filled" @bind-Value="_Seconds" />
 
                 <MudToggleIconButton Toggled="@_IconToggle" ToggledChanged="ToggleTimer" Variant="Variant.Filled" Class="rounded-circle"

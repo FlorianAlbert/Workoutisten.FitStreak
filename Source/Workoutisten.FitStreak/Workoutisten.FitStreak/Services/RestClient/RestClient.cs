@@ -155,12 +155,12 @@ namespace Workoutisten.FitStreak.Client.RestClient
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ExerciseGroup>> GetExerciseGroupsAsync(System.Threading.CancellationToken cancellationToken);
 
-        /// <returns>Created</returns>
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<ExerciseGroup> CreateExerciseGroupAsync(ExerciseGroup body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Created</returns>
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<ExerciseGroup> CreateExerciseGroupAsync(ExerciseGroup body, System.Threading.CancellationToken cancellationToken);
 
@@ -2134,7 +2134,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
             }
         }
 
-        /// <returns>Created</returns>
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ExerciseGroup> CreateExerciseGroupAsync(ExerciseGroup body)
         {
@@ -2142,7 +2142,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Created</returns>
+        /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ExerciseGroup> CreateExerciseGroupAsync(ExerciseGroup body, System.Threading.CancellationToken cancellationToken)
         {
@@ -2182,7 +2182,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
                         await ProcessResponseAsync(client_, response_, cancellationToken).ConfigureAwait(false);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
+                        if (status_ == 200)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<ExerciseGroup>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)

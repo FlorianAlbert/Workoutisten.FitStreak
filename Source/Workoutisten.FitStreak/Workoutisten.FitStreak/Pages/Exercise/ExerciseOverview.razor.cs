@@ -103,7 +103,7 @@ namespace Workoutisten.FitStreak.Pages.Exercise
                             {
                                 GroupName = $"{Workout.WorkoutName} {DateTime.Now.ToString(@"dd\:MM\:yyyy\HH:\mm")}",
                                 WorkoutId = WorkoutGuid,
-                                ParticipantIds = new List<Guid>() { Guid.Parse(await SecureStorage.GetAsync("userId"))},
+                                ParticipantIds = new List<Guid>() { Guid.Parse(await SecureStorage.GetAsync("userId")) },
                                 DoneExerciseIds = new List<Guid>()
                             }));
 
@@ -117,6 +117,7 @@ namespace Workoutisten.FitStreak.Pages.Exercise
                         await _ErrorDialogService.ShowErrorDialog();
                     }
                 }
+                StateHasChanged();
             }
             //Exercises anhand der ExerciseGuids oder der WorkoutGuid holen
 
@@ -141,8 +142,6 @@ namespace Workoutisten.FitStreak.Pages.Exercise
 
             //Exercises.
             #endregion
-
-            StateHasChanged();
 
             base.OnAfterRenderAsync(firstRender);
         }
@@ -201,11 +200,9 @@ namespace Workoutisten.FitStreak.Pages.Exercise
                         Duration = cardioSetModel.Duration.HasValue ?
                         new Client.RestClient.TimeSpan()
                         {
-                            Hours = cardioSetModel.Duration.Value.Hours,
-                            Minutes = cardioSetModel.Duration.Value.Minutes,
-                            Seconds = cardioSetModel.Duration.Value.Seconds
+                            Ticks = cardioSetModel.Duration.Value.Ticks
                         } :
-                            new Client.RestClient.TimeSpan() { Hours = 0, Minutes = 0, Seconds = 0 }
+                            new Client.RestClient.TimeSpan() { Ticks = 0 }
                     };
                     set = await _RestClient.CallControlled(c => c.CreateCardioSetAsync(set));
 
