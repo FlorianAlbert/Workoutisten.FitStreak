@@ -66,10 +66,10 @@
                 await _AuthenticationStateProvider.Login(response);
                 _NavigationManager.NavigateTo("/home");
             }
-            else
-            {
-                _NavigationManager.NavigateTo($"/validate?email={loginModel.Email}");
-            }
+            //else
+            //{
+            //    _NavigationManager.NavigateTo($"/validate?email={loginModel.Email}");
+            //}
 
 
         }

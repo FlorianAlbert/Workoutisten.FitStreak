@@ -26,6 +26,8 @@ namespace Workoutisten.FitStreak.Pages.Exercise
         #endregion
 
         #region Properties
+
+
         ExerciseModel CurrentExercise { get; set; }
 
         List<ExerciseModel> ExerciseList { get; set; } = new();
