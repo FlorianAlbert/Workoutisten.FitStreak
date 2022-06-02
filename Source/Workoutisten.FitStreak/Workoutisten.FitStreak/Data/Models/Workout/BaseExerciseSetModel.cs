@@ -4,6 +4,6 @@
     {
         public int SetNumber { get; set; }
 
-        public string Name { get { return $"Set {SetNumber}"; } }
+        public string Name { get { return $"Set {SetNumber + 1}"; } }
     }
 }

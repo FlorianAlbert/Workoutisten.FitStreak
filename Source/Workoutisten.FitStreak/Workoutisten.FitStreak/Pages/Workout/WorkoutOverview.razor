@@ -1,5 +1,6 @@
 ﻿@using Workoutisten.FitStreak.Client.RestClient
 @using Workoutisten.FitStreak.Data.Models.Workout
+@using Workoutisten.FitStreak.Shared.Exercise
 
 @page "/workouts/overview"
 
@@ -8,14 +9,14 @@
 @inject ErrorDialogService _ErrorDialogService
 @inject IConverterWrapper _Converter
 
-<MudPaper Class="rounded-xl p-2 my-3 h-75">
+<MudPaper Class="rounded-xl p-2 my-3 h-75" MinHeight="600px">
     <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
-        <MudText Typo="Typo.h4">@Workout.WorkoutName</MudText>
+        <MudText Typo="Typo.h6">@Workout.WorkoutName</MudText>
         <MudText Align="Align.Start" Typo="Typo.subtitle2">@Workout.Exercises.Count Exercises</MudText>
         <FitStreakButton Label="START" OnClick="StartWorkout" />
     </MudStack>
 
-    <MudDivider Style="padding: 2px" Class="Foreground: white mb-1 mt-1" />
+    <MudDivider Style="padding: 2px" Class="Foreground: white mb-1 mt-3" />
 
 
     <MudList>
@@ -76,6 +77,6 @@
 
     void StartWorkout()
     {
-        _NavManager.NavigateTo("/exercises/overview");
+        _NavManager.NavigateTo($"/exercises/overview?workout={WorkoutGuid}");
     }
 }

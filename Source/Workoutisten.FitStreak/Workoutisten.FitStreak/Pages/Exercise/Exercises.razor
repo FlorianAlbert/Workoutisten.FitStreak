@@ -1,5 +1,6 @@
 ﻿@using Workoutisten.FitStreak.Pages.Dialogs
 @using Workoutisten.FitStreak.Data.Models.Workout
+@using Workoutisten.FitStreak.Shared.Exercise
 
 @page "/exercises"
 
@@ -17,7 +18,7 @@
     </MudItem>
 </MudGrid>
 
-<MudPaper Class="rounded-xl p-2 my-3">
+<MudPaper Class="rounded-xl p-2 my-3" MinHeight="600px">
     <MudList>
         @foreach (var exercise in UserExercises)
         {
