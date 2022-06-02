@@ -22,6 +22,9 @@ namespace Workoutisten.FitStreak.Pages
         [Inject]
         public IConverterWrapper _Converter { get; set; }
 
+        [Inject] 
+        public NavigationManager _NavigationManager { get; set; } 
+
         double[] Counts { get; set; } = new double[] { 0, 100 };
 
         ChartOptions chartOptions = new ChartOptions()
@@ -30,8 +33,6 @@ namespace Workoutisten.FitStreak.Pages
             ChartPalette = new string[] { "#EB5E55", "#3D4151" },
             LineStrokeWidth = 1
         };
-
-        CustomAuthenticationStateProvider customAuthenticationStateProvider = new CustomAuthenticationStateProvider();
 
         string? remainingTimeString { get; set; } = null;
         double elapsedPercent { get; set; } = 0;
@@ -70,6 +71,7 @@ namespace Workoutisten.FitStreak.Pages
                 catch (ApiException<ProblemDetails> e)
                 {
                     await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+                    _NavigationManager.NavigateTo("/welcome");
                 }
                 catch (Exception)
                 {
