@@ -11,6 +11,6 @@ public class CardioSet : Set
     public double Distance { get; set; }
 
     [Required]
-    [JsonProperty("Duration")]
+    [JsonProperty("Ticks")]
     public long Ticks { get; set; }
 }

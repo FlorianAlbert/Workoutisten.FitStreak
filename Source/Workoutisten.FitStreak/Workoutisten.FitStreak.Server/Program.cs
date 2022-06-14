@@ -49,6 +49,12 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1"
     });
 
+    options.UseAllOfForInheritance();
+    options.UseOneOfForPolymorphism();
+    options.SelectSubTypesUsing(baseType =>
+        typeof(UserDto).Assembly.GetTypes().Where(type => type.IsSubclassOf(baseType))
+    );
+
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",

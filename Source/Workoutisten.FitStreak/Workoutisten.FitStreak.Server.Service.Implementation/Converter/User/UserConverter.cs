@@ -20,7 +20,7 @@ namespace Workoutisten.FitStreak.Server.Service.Implementation.Converter.User
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
                 CreatedAt = entity.CreatedAt,
-                LastExercise = entity.Exercises.OrderByDescending(x => x.CreatedAt).Select(x => x.CreatedAt).FirstOrDefault(),
+                LastExercise = entity.DoneExercises.OrderByDescending(x => x.CreatedAt).Select(x => x.CreatedAt).FirstOrDefault(),
                 ExerciseStreak = entity.Streak,
                 MaxExerciseStreak = entity.MaxStreak
             };
