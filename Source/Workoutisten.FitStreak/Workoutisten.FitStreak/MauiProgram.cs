@@ -76,6 +76,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<IConverter<WorkoutModel, Workout>, WorkoutConverter>();
         builder.Services.AddSingleton<IConverter<ResetPasswordModel, ResetPassword>, ResetPasswordConverter>();
         builder.Services.AddSingleton<IConverter<UserModel, User>, UserConverter>();
+        builder.Services.AddSingleton<IConverter<DoneExerciseModel, DoneExercise>, DoneExerciseConverter>();
+        builder.Services.AddSingleton<IConverter<ExerciseGroupModel, ExerciseGroup>, ExerciseGroupConverter>();
+        builder.Services.AddSingleton<IConverter<StrengthExerciseSetModel, StrengthSet>, StrengthSetConverter>();
+        builder.Services.AddSingleton<IConverter<CardioExerciseSetModel, CardioSet>, CardioSetConverter>();
 
         //Authentication
         builder.Services.AddAuthorizationCore();

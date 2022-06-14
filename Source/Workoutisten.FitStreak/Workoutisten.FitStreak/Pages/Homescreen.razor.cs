@@ -40,11 +40,11 @@ namespace Workoutisten.FitStreak.Pages
 
         Timer Timer { get; set; }
 
-        DateTime LastWorkoutDate { get; set; }
+        DateTime LastWorkoutDate { get; set; } = DateTime.MinValue;
 
         TimeSpan MaxTimeSpan { get; set; } = new TimeSpan(3, 0, 0, 0);
 
-        UserModel CurrentUser { get; set; }
+        UserModel CurrentUser { get; set; } = new UserModel() { FirstName = String.Empty, Streak = 0 };
 
         #endregion
 
@@ -67,7 +67,7 @@ namespace Workoutisten.FitStreak.Pages
                     {
                         CurrentUser.Streak = 0;
                     }
-
+                    
                 }
                 catch (ApiException e)
                 {

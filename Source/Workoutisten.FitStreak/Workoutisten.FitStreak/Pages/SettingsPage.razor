@@ -29,7 +29,7 @@
                 <MudItem>
                     <MudText Typo="Typo.body1">Remind me every:</MudText>
                 </MudItem>
-                <MudSelect T="NotificationOptionEnum" @bind-Value="NotificationOption" Label="Select" Placeholder="Please Select">
+                <MudSelect T="NotificationOptionEnum" Value="NotificationOption" Label="Select" Placeholder="Please Select" ValueChanged="ScheduleChanged">
                     <MudSelectItem T="NotificationOptionEnum" Value="NotificationOptionEnum.EverySecondDay">Every other day</MudSelectItem>
                     <MudSelectItem T="NotificationOptionEnum" Value="NotificationOptionEnum.EveryDay">Everyday</MudSelectItem>
                     <MudSelectItem T="NotificationOptionEnum" Value="NotificationOptionEnum.CostumWeekday">Custom Weekdays</MudSelectItem>
@@ -107,6 +107,13 @@
             }
 
         }
+    }
+
+    void ScheduleChanged(NotificationOptionEnum notificationOption)
+    {
+        NotificationOption = notificationOption;
+
+        NotifyMeChanged(NotificationActive);
     }
 
     public void Dispose()

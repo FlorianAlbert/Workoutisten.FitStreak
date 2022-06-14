@@ -8,7 +8,7 @@ using Workoutisten.FitStreak.Data.Enums;
 namespace Workoutisten.FitStreak.Data.Models.Workout
 {
     public class DoneExerciseModel
-    { 
+    {
         public Guid DoneExerciseId { get; set; }
 
         public DateTime CreatedAt { get; set; }
@@ -16,8 +16,11 @@ namespace Workoutisten.FitStreak.Data.Models.Workout
         public Guid ExerciseId { get; set; }
 
         public ExerciseModel ExerciseModel { get; set; }
+
         public Guid? ExerciseGroupId { get; set; }
+
         public ICollection<Guid> SetIds { get; set; }
+
         public ICollection<BaseExerciseSetModel> Sets { get; set; }
-            }
+    }
 }

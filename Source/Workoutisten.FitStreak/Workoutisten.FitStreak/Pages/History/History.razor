@@ -6,44 +6,47 @@
 @inject ErrorDialogService _ErrorDialogService
 
 <MudText Class="m-3" Typo="Typo.h5" Align="Align.Center">History</MudText>
-<MudDivider Class="Foreground: white"/>
+<MudDivider Class="Foreground: white" />
 <MudTimeline TimelineAlign="TimelineAlign.Start" TimelinePosition="TimelinePosition.Left">
-    @foreach (var doneExercise in DoneExercises)
+    @foreach (var exerciseGroup in DoneExerciseGroups)
     {
         <MudTimelineItem Color="Color.Primary" Elevation="25">
             <ItemContent>
-                <MudPaper  Elevation="3" Class="p-3">
-                    <MudText Color="Color.Primary" Typo="Typo.caption" GutterBottom="true">@doneExercise.CreatedAt </MudText>
+                <MudPaper Elevation="3" Class="p-3">
+                    <MudText Color="Color.Primary" Typo="Typo.caption" GutterBottom="true">@exerciseGroup.CreatedAt </MudText>
                     <MudExpansionPanels>
-                        
-                            <MudExpansionPanel Dense="true" Class="mud-theme-dark"> 
+
+
+                        @foreach (var doneExercise in exerciseGroup.DoneExercises)
+                        {
+                            <MudExpansionPanel Dense="true" Class="mud-theme-dark">
                                 <TitleContent>
                                     <div class="d-flex gap-4">
-                                        <MudIcon Icon="@Icons.Material.Filled.Sports"/>
+                                        <MudIcon Icon="@Icons.Material.Filled.Sports" />
                                         <MudText><strong>@doneExercise.ExerciseModel.Name</strong></MudText>
                                         <MudText Color="Color.Primary">3x</MudText>
                                     </div>
                                 </TitleContent>
                                 <ChildContent>
-                                    <MudDivider Class="mud-theme-primary"/>
+                                    <MudDivider Class="mud-theme-primary" />
                                     <MudList Dense="true">
                                         @foreach (var set in doneExercise.Sets)
                                         {
-                                            @if(set is StrengthExerciseSetModel  streghtset )
-                                            {                                                                                        
-                                                <MudListItem><MudText>Set @streghtset.SetNumber : @streghtset.Reps, @streghtset.Weight </MudText></MudListItem>
-                                                <MudDivider/>
+                                            @if (set is StrengthExerciseSetModel strengthSet)
+                                            {
+                                                <MudListItem><MudText>Set @strengthSet.SetNumber : @strengthSet.Reps Reps, @strengthSet.Weight kg</MudText></MudListItem>
+                                                <MudDivider />
                                             }
-                                            @if(set is CardioExerciseSetModel  cardiotset )
-                                            {                                                                                        
-                                                <MudListItem><MudText>Set @cardiotset.SetNumber : @cardiotset.Distance, @cardiotset.Duration </MudText></MudListItem>
-                                                <MudDivider/>
+                                            @if (set is CardioExerciseSetModel cardioSet)
+                                            {
+                                                <MudListItem><MudText>Set @cardioSet.SetNumber : @cardioSet.Distance m, @cardioSet.Duration.Value.ToString(@"hh\:mm\:ss")) </MudText></MudListItem>
+                                                <MudDivider />
                                             }
                                         }
                                     </MudList>
                                 </ChildContent>
                             </MudExpansionPanel>
-                        @*}*@
+                        }
                     </MudExpansionPanels>
                 </MudPaper>
             </ItemContent>
@@ -52,7 +55,7 @@
 </MudTimeline>
 
 @code {
-    List<DoneExerciseModel> DoneExercises { get; set; } = new List<DoneExerciseModel>();
+    List<ExerciseGroupModel> DoneExerciseGroups { get; set; } = new();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -60,15 +63,19 @@
         {
             try
             {
-                DoneExercises = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetDoneExercisesAsync())).Select(async exercise => await _Converter.ToEntity<DoneExercise, DoneExerciseModel>(exercise)))).ToList();
-                foreach(var doneExercise in DoneExercises)
+                var exerciseGroups = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetExerciseGroupsAsync())).Select(async exerciseGroup => await _Converter.ToEntity<ExerciseGroup, ExerciseGroupModel>(exerciseGroup)))).ToList();
+
+                foreach (var group in exerciseGroups)
                 {
-                    doneExercise.ExerciseModel = await _Converter.ToEntity<Exercise, ExerciseModel>(await _RestClient.CallControlled(c => c.GetExerciseAsync(doneExercise.ExerciseId)));
-                    foreach(var setid in doneExercise.SetIds)
+                    group.DoneExercises = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetDoneExercisesOfExerciseGroupAsync(group.ExerciseGroupId))).Select(async exercise => await _Converter.ToEntity<DoneExercise, DoneExerciseModel>(exercise)))).ToList();
+
+                    foreach (var exercise in group.DoneExercises)
                     {
-                        doneExercise.Sets.Add(await _Converter.ToEntity<Set, BaseExerciseSetModel>(await _RestClient.CallControlled(c => c.GetSetAsync(setid))));
+                        exercise.ExerciseModel = await _Converter.ToEntity<Exercise, ExerciseModel>(await _RestClient.CallControlled(c => c.GetExerciseAsync(exercise.ExerciseId)));
+                        exercise.Sets = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetSetsOfDoneExerciseAsync(exercise.DoneExerciseId))).Select(async set => await _Converter.ToEntity<StrengthSet, StrengthExerciseSetModel>(set)))).ToList();
                     }
                 }
+
             }
             catch (ApiException<ProblemDetails> e)
             {
@@ -82,6 +89,6 @@
 
             StateHasChanged();
         }
-            base.OnAfterRenderAsync(firstRender);
+        base.OnAfterRenderAsync(firstRender);
     }
 }

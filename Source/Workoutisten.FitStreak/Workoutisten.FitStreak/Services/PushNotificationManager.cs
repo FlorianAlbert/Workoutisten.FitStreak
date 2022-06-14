@@ -10,8 +10,8 @@ namespace Workoutisten.FitStreak.Services
         NotificationRequest _OptionalNotification = new NotificationRequest
         {
             BadgeNumber = 1,
-            Description = "Hey! Time to work out!",
-            Title = "This is your reminder to stay on your workout schedule.\n Your body will appreciate it, and even more importantly your streak will appreciate it! ",
+            Description = "This is your reminder to stay on your workout schedule.\n Your body will appreciate it, and even more importantly your streak will appreciate it!",
+            Title = "Hey! Time to work out!",
             NotificationId = 1,
 #if ANDROID
             Android = new AndroidOptions
@@ -24,8 +24,8 @@ namespace Workoutisten.FitStreak.Services
         NotificationRequest _StreakNotification12HoursBefore = new NotificationRequest
         {
             BadgeNumber = 1,
-            Description = "Your Streak is running out!",
-            Title = "You are only 12 hours away from losing your Streak, better sooner than later!",
+            Description = "You are only 12 hours away from losing your Streak, better sooner than later!",
+            Title = "Your Streak is running out!",
             NotificationId = 1,
 #if ANDROID
             Android = new AndroidOptions
@@ -38,8 +38,8 @@ namespace Workoutisten.FitStreak.Services
         NotificationRequest _StreakNotification2HoursBefore = new NotificationRequest
         {
             BadgeNumber = 1,
-            Description = "Your Streak is running out!",
-            Title = "You are only 2 hours away from  losing your Streak, this is not a test, I repeat, this is not a test! You are about to lose your streak!",
+            Description = "You are only 2 hours away from  losing your Streak, this is not a test, I repeat, this is not a test! You are about to lose your streak!",
+            Title = "Your Streak is running out!",
             NotificationId = 1,
 #if ANDROID
             Android = new AndroidOptions
@@ -56,6 +56,7 @@ namespace Workoutisten.FitStreak.Services
             _OptionalNotification.Schedule = new NotificationRequestSchedule()
             {
                 NotifyTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0).Add(notificationRepeatTime),
+                //NotifyTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second).Add(new TimeSpan(0,0,5)),
                 RepeatType = NotificationRepeat.TimeInterval,
                 NotifyRepeatInterval = notificationRepeatTime
             };
