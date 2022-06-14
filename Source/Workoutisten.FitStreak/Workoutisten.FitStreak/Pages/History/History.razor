@@ -72,7 +72,8 @@
                     foreach (var exercise in group.DoneExercises)
                     {
                         exercise.ExerciseModel = await _Converter.ToEntity<Exercise, ExerciseModel>(await _RestClient.CallControlled(c => c.GetExerciseAsync(exercise.ExerciseId)));
-                        exercise.Sets = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetSetsOfDoneExerciseAsync(exercise.DoneExerciseId))).Select(async set => await _Converter.ToEntity<StrengthSet, StrengthExerciseSetModel>(set)))).ToList();
+                        
+                        exercise.Sets = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetSetsOfDoneExerciseAsync(exercise.DoneExerciseId))).Select(async set => await _Converter.ToEntity<Set, BaseExerciseSetModel>(set)))).ToList();
                     }
                 }
 
