@@ -34,7 +34,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
 
                     b.HasIndex("ReceiversId");
 
-                    b.ToTable("EmailUser");
+                    b.ToTable("EmailUser", (string)null);
                 });
 
             modelBuilder.Entity("ExerciseGroupUser", b =>
@@ -49,7 +49,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
 
                     b.HasIndex("ParticipatedExerciseGroupsId");
 
-                    b.ToTable("ExerciseGroupUser");
+                    b.ToTable("ExerciseGroupUser", (string)null);
                 });
 
             modelBuilder.Entity("UserUser", b =>
@@ -89,7 +89,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
 
                     b.HasKey("Id");
 
-                    b.ToTable("Email");
+                    b.ToTable("Email", (string)null);
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Account.FriendshipRequest", b =>
@@ -117,7 +117,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
                     b.HasIndex("RequestedUserId", "RequestingUserId")
                         .IsUnique();
 
-                    b.ToTable("FriendshipRequest");
+                    b.ToTable("FriendshipRequest", (string)null);
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Account.User", b =>
@@ -171,7 +171,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Excercise.DoneExercise", b =>
@@ -203,7 +203,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
 
                     b.HasIndex("ExercisingUserId");
 
-                    b.ToTable("DoneExercise");
+                    b.ToTable("DoneExercise", (string)null);
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Excercise.Exercise", b =>
@@ -237,7 +237,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Exercise");
+                    b.ToTable("Exercise", (string)null);
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Excercise.Set", b =>
@@ -263,7 +263,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
 
                     b.HasIndex("DoneExerciseId");
 
-                    b.ToTable("Set");
+                    b.ToTable("Set", (string)null);
 
                     b.HasDiscriminator<string>("Category");
                 });
@@ -291,7 +291,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("ExerciseGroup");
+                    b.ToTable("ExerciseGroup", (string)null);
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Workout.Workout", b =>
@@ -321,7 +321,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Workout");
+                    b.ToTable("Workout", (string)null);
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Workout.WorkoutExercise", b =>
@@ -349,7 +349,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
                     b.HasIndex("ExerciseId", "WorkoutId")
                         .IsUnique();
 
-                    b.ToTable("WorkoutExercise");
+                    b.ToTable("WorkoutExercise", (string)null);
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Excercise.CardioSet", b =>
@@ -361,8 +361,6 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation.Migrations.MsSql
 
                     b.Property<long>("Duration")
                         .HasColumnType("bigint");
-
-                    b.HasDiscriminator().HasValue("Cardio");
                 });
 
             modelBuilder.Entity("Workoutisten.FitStreak.Server.Model.Excercise.StrengthSet", b =>

@@ -113,7 +113,7 @@ namespace Workoutisten.FitStreak.Server.Database.Implementation
 
             try
             {
-                return DbContext.Set<TEntity>().Where(where).ToList();
+                return DbContext.Set<TEntity>().ToList().Where(where);
             }
             catch (Exception ex)
             {

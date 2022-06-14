@@ -31,7 +31,7 @@ public class SetConverter : IConverter<SetEntity, SetDto>
                 Id = cardioSet.Id,
                 DoneExerciseId = cardioSet.DoneExercise.Id,
                 Distance = cardioSet.Distance,
-                Duration = cardioSet.Duration
+                Ticks = cardioSet.Duration.Ticks
             },
             _ => throw new ArgumentException("Entity type is not suported.", nameof(entity)),
         };

@@ -16,7 +16,7 @@ public class DoneExerciseConverter : IConverter<DoneExerciseEntity, DoneExercise
         return Task.FromResult(new DoneExerciseDto
         {
             CreatedAt = entity.CreatedAt,
-            ExerciseId = entity.Id,
+            ExerciseId = entity.Exercise.Id,
             DoneExerciseId = entity.Id,
             ExerciseGroupId = entity.ExerciseGroup?.Id,
             SetIds = entity.Sets.Select(x => x.Id)

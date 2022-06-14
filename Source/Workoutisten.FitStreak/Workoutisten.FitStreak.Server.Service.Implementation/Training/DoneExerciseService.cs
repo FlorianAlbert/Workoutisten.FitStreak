@@ -41,6 +41,17 @@ public class DoneExerciseService : IDoneExerciseService
                 Detail = $"You are not authorized to create the create a DoneExercise based on the Exercise with the id {exerciseId} because you are not the creator!"
             };
 
+            var lastDoneExercise = user.DoneExercises.OrderByDescending(x => x.CreatedAt).FirstOrDefault();
+
+            if (lastDoneExercise is null || DateTime.UtcNow.Date - lastDoneExercise.CreatedAt.Date >= TimeSpan.FromDays(1))
+            {
+                user.Streak++;
+
+                user.MaxStreak = Math.Max(user.Streak, user.MaxStreak);
+
+                await Repo.CreateOrUpdateAsync(user);
+            }
+
             var newDoneExercise = new DoneExercise
             {
                 Exercise = exercise,

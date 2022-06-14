@@ -18,7 +18,7 @@ public class ExerciseGroupService : IExerciseGroupService
 
     private IRepository Repo { get; }
 
-    public async Task<Result<ExerciseGroup>> CreateNewExerciseGroup(Guid userId, Guid? workoutId = null)
+    public async Task<Result<ExerciseGroup>> CreateNewExerciseGroup(Guid userId, string name, Guid? workoutId = null)
     {
         try
         {
@@ -29,7 +29,10 @@ public class ExerciseGroupService : IExerciseGroupService
                 Detail = $"There does not exist a User with Id={userId}."
             };
 
-            var newExerciseGroup = new ExerciseGroup();
+            var newExerciseGroup = new ExerciseGroup
+            {
+                Name = name
+            };
             newExerciseGroup.Participants.Add(user);
 
             if (workoutId.HasValue)

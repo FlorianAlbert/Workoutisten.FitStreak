@@ -89,7 +89,7 @@ public class ExerciseGroupController : ControllerBase
     [HttpPost]
     [Route("", Name = nameof(CreateExerciseGroup))]
     [Authorize]
-    [ProducesResponseType(typeof(ExerciseGroupDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ExerciseGroupDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -99,7 +99,7 @@ public class ExerciseGroupController : ControllerBase
         var userId = await User.GetUserIdAsync();
         if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
 
-        var exerciseGroupResult = await ExerciseGroupService.CreateNewExerciseGroup(userId.Value, exerciseGroup.WorkoutId);
+        var exerciseGroupResult = await ExerciseGroupService.CreateNewExerciseGroup(userId.Value, exerciseGroup.GroupName, exerciseGroup.WorkoutId);
 
         if (exerciseGroupResult.Unsuccessful) return Problem(statusCode: exerciseGroupResult.StatusCode, detail: exerciseGroupResult.Detail);
 

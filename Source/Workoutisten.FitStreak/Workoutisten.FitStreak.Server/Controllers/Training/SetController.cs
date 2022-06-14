@@ -39,7 +39,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
 
             if (setResult.Unsuccessful) return Problem(statusCode: setResult.StatusCode, detail: setResult.Detail);
 
-            var createdSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value);
+            var createdSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as StrengthSet;
 
             return Ok(createdSet);
         }
@@ -57,11 +57,11 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
             var userId = await User.GetUserIdAsync();
             if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
 
-            var setResult = await SetService.CreateCardioSet(userId.Value, set.DoneExerciseId, set.Distance, set.Duration);
+            var setResult = await SetService.CreateCardioSet(userId.Value, set.DoneExerciseId, set.Distance, TimeSpan.FromTicks(set.Ticks));
 
             if (setResult.Unsuccessful) return Problem(statusCode: setResult.StatusCode, detail: setResult.Detail);
 
-            var createdSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value);
+            var createdSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as CardioSet;
 
             return Ok(createdSet);
         }
@@ -123,7 +123,12 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
 
             var set = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value);
 
-            return Ok(set);
+            if (set is CardioSet cardioSet)
+                return Ok(cardioSet);
+            else if (set is StrengthSet strengthSet) 
+                return Ok(strengthSet);
+
+            return Problem(statusCode: StatusCodes.Status500InternalServerError, detail: "The Set was neither a CardioSet nor a StrengthSet.");
         }
 
         [HttpPut]
@@ -143,7 +148,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
 
             if (setResult.Unsuccessful) return Problem(statusCode: setResult.StatusCode, detail: setResult.Detail);
 
-            var updatedSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value);
+            var updatedSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as StrengthSet;
 
             return Ok(updatedSet);
         }
@@ -161,11 +166,11 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
             var userId = await User.GetUserIdAsync();
             if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
 
-            var setResult = await SetService.UpdateCardioSet(userId.Value, set.DoneExerciseId, set.Distance, set.Duration);
+            var setResult = await SetService.UpdateCardioSet(userId.Value, set.DoneExerciseId, set.Distance, TimeSpan.FromTicks(set.Ticks));
 
             if (setResult.Unsuccessful) return Problem(statusCode: setResult.StatusCode, detail: setResult.Detail);
 
-            var updatedSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value);
+            var updatedSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as CardioSet;
 
             return Ok(updatedSet);
         }
