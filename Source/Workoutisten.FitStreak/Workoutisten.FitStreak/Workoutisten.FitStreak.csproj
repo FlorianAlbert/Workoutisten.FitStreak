@@ -66,6 +66,15 @@
 	  <AndroidTlsProvider>btls</AndroidTlsProvider>
 	</PropertyGroup>
 
+	<!-- KeyStore settings -->
+	<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
+		<AndroidKeyStore>True</AndroidKeyStore>
+		<AndroidSigningKeyStore>..\SigningKey.keystore</AndroidSigningKeyStore>
+		<AndroidSigningStorePass>FitStreakKeyStorePassword</AndroidSigningStorePass>
+		<AndroidSigningKeyAlias>FitStreakAlias</AndroidSigningKeyAlias>
+		<AndroidSigningKeyPass>FitStreakKeyStorePassword</AndroidSigningKeyPass>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\appicon.svg" ForegroundFile="Resources\appiconfg.svg" Color="#3D4151" />

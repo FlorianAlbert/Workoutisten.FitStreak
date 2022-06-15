@@ -14,8 +14,11 @@ namespace Workoutisten.FitStreak
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
+       
+
         public CustomAuthenticationStateProvider()
         {
+            
         }
 
         /// <summary>

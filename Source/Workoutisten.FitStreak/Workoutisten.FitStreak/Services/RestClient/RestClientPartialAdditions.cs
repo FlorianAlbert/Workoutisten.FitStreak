@@ -7,6 +7,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
 {
     public partial class RestClient
     {
+        static int refreshCounter = 0;
 
         public CustomAuthenticationStateProvider AuthenticationStateProvider { get; set; }
 

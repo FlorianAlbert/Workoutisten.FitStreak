@@ -13,7 +13,7 @@
         <MudTimelineItem Color="Color.Primary" Elevation="25">
             <ItemContent>
                 <MudPaper Elevation="3" Class="p-3">
-                    <MudText Color="Color.Primary" Typo="Typo.caption" GutterBottom="true">@exerciseGroup.CreatedAt </MudText>
+                    <MudText Color="Color.Primary" Typo="Typo.caption" GutterBottom="true">@exerciseGroup.CreatedAt.ToString(@"D") </MudText>
                     <MudExpansionPanels>
 
 
@@ -24,7 +24,7 @@
                                     <div class="d-flex gap-4">
                                         <MudIcon Icon="@Icons.Material.Filled.Sports" />
                                         <MudText><strong>@doneExercise.ExerciseModel.Name</strong></MudText>
-                                        <MudText Color="Color.Primary">3x</MudText>
+                                        <MudText Color="Color.Primary">@(doneExercise.Sets.Count()+"\u00d7")</MudText>
                                     </div>
                                 </TitleContent>
                                 <ChildContent>
@@ -34,12 +34,12 @@
                                         {
                                             @if (set is StrengthExerciseSetModel strengthSet)
                                             {
-                                                <MudListItem><MudText>Set @strengthSet.SetNumber : @strengthSet.Reps Reps, @strengthSet.Weight kg</MudText></MudListItem>
+                                                <MudListItem><MudText>@strengthSet.Name : @strengthSet.Reps Reps, @strengthSet.Weight kg</MudText></MudListItem>
                                                 <MudDivider />
                                             }
                                             @if (set is CardioExerciseSetModel cardioSet)
                                             {
-                                                <MudListItem><MudText>Set @cardioSet.SetNumber : @cardioSet.Distance m, @cardioSet.Duration.Value.ToString(@"hh\:mm\:ss")) </MudText></MudListItem>
+                                                <MudListItem><MudText>@cardioSet.Name : @cardioSet.Distance m, @cardioSet.Duration.Value.ToString(@"hh\:mm\:ss") </MudText></MudListItem>
                                                 <MudDivider />
                                             }
                                         }
@@ -63,17 +63,27 @@
         {
             try
             {
-                var exerciseGroups = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetExerciseGroupsAsync())).Select(async exerciseGroup => await _Converter.ToEntity<ExerciseGroup, ExerciseGroupModel>(exerciseGroup)))).ToList();
+                DoneExerciseGroups = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetExerciseGroupsAsync())).Select(async exerciseGroup => await _Converter.ToEntity<ExerciseGroup, ExerciseGroupModel>(exerciseGroup)))).ToList();
 
-                foreach (var group in exerciseGroups)
+                foreach (var group in DoneExerciseGroups)
                 {
                     group.DoneExercises = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetDoneExercisesOfExerciseGroupAsync(group.ExerciseGroupId))).Select(async exercise => await _Converter.ToEntity<DoneExercise, DoneExerciseModel>(exercise)))).ToList();
 
                     foreach (var exercise in group.DoneExercises)
                     {
                         exercise.ExerciseModel = await _Converter.ToEntity<Exercise, ExerciseModel>(await _RestClient.CallControlled(c => c.GetExerciseAsync(exercise.ExerciseId)));
-                        
-                        exercise.Sets = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetSetsOfDoneExerciseAsync(exercise.DoneExerciseId))).Select(async set => await _Converter.ToEntity<Set, BaseExerciseSetModel>(set)))).ToList();
+
+                        switch (exercise.ExerciseModel.Category)
+                        {
+                            case ExerciseCategoryEnum.Cardio:
+                                exercise.Sets = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetCardioSetsOfDoneExerciseAsync(exercise.DoneExerciseId))).Select(async set => await _Converter.ToEntity<CardioSet, CardioExerciseSetModel>(set)))).Select(x => x as BaseExerciseSetModel).ToList();
+                                break;
+                            case ExerciseCategoryEnum.Strength:
+                                exercise.Sets = (await Task.WhenAll((await _RestClient.CallControlled(async c => await c.GetStrengthSetsOfDoneExerciseAsync(exercise.DoneExerciseId))).Select(async set => await _Converter.ToEntity<StrengthSet, StrengthExerciseSetModel>(set)))).Select(x => x as BaseExerciseSetModel).ToList();
+                                break;
+                            default:
+                                throw new Exception(); //TODO besseres error handling
+                        }
                     }
                 }
 
