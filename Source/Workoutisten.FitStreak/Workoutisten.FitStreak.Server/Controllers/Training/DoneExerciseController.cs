@@ -8,6 +8,9 @@ using DoneExerciseEntity = Workoutisten.FitStreak.Server.Model.Excercise.DoneExe
 using DoneExerciseDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise.DoneExercise;
 using SetEntity = Workoutisten.FitStreak.Server.Model.Excercise.Set;
 using SetDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise.Set;
+using StrengthSetDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise.StrengthSet;
+using CardioSetDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise.CardioSet;
+using Workoutisten.FitStreak.Server.Model.Excercise;
 
 namespace Workoutisten.FitStreak.Server.Controllers.Training;
 
@@ -66,14 +69,14 @@ public class DoneExerciseController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{doneExerciseId}/sets", Name = nameof(GetSetsOfDoneExercise))]
+    [Route("{doneExerciseId}/strengthSets", Name = nameof(GetStrengthSetsOfDoneExercise))]
     [Authorize]
-    [ProducesResponseType(typeof(SetDto[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(StrengthSetDto[]), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<IActionResult> GetSetsOfDoneExercise([FromRoute] Guid doneExerciseId)
+    public async Task<IActionResult> GetStrengthSetsOfDoneExercise([FromRoute] Guid doneExerciseId)
     {
         var userId = await User.GetUserIdAsync();
         if (userId is null) return BadRequest("There was no userId present in the JWT!");
@@ -81,7 +84,28 @@ public class DoneExerciseController : ControllerBase
         var result = await DoneExerciseService.GetDoneExerciseForUser(userId.Value, doneExerciseId);
         if (result.Unsuccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
 
-        var dtos = await Task.WhenAll(result.Value?.Sets.Select(x => ConverterWrapper.ToDto<SetEntity, SetDto>(x)));
+        var dtos = (await Task.WhenAll(result.Value?.Sets.Where(x => x.Category == ExerciseCategory.Strength).Select(x => ConverterWrapper.ToDto<SetEntity, SetDto>(x)))).Select(x => x as StrengthSetDto).ToArray();
+
+        return Ok(dtos);
+    }
+
+    [HttpGet]
+    [Route("{doneExerciseId}/cardioSets", Name = nameof(GetCardioSetsOfDoneExercise))]
+    [Authorize]
+    [ProducesResponseType(typeof(CardioSetDto[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+    public async Task<IActionResult> GetCardioSetsOfDoneExercise([FromRoute] Guid doneExerciseId)
+    {
+        var userId = await User.GetUserIdAsync();
+        if (userId is null) return BadRequest("There was no userId present in the JWT!");
+
+        var result = await DoneExerciseService.GetDoneExerciseForUser(userId.Value, doneExerciseId);
+        if (result.Unsuccessful) return Problem(statusCode: result.StatusCode, detail: result.Detail);
+
+        var dtos = (await Task.WhenAll(result.Value?.Sets.Where(x => x.Category == ExerciseCategory.Cardio).Select(x => ConverterWrapper.ToDto<SetEntity, SetDto>(x)))).Select(x => x as CardioSetDto).ToArray();
 
         return Ok(dtos);
     }
