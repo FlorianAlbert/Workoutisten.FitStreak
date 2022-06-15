@@ -33,11 +33,11 @@
             <MudItem xs="12">
                 @if (CurrentExercise.Category == ExerciseCategoryEnum.Cardio)
                 {
-                    <ExerciseSetView CardioExerciseSet="NewCardioExerciseSetModel" ExerciseCategory="CurrentExercise.Category" _Hours="@_Hours" _Minutes="@_Minutes" @bind-_Seconds="@_Seconds" />
+                    <ExerciseSetView CardioExerciseSet="NewCardioExerciseSetModel" ExerciseCategory="CurrentExercise.Category" @bind-_Hours="@_Hours" @bind-_Minutes="@_Minutes" @bind-_Seconds="@_Seconds" />
                 }
                 else
                 {
-                    <ExerciseSetView StrengthExerciseSet="NewStrengthExerciseSetModel" ExerciseCategory="CurrentExercise.Category" _Hours="@_Hours" _Minutes="@_Minutes"  @bind-_Seconds="@_Seconds"/>
+                    <ExerciseSetView StrengthExerciseSet="NewStrengthExerciseSetModel" ExerciseCategory="CurrentExercise.Category"/>
                 }
             </MudItem>
             <MudItem xs="12">

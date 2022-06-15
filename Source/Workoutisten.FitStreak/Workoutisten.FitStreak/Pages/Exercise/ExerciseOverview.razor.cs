@@ -61,7 +61,7 @@ namespace Workoutisten.FitStreak.Pages.Exercise
 
         TimeSpan? TimerValueBackup { get; set; }
 
-        System.Timers.Timer _Timer { get; set; } = new System.Timers.Timer(500);
+        System.Timers.Timer _Timer { get; set; } = new System.Timers.Timer(1000);
 
         Stopwatch _Stopwatch { get; set; } = new();
 
@@ -134,7 +134,8 @@ namespace Workoutisten.FitStreak.Pages.Exercise
 
         void CancelWorkout()
         {
-            //To be done
+            //TODO: Löschend der Sets
+            _NavigationManager.NavigateTo("/home");
         }
 
         void CompleteWorkout()
@@ -312,7 +313,8 @@ namespace Workoutisten.FitStreak.Pages.Exercise
             await InvokeAsync(() =>
             {
                 TimerValue = TimerValueBackup.Value - _Stopwatch.Elapsed;
-                if (TimerValue.TotalSeconds == 0)
+
+                if (TimerValue.TotalSeconds < 0.9)
                 {
                     ToggleTimer(false);
                     for (int i = 0; i < 3; i++)
