@@ -33,7 +33,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
         async Task ProcessResponseAsync(HttpClient client, HttpResponseMessage response, CancellationToken cancellationToken)
         {
-            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && refreshCounter < 2)
             {
                 try
                 {
@@ -42,6 +42,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
 
                     if (accountToken is not null && refreshToken is not null)
                     {
+                        refreshCounter++;
                         await AuthenticationStateProvider.RefreshTokens(
                             await RefreshTokensAsync(
                             new TokenRefreshRequest()
@@ -60,8 +61,12 @@ namespace Workoutisten.FitStreak.Client.RestClient
                     }
                 }
             }
+            else if (refreshCounter == 2)
+            {
+                refreshCounter = 0;
+                AuthenticationStateProvider.Logout();
+            }
         }
-        //else if (refreshCounter == 2) TODO: Verwenden des RefreshCounters
 
         partial void UpdateJsonSerializerSettings(JsonSerializerSettings settings)
         {

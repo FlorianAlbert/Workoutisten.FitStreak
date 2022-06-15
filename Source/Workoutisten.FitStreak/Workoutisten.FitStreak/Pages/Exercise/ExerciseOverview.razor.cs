@@ -61,7 +61,7 @@ namespace Workoutisten.FitStreak.Pages.Exercise
 
         TimeSpan? TimerValueBackup { get; set; }
 
-        System.Timers.Timer _Timer { get; set; } = new System.Timers.Timer(1000);
+        System.Timers.Timer _Timer { get; set; } = new System.Timers.Timer(500);
 
         Stopwatch _Stopwatch { get; set; } = new();
 

@@ -41,6 +41,8 @@ namespace Workoutisten.FitStreak
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
+        
+
         public async Task RefreshTokens(TokenRefreshResponse response)
         {
             await SecureStorage.SetAsync("accounttoken", response.NewJwt);
@@ -83,7 +85,7 @@ namespace Workoutisten.FitStreak
                 Console.WriteLine("Request failed:" + ex.ToString());
             }
 
-            return new AuthenticationState(new ClaimsPrincipal());
+            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
         //public static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
