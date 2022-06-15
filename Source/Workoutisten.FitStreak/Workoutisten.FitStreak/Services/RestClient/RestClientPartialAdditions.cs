@@ -61,6 +61,7 @@ namespace Workoutisten.FitStreak.Client.RestClient
                 }
             }
         }
+        //else if (refreshCounter == 2) TODO: Verwenden des RefreshCounters
 
         partial void UpdateJsonSerializerSettings(JsonSerializerSettings settings)
         {
