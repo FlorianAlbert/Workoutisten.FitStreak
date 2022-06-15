@@ -6,6 +6,9 @@ using Workoutisten.FitStreak.Server.Service.Interface.Converter;
 using Workoutisten.FitStreak.Server.Service.Interface.Training;
 using SetEntity = Workoutisten.FitStreak.Server.Model.Excercise.Set;
 using SetDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise.Set;
+using StrengthSetDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise.StrengthSet;
+using CardioSetDto = Workoutisten.FitStreak.Server.Outbound.Model.Training.DoneExercise.CardioSet;
+using Workoutisten.FitStreak.Server.Model.Excercise;
 
 namespace Workoutisten.FitStreak.Server.Controllers.Training
 {
@@ -25,12 +28,12 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
         [HttpPost]
         [Route("strength", Name = nameof(CreateStrengthSet))]
         [Authorize]
-        [ProducesResponseType(typeof(StrengthSet), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(StrengthSetDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        public async Task<IActionResult> CreateStrengthSet([FromBody] StrengthSet set)
+        public async Task<IActionResult> CreateStrengthSet([FromBody] StrengthSetDto set)
         {
             var userId = await User.GetUserIdAsync();
             if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
@@ -39,7 +42,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
 
             if (setResult.Unsuccessful) return Problem(statusCode: setResult.StatusCode, detail: setResult.Detail);
 
-            var createdSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as StrengthSet;
+            var createdSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as StrengthSetDto;
 
             return Ok(createdSet);
         }
@@ -47,12 +50,12 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
         [HttpPost]
         [Route("cardio", Name = nameof(CreateCardioSet))]
         [Authorize]
-        [ProducesResponseType(typeof(CardioSet), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CardioSetDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        public async Task<IActionResult> CreateCardioSet([FromBody] CardioSet set)
+        public async Task<IActionResult> CreateCardioSet([FromBody] CardioSetDto set)
         {
             var userId = await User.GetUserIdAsync();
             if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
@@ -61,7 +64,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
 
             if (setResult.Unsuccessful) return Problem(statusCode: setResult.StatusCode, detail: setResult.Detail);
 
-            var createdSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as CardioSet;
+            var createdSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as CardioSetDto;
 
             return Ok(createdSet);
         }
@@ -85,12 +88,12 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
             return NoContent();
         }
 
-        [HttpGet(Name = nameof(GetAllSets))]
+        [HttpGet("strengthSets", Name = nameof(GetAllStrengthSets))]
         [Authorize]
-        [ProducesResponseType(typeof(SetDto[]), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(StrengthSetDto[]), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        public async Task<IActionResult> GetAllSets()
+        public async Task<IActionResult> GetAllStrengthSets()
         {
             var userId = await User.GetUserIdAsync();
             if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
@@ -99,20 +102,39 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
 
             if (setsResult.Unsuccessful) return Problem(statusCode: setsResult.StatusCode, detail: setsResult.Detail);
 
-            var sets = await Task.WhenAll(setsResult.Value.Select(x => ConverterWrapper.ToDto<SetEntity, SetDto>(x)));
+            var sets = (await Task.WhenAll(setsResult.Value.Where(x => x.Category == ExerciseCategory.Strength).Select(x => ConverterWrapper.ToDto<SetEntity, SetDto>(x)))).Select(x => x as StrengthSetDto).ToArray();
+
+            return Ok(sets);
+        }
+
+        [HttpGet("cardioSets", Name = nameof(GetAllCardioSets))]
+        [Authorize]
+        [ProducesResponseType(typeof(CardioSetDto[]), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+        public async Task<IActionResult> GetAllCardioSets()
+        {
+            var userId = await User.GetUserIdAsync();
+            if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
+
+            var setsResult = await SetService.GetAllSetsForUser(userId.Value);
+
+            if (setsResult.Unsuccessful) return Problem(statusCode: setsResult.StatusCode, detail: setsResult.Detail);
+
+            var sets = (await Task.WhenAll(setsResult.Value.Where(x => x.Category == ExerciseCategory.Cardio).Select(x => ConverterWrapper.ToDto<SetEntity, SetDto>(x)))).Select(x => x as CardioSetDto).ToArray();
 
             return Ok(sets);
         }
 
         [HttpGet]
-        [Route("{setId}", Name = nameof(GetSet))]
+        [Route("strengthSet/{setId}", Name = nameof(GetStrengthSet))]
         [Authorize]
-        [ProducesResponseType(typeof(SetDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(StrengthSetDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        public async Task<IActionResult> GetSet([FromRoute] Guid setId)
+        public async Task<IActionResult> GetStrengthSet([FromRoute] Guid setId)
         {
             var userId = await User.GetUserIdAsync();
             if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
@@ -123,23 +145,46 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
 
             var set = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value);
 
-            if (set is CardioSet cardioSet)
-                return Ok(cardioSet);
-            else if (set is StrengthSet strengthSet) 
+            if (set is StrengthSetDto strengthSet) 
                 return Ok(strengthSet);
 
-            return Problem(statusCode: StatusCodes.Status500InternalServerError, detail: "The Set was neither a CardioSet nor a StrengthSet.");
+            return Problem(statusCode: StatusCodes.Status404NotFound, detail: "The Set was not a StrengthSet.");
+        }
+
+        [HttpGet]
+        [Route("cardioSet/{setId}", Name = nameof(GetCardioSet))]
+        [Authorize]
+        [ProducesResponseType(typeof(CardioSetDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+        public async Task<IActionResult> GetCardioSet([FromRoute] Guid setId)
+        {
+            var userId = await User.GetUserIdAsync();
+            if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
+
+            var setResult = await SetService.GetSetForUser(userId.Value, setId);
+
+            if (setResult.Unsuccessful) return Problem(statusCode: setResult.StatusCode, detail: setResult.Detail);
+
+            var set = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value);
+
+            if (set is CardioSetDto cardioSet)
+                return Ok(cardioSet);
+
+            return Problem(statusCode: StatusCodes.Status404NotFound, detail: "The Set was not a CardioSet.");
         }
 
         [HttpPut]
         [Route("strength", Name = nameof(UpdateStrengthSet))]
         [Authorize]
-        [ProducesResponseType(typeof(StrengthSet), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(StrengthSetDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        public async Task<IActionResult> UpdateStrengthSet([FromBody] StrengthSet set)
+        public async Task<IActionResult> UpdateStrengthSet([FromBody] StrengthSetDto set)
         {
             var userId = await User.GetUserIdAsync();
             if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
@@ -148,7 +193,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
 
             if (setResult.Unsuccessful) return Problem(statusCode: setResult.StatusCode, detail: setResult.Detail);
 
-            var updatedSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as StrengthSet;
+            var updatedSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as StrengthSetDto;
 
             return Ok(updatedSet);
         }
@@ -156,12 +201,12 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
         [HttpPut]
         [Route("cardio", Name = nameof(UpdateCardioSet))]
         [Authorize]
-        [ProducesResponseType(typeof(CardioSet), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CardioSetDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        public async Task<IActionResult> UpdateCardioSet([FromBody] CardioSet set)
+        public async Task<IActionResult> UpdateCardioSet([FromBody] CardioSetDto set)
         {
             var userId = await User.GetUserIdAsync();
             if (!userId.HasValue) return BadRequest("There was no userId present in the JWT!");
@@ -170,7 +215,7 @@ namespace Workoutisten.FitStreak.Server.Controllers.Training
 
             if (setResult.Unsuccessful) return Problem(statusCode: setResult.StatusCode, detail: setResult.Detail);
 
-            var updatedSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as CardioSet;
+            var updatedSet = await ConverterWrapper.ToDto<SetEntity, SetDto>(setResult.Value) as CardioSetDto;
 
             return Ok(updatedSet);
         }
