@@ -80,6 +80,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+builder.Services.AddSwaggerGenNewtonsoftSupport();
 
 // Add DbContext to the container
 if (builder.Configuration["DatabaseProvider"] == "MsSql")
@@ -203,7 +204,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
