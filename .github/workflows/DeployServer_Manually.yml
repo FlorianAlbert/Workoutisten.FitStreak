@@ -1,0 +1,43 @@
+name: Server Deploy
+
+on: workflow_dispatch
+  
+env:
+  PUBLISH_PATH: '.\published'
+  NET_VERSION: '6.0.300'
+  PROJECT_PATH: 'Source\Workoutisten.FitStreak\Workoutisten.FitStreak.Server\Workoutisten.FitStreak.Server.csproj'
+
+jobs:
+  deploy-server:
+    runs-on: self-hosted
+    if: ${{ github.ref_name == 'main' }}
+    
+    steps:    
+    - name: Checkout
+      uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: ${{ env.NET_VERSION }}
+        
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.PROJECT_PATH }}
+      
+    - name: Build
+      run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
+      
+    - name: Publish
+      run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --no-build -o ${{ env.PUBLISH_PATH}}
+      
+    - name: Stop Website
+      run: iisreset /stop
+      
+    - name: Delete all files from old Website
+      run: rm -r ..\..\..\..\..\inetpub\wwwroot\*
+      
+    - name: Copy published files to Website
+      run: Copy-Item ${{ env.PUBLISH_PATH }}/* ..\..\..\..\..\inetpub\wwwroot -Recurse -Force
+      
+    - name: Restart Website
+      run: iisreset /start
