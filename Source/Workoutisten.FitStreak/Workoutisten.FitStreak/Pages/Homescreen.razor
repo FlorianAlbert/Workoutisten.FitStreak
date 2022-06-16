@@ -1,0 +1,52 @@
+﻿@using System.Timers
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Workoutisten.FitStreak.Shared.PageExclusives.HomescreenPage
+
+@page "/home"
+@*@page "/"*@
+
+@*@attribute [Authorize]*@
+
+<AuthorizeView>
+    <Authorized>
+        <MudStack>
+            @if (CurrentUser is not null)
+            {
+                <MudItem md="10" xs="12" Class="d-flex align-left justify-left mt-5">
+                    <MudText Typo="Typo.h4">Hello @CurrentUser.FirstName!</MudText>
+
+                </MudItem>
+                <MudChart ChartType="MudBlazor.ChartType.Donut" Width="70%" Height="70%" InputData="@Counts" ChartOptions="@chartOptions">
+                    <CustomGraphics>
+                        <text class="donut-inner-text" x="47%" y="33%" dominant-baseline="middle" text-anchor="middle" fill="white" font-size="3" color="white">Your Streak</text>
+                        <text class="donut-inner-text" x="47%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#EB5E55" font-size="10">@CurrentUser.Streak</text>
+                        <text class="donut-inner-text" x="47%" y="65%" dominant-baseline="middle" text-anchor="middle" fill="#838486" font-size="2">@(remainingTimeString is null? "You lost your streak" : "Time till Reset:")</text>
+                        <text class="donut-inner-text" x="47%" y="70%" dominant-baseline="middle" text-anchor="middle" fill="#838486" font-size="2">@remainingTimeString</text>
+                    </CustomGraphics>
+                </MudChart>
+            }
+            <MudGrid>
+                <MudItem xs="6">
+                    <HomescreenButton Image="Images/Workouts.jpg" Title="Workout" Href="/workouts" />
+                </MudItem>
+                <MudItem xs="6">
+                    <HomescreenButton Image="Images/Exercises.jpg" Title="Exercises" Href="/exercises" />
+                </MudItem>
+                <MudItem xs="6">
+                    <HomescreenButton Image="Images/History.jpg" Title="History" Href="/history" />
+                </MudItem>
+                <MudItem xs="6">
+                    <HomescreenButton Image="Images/Social.jpg" Title="Social" Href="/social" />
+                </MudItem>
+            </MudGrid>
+        </MudStack>
+    </Authorized>
+    <NotAuthorized>
+        <RedirectToLogin />
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentEmail.Core" Version="3.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.19.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Workoutisten.FitStreak.Server.Database.Implementation\Workoutisten.FitStreak.Server.Database.Implementation.csproj" />
+    <ProjectReference Include="..\Workoutisten.FitStreak.Server.Database.Interface\Workoutisten.FitStreak.Server.Database.Interface.csproj" />
+    <ProjectReference Include="..\Workoutisten.FitStreak.Server.Outbound.Model\Workoutisten.FitStreak.Server.Outbound.Model.csproj" />
+    <ProjectReference Include="..\Workoutisten.FitStreak.Server.Service.Interface\Workoutisten.FitStreak.Server.Service.Interface.csproj" />
+  </ItemGroup>
+
+</Project>

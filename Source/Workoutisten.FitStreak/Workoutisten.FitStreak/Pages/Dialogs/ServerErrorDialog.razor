@@ -1,0 +1,24 @@
+﻿@using Workoutisten.FitStreak.Shared.UniversalElements
+
+<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.body1">@ErrorMessage</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudContainer Class="d-flex justify-center my-3 ">
+            <FitStreakButton Label="Alright" OnClick="Submit"/>
+        </MudContainer>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string ErrorMessage { get; set; }
+
+    void Submit() => MudDialog.Close(DialogResult.Ok(true));
+
+
+}

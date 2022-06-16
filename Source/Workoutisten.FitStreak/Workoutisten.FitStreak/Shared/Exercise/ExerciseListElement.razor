@@ -1,0 +1,46 @@
+﻿
+<MudListItem Avatar="@IconAttribute">
+    <MudCard Elevation="0">
+        <MudCardContent>
+            <MudText>@Name</MudText>
+            <MudText Typo="Typo.caption">@Description</MudText>
+        </MudCardContent>
+    </MudCard>
+</MudListItem>
+@if (!LastElement)
+{
+    <MudDivider Class="mud-theme-primary" DividerType="DividerType.Middle"/>
+}
+
+@code {
+
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public bool LastElement { get; set; }
+
+    [Parameter]
+    public Data.Enums.ExerciseCategoryEnum Category { get; set; }
+
+    [Parameter]
+    public MudIcon Icon { get; set; }
+
+    [Parameter]
+    public string Description { get; set; }
+
+    private string IconAttribute
+    {
+        get
+        {
+            if (Icon is not null)
+            {
+                return Icon.ToString();
+            }
+            return Category == Data.Enums.ExerciseCategoryEnum.Cardio ? Icons.Material.Filled.Kitesurfing : Icons.Material.Filled.FitnessCenter;
+        }
+    }
+
+    
+
+}

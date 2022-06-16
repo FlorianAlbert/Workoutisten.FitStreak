@@ -1,0 +1,36 @@
+﻿
+
+.MudTextHiddenOverflow {
+    overflow: hidden;
+}
+
+.mud-chart-donut .mud-donut-ring {
+    stroke: transparent !important;
+}
+
+.mud-chart-donut .mud-donut-segment {
+    stroke-width: 2 !important;
+}
+
+.AutoScrollSetStack {
+    height: 28vh;
+    overflow-x: hidden;
+    overflow-y: scroll
+}
+
+.DialogContentMaxHeight {
+    max-height: 85%;
+}
+
+.MudListMaxHeight {
+    max-height: 400px;
+    overflow: auto;
+}
+
+/*.a {
+    color: #EB5E55 !important;
+}*/
+
+/*a, .btn-link:hover {
+    color: #EB5E55 !important;
+}*/

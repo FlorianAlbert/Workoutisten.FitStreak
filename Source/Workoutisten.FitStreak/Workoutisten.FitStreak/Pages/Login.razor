@@ -1,0 +1,115 @@
+﻿@using Workoutisten.FitStreak.Data.Models.User
+@using Workoutisten.FitStreak.Pages.Dialogs
+
+@page "/login"
+
+@inject NavigationManager _NavigationManager
+@inject CustomAuthenticationStateProvider _AuthenticationStateProvider
+@inject IRestClient _RestClient
+@inject IConverterWrapper _Converter
+@inject IDialogService _DialogService
+@inject ErrorDialogService _ErrorDialogService
+
+<MudStack>
+    <MudStack AlignItems="AlignItems.Center">
+        <MudImage Class="align-center" Src="Images/fitstreak_logo_white.svg" Width="300" Height="100"></MudImage>
+    </MudStack>
+    <MudPaper Class="rounded-xl p-4 mt-5" Elevation="5">
+        <MudText Class="align-center" Typo="Typo.h4"><b>Login</b></MudText>
+        <MudDivider />
+        <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+            <MudStack Spacing="3">
+                <MudTextField T="string" Label="Email" Required="true" RequiredError="Email is required!"
+                              @bind-Value=loginModel.Email Clearable="true" />
+
+                <MudTextField T="string" Label="Password" InputType="InputType.Password" Required="true" RequiredError="Password is required!"
+                              @bind-Value=loginModel.Password Clearable="true" />
+            </MudStack>
+        </MudForm>
+        <MudDivider />
+        <MudButton Class="rounded-xl p-3 mt-4" Color="Color.Primary" Variant="Variant.Filled" OnClick="Login_Button" FullWidth="true">
+            <MudText Typo="Typo.button"><b>Login</b></MudText>
+        </MudButton>
+        <MudButton OnClick="ForgotPassword" Class="d-flex justify-center mt-3" FullWidth="true">
+            <MudText Typo="Typo.subtitle1" Color="Color.Primary"><u>Forgot password?</u></MudText>
+        </MudButton>
+        @if (!(string.IsNullOrEmpty(message)))
+        {
+            <MudText Typo="Typo.subtitle1">@message</MudText>
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+        }
+    </MudPaper>
+</MudStack>
+
+@code {
+
+    public LoginModel loginModel { get; set; } = new LoginModel();
+
+    MudForm form;
+
+    bool success;
+
+    string[] errors = { };
+
+    string message = string.Empty;
+
+    async void Login_Button()
+    {
+        message = "Logging in...";
+        try
+        {
+            var response = await _RestClient.CallControlled(async c => await c.LoginAsync(await _Converter.ToDto<LoginModel, AuthenticationRequest>(loginModel)));
+
+            message = "Success";
+            await _AuthenticationStateProvider.Login(response);
+            _NavigationManager.NavigateTo("/home");
+        }
+        catch (ApiException<ProblemDetails> e)
+        {
+            if (e.Result.Status == 403)
+            {
+                _NavigationManager.NavigateTo($"/validate?email={loginModel.Email}");
+                return;
+            }
+            await _ErrorDialogService.ShowErrorDialog(e.Result.Status.ToString(), e.Result.Detail);
+        }
+        catch (Exception e)
+        {
+            await _ErrorDialogService.ShowErrorDialog();
+        }
+        finally
+        {
+            message = string.Empty;
+            StateHasChanged();
+        }
+
+    }
+
+    async void ForgotPassword()
+    {
+        try
+        {
+            var options = new DialogOptions
+                {
+                    CloseButton = true,
+                    FullWidth = true
+                };
+
+            var DialogReference = _DialogService.Show<ResetPasswordDialog>("Reset your password ", options);
+
+            var result = await DialogReference.Result;
+
+            if (!result.Cancelled)
+            {
+                //var exercise = await _RestClient.CreateExerciseAsync(await _Converter.ToDto<ExerciseModel, Exercise>((ExerciseModel)result.Data));
+                //UserExercises.Add(await _Converter.ToEntity<Exercise, ExerciseModel>(exercise));
+            }
+
+            StateHasChanged();
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+ }

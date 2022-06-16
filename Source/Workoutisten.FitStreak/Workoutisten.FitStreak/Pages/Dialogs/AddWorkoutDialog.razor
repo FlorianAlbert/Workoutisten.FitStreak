@@ -1,0 +1,65 @@
+﻿@using Workoutisten.FitStreak.Data.Models.Frontend
+@using Workoutisten.FitStreak.Data.Models.Workout
+@using Workoutisten.FitStreak.Shared.PageExclusives.WorkoutsPage
+
+@inject IRestClient _RestClient
+
+<MudDialog Class="MudDialogMaxHeight">
+    <DialogContent>
+        <MudGrid Class="GridMaxHeight">
+            <MudItem xs=12>
+                <MudTextField @bind-Value="NewWorkout.WorkoutName" Label="Name" Variant="Variant.Text" Clearable="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudTextField @bind-Value="NewWorkout.Description" Label="Description" Variant="Variant.Text" Clearable="true" />
+            </MudItem>
+            <MudItem xs=12>
+                <MudText Typo="Typo.h6">Select Exercises: </MudText>
+            </MudItem>
+            <MudItem xs="12">
+                <MudList Clickable="true" Dense="true" Class="MudListMaxHeight">
+                    @foreach (var exerciseListElement in ExerciseElements)
+                    {
+                        <AddWorkoutDialogListElement AddWorkoutExerciseElementModel="exerciseListElement" />
+                    }
+                </MudList>
+            </MudItem>
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudContainer Class="d-flex justify-center my-3 ">
+            <FitStreakButton OnClick="Submit" Icon="@Icons.Filled.Add" Label="CREATE" />
+        </MudContainer>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public List<ExerciseModel> UserExercises { get; set; }
+
+    WorkoutModel NewWorkout = new WorkoutModel();
+
+    List<AddWorkoutExerciseElementModel> ExerciseElements { get; set; } = new List<AddWorkoutExerciseElementModel>();
+
+    protected override void OnInitialized()
+    {
+        UserExercises.ForEach(exercise => ExerciseElements.Add(new AddWorkoutExerciseElementModel() { ExerciseModel = exercise, Checked = false }));
+
+        base.OnInitialized();
+    }
+
+    void Submit()
+    {
+        NewWorkout.Exercises.AddRange(ExerciseElements.Where(ue => ue.Checked).Select(ue => ue.ExerciseModel.Guid));
+        MudDialog.Close(DialogResult.Ok<WorkoutModel>(NewWorkout));
+
+    }
+
+    void Cancel() => MudDialog.Cancel();
+
+
+}

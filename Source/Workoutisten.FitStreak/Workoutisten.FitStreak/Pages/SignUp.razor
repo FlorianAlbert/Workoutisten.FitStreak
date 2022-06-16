@@ -1,0 +1,116 @@
+﻿@page "/signup"
+
+@using System.Text.RegularExpressions
+@using System.ComponentModel.DataAnnotations
+@using Workoutisten.FitStreak.Converter
+@using Workoutisten.FitStreak.Data.Models.User
+
+@inject IRestClient _RestClient
+@inject IConverterWrapper _Converter
+@inject ErrorDialogService _ErrorDialogService
+@inject NavigationManager _NavigationManager
+
+
+<MudStack>
+    <MudStack AlignItems="AlignItems.Center">
+        <MudImage Class="align-center" Src="Images/fitstreak_logo_white.svg" Width="300" Height="100"></MudImage>
+    </MudStack>
+    <MudPaper Class="rounded-xl p-4 mt-5" Elevation="5">
+        <MudText Class="align-center" Typo="Typo.h4"><b>Register</b></MudText>
+        <MudDivider />
+
+        <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+            <MudStack Spacing="3">
+                <MudTextField T="string" Label="First name" Required="true" RequiredError="First name is required!"
+                              @bind-Value=registerModel.FirstName />
+                <MudTextField T="string" Label="Last name" Required="true" RequiredError="Last name is required!"
+                              @bind-Value=registerModel.LastName />
+                <MudTextField T="string" Label="Email" Required="true" RequiredError="Email is required!"
+                              Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"
+                              @bind-Value=registerModel.Email />
+                <MudTextField T="string" Label="Password" HelperText="Choose a strong password" @ref="pwField1"
+                              InputType="InputType.Password"
+                              Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Required="true"
+                              RequiredError="Password is required!"
+                              @bind-Value=registerModel.Password />
+                <MudTextField T="string" Required="true"
+                              Label="Password" HelperText="Repeat the password" InputType="InputType.Password"
+                              Validation="@(new Func<string, string>(PasswordMatch))" />
+            </MudStack>
+        </MudForm>
+
+        <MudButton Class="rounded-xl p-3 mt-4" Color="Color.Primary" Variant="Variant.Filled" Disabled="@(!success)" OnClick="SignUp_Button" FullWidth="true"><MudText Typo="Typo.button"><b>Register</b></MudText></MudButton>
+        @if (!(string.IsNullOrEmpty(message)))
+        {
+            <MudText Typo="Typo.subtitle1">@message</MudText>
+            if (showWaitIndicator)
+            {
+                <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+            }
+        }
+    </MudPaper>
+</MudStack>
+
+
+@code {
+
+    public RegisterModel registerModel { get; set; } = new RegisterModel();
+    MudForm form;
+    MudTextField<string> pwField1;
+    bool success;
+    string[] errors = { };
+    string message = string.Empty;
+
+    bool showWaitIndicator;
+
+
+    private IEnumerable<string> PasswordStrength(string pw)
+    {
+        if (string.IsNullOrWhiteSpace(pw))
+        {
+            yield return "Password is required!";
+            yield break;
+        }
+        if (pw.Length < 8)
+            yield return "Password must be at least of length 8";
+        if (!Regex.IsMatch(pw, @"[A-Z]"))
+            yield return "Password must contain at least one capital letter";
+        if (!Regex.IsMatch(pw, @"[a-z]"))
+            yield return "Password must contain at least one lowercase letter";
+        if (!Regex.IsMatch(pw, @"[0-9]"))
+            yield return "Password must contain at least one digit";
+    }
+
+    private string PasswordMatch(string arg)
+    {
+        if (!pwField1.Value.Equals(arg))
+            return "Passwords don't match";
+        return null;
+    }
+
+    async void SignUp_Button()
+    {
+        message = "Registrating...";
+        showWaitIndicator = true;
+        StateHasChanged();
+        try
+        {
+            await _RestClient.CallControlled(async c => await c.RequestRegistrationAsync(await _Converter.ToDto<RegisterModel, RegistrationRequest>(registerModel)));
+            _NavigationManager.NavigateTo($"/validate?email={registerModel.Email}");
+        }
+        catch (ApiException<ProblemDetails> e)
+        {
+            await _ErrorDialogService.ShowErrorDialog(e.Result.Status.ToString(), e.Result.Detail);
+        }
+        catch (Exception e)
+        {
+            await _ErrorDialogService.ShowErrorDialog();
+        }
+        finally
+        {
+            showWaitIndicator = false;
+            StateHasChanged();
+        }
+    }
+
+}

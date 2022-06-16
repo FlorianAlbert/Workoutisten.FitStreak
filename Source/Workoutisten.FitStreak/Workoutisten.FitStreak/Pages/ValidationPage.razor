@@ -1,0 +1,49 @@
+﻿@page "/validate"
+
+@inject IRestClient _RestClient
+@inject NavigationManager _NavManager
+@inject ErrorDialogService _ErrorDialogService
+
+<MudStack>
+    <MudStack AlignItems="AlignItems.Center">
+        <MudImage Class="align-center" Src="Images/fitstreak_logo_white.svg" Width="300" Height="100"></MudImage>
+    </MudStack>
+    <MudPaper Class="rounded-xl p-4 mt-5" Elevation="5">
+        <MudText Class="align-center" Typo="Typo.h4"><b>Enter your Code:</b></MudText>
+        <MudText Typo="Typo.caption">Please enter the code we have sent you by email to confirm your account.</MudText>
+        <MudDivider />
+        <MudPaper Class="mud-theme-dark p-3 rounded-xl mt-4">
+            <MudTextField T="string" Counter="8" Immediate="true" Label="Code" Variant="Variant.Text" @bind-Value="VerificationCode" />
+        </MudPaper>
+        <MudButton Class="rounded-xl p-3 mt-4" Color="Color.Primary" Variant="Variant.Filled" OnClick="SendCode" FullWidth="true"><MudText Typo="Typo.button"><b>Verify</b></MudText></MudButton>
+    </MudPaper>
+</MudStack>
+
+@code {
+    public string? VerificationCode { get; set; } = string.Empty;
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "email")]
+    public string? Email { get; set; }
+
+    async void SendCode()
+    {
+        if (VerificationCode.Count() == 8)
+        {
+            try
+            {
+                await _RestClient.CallControlled(c => c.ConfirmRegistrationAsync(new RegistrationConfirmation(){ConfirmationKey = VerificationCode, Email = Email}));
+                _NavManager.NavigateTo("/login");
+            }
+            catch(ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception e)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
+
+        }
+    }
+}

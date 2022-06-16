@@ -1,0 +1,26 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField T="string" Label="Email" @bind-Value="@Input" Validation="@(new EmailAddressAttribute() {ErrorMessage = "The email address is invalid"})"/>
+    </DialogContent>
+    <DialogActions>
+        <MudContainer Class="d-flex justify-center my-3 ">
+            <MudButton Class="rounded-pill" Color="Color.Primary" Variant="Variant.Filled" OnClick="Submit" StartIcon="@Icons.Filled.Add">
+                <MudText Typo="Typo.button">ADD</MudText>
+            </MudButton>
+        </MudContainer>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    string Input { get; set; }
+
+    void Submit() => MudDialog.Close(DialogResult.Ok<string>(Input));
+
+    void Cancel() => MudDialog.Cancel();
+}

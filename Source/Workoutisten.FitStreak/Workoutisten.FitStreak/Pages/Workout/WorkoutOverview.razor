@@ -1,0 +1,82 @@
+﻿@using Workoutisten.FitStreak.Client.RestClient
+@using Workoutisten.FitStreak.Data.Models.Workout
+@using Workoutisten.FitStreak.Shared.Exercise
+
+@page "/workouts/overview"
+
+@inject IRestClient _RestClient
+@inject NavigationManager _NavManager
+@inject ErrorDialogService _ErrorDialogService
+@inject IConverterWrapper _Converter
+
+<MudPaper Class="rounded-xl p-2 my-3 h-75" MinHeight="600px">
+    <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexStart">
+        <MudText Typo="Typo.h6">@Workout.WorkoutName</MudText>
+        <MudText Align="Align.Start" Typo="Typo.subtitle2">@Workout.Exercises.Count Exercises</MudText>
+        <FitStreakButton Label="START" OnClick="StartWorkout" />
+    </MudStack>
+
+    <MudDivider Style="padding: 2px" Class="Foreground: white mb-1 mt-3" />
+
+
+    <MudList>
+        @foreach (var exercise in WorkoutExercises)
+        {
+        <ExerciseListElement Category="@exercise.Category" Name="@exercise.Name" Description="@exercise.Description"/>
+        }
+    </MudList>
+</MudPaper>
+
+
+
+@code {
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "workout")]
+    public Guid? WorkoutGuid { get; set; }
+
+    WorkoutModel Workout { get; set; } = new();
+
+    List<ExerciseModel> WorkoutExercises { get; set; } = new();
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (WorkoutGuid is null)
+            {
+                await _ErrorDialogService.ShowGeneralErrorDialog();
+                base.OnAfterRenderAsync(firstRender);
+                return;
+            }
+            try
+            {
+                Workout = await _Converter.ToEntity<Workout, WorkoutModel>(await _RestClient.CallControlled(c => c.GetWorkoutAsync(WorkoutGuid.Value)));
+                WorkoutExercises = (await Task.WhenAll((await _RestClient.CallControlled(c => c.GetExercisesOfWorkoutAsync(Workout.Guid))).Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise)))).ToList();
+
+                if (WorkoutExercises.Count == 0)
+                {
+                    await _ErrorDialogService.ShowGeneralErrorDialog();
+                    base.OnAfterRenderAsync(firstRender);
+                    return;
+                }
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception e)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
+            StateHasChanged();
+        }
+
+        base.OnAfterRenderAsync(firstRender);
+    }
+
+    void StartWorkout()
+    {
+        _NavManager.NavigateTo($"/exercises/overview?workout={WorkoutGuid}");
+    }
+}

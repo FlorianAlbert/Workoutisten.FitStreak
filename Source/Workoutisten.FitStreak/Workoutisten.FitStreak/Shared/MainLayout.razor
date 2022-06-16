@@ -1,17 +1,80 @@
 ﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.Maui.Devices
 
-<div class="page">
-	<div class="sidebar">
-		<NavMenu />
-	</div>
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="FitStreakTheme"/>
+<MudDialogProvider />
+<MudSnackbarProvider />
 
-	<main>
-		<div class="top-row px-4">
-			<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-		</div>
+<MudLayout>
+    <AuthorizeView>
+        <Authorized>
+            <MudAppBar>
+                <NavBar />
+            </MudAppBar>
+            <MudMainContent>
+                <MudContainer Class="mt-2">
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </Authorized>
+        <NotAuthorized>
+            <MudMainContent>
+                <MudContainer Class="p-3">
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </NotAuthorized>
+    </AuthorizeView>
+</MudLayout>
 
-		<article class="content px-4">
-			@Body
-		</article>
-	</main>
-</div>
+
+
+@code {
+    string height = DeviceDisplay.Current.MainDisplayInfo.Height.ToString() + "px";
+
+    MudTheme FitStreakTheme = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Primary = "#EB5E55",
+        },
+
+        PaletteDark = new Palette()
+        {
+            Primary = "#EB5E55",
+            Black = "#141416",
+            Background = "#27272f",
+            BackgroundGrey = "#3D4151",
+            Surface = "#373740",
+            DrawerBackground = "#27272f",
+            DrawerText = "rgba(255,255,255, 0.50)",
+            DrawerIcon = "rgba(255,255,255, 0.50)",
+            AppbarBackground = "#27272f",
+            AppbarText = "rgba(255,255,255, 0.70)",
+            TextPrimary = "rgba(255,255,255, 1)",
+            TextSecondary = "rgba(255,255,255, 0.70)",
+            ActionDefault = "#adadb1",
+            ActionDisabled = "rgba(255,255,255, 0.26)",
+            ActionDisabledBackground = "rgba(255,255,255, 0.12)",
+            Divider = "rgba(255,255,255, 0.12)",
+            DividerLight = "rgba(255,255,255, 0.06)",
+            TableLines = "rgba(255,255,255, 0.12)",
+            LinesDefault = "rgba(255,255,255, 0.12)",
+            LinesInputs = "rgba(255,255,255, 0.3)",
+            TextDisabled = "rgba(255,255,255, 0.2)",
+            Info = "#3299ff",
+            Success = "#0bba83",
+            Warning = "#ffa800",
+            Error = "#f64e62",
+            Dark = "#27272f",
+        },
+    };
+    private bool _isDarkMode = true;
+    //bool _drawerOpen = true;
+
+    //void DrawerToggle()
+    //{
+    //    _drawerOpen = !_drawerOpen;
+    //}
+}

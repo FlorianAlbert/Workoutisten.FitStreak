@@ -28,25 +28,120 @@
 		<TargetPlatformMinVersion Condition="$(TargetFramework.Contains('-windows'))">10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-android|AnyCPU'">
+	  <Debugger>Xamarin</Debugger>
+	  <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	  <Optimize>False</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-android|AnyCPU'">
+	  <Debugger>Xamarin</Debugger>
+	  <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-ios|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-ios|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-maccatalyst|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-maccatalyst|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0-windows10.0.19041|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	  <Optimize>False</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0-windows10.0.19041|AnyCPU'">
+	  <AndroidTlsProvider>btls</AndroidTlsProvider>
+	</PropertyGroup>
+
+	<!-- KeyStore settings -->
+	<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
+		<AndroidKeyStore>True</AndroidKeyStore>
+		<AndroidSigningKeyStore>..\SigningKey.keystore</AndroidSigningKeyStore>
+		<AndroidSigningStorePass>FitStreakKeyStorePassword</AndroidSigningStorePass>
+		<AndroidSigningKeyAlias>FitStreakAlias</AndroidSigningKeyAlias>
+		<AndroidSigningKeyPass>FitStreakKeyStorePassword</AndroidSigningKeyPass>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon
-			Include="Resources\appicon.svg"
-			ForegroundFile="Resources\appiconfg.svg"
-			Color="#512BD4" />
+		<MauiIcon Include="Resources\appicon.svg" ForegroundFile="Resources\appiconfg.svg" Color="#3D4151" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\appiconfg.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\FitStreakIcon\fitstreaklogo_big.svg" Color="#3D4151" BaseSize="128,128" />
+		
+		
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+		<MauiImage Update="Resources\Images\fitstreak_logo_black.svg" BaseSize="160,50" />
+		<MauiImage Update="Resources\Images\fitstreak_logo_white.svg" BaseSize="160,50" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AndroidResource Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <AndroidResource Remove="Shared\PageExclusives\SocialPage\**" />
+	  <Compile Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <Compile Remove="Shared\PageExclusives\SocialPage\**" />
+	  <Content Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <Content Remove="Shared\PageExclusives\SocialPage\**" />
+	  <EmbeddedResource Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <EmbeddedResource Remove="Shared\PageExclusives\SocialPage\**" />
+	  <MauiXaml Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <MauiXaml Remove="Shared\PageExclusives\SocialPage\**" />
+	  <None Remove="Shared\PageExclusives\ExercisePage\**" />
+	  <None Remove="Shared\PageExclusives\SocialPage\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="Properties\launchSettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Platforms\Android\Resources\xml\network_security_config.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Properties\launchSettings.json" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.5" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="7.0.0-preview.4.22251.1" />
+	  <PackageReference Include="MudBlazor" Version="6.0.10" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Blazor-ApexCharts" Version="0.9.10-beta" />
+	  <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="7.0.0-preview.4.22251.1">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0-preview.4.22229.4" />
+	  <PackageReference Include="MudBlazor" Version="6.0.11-dev.4" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1" />
+	  <PackageReference Include="NSwag.ApiDescription.Client" Version="13.16.0">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	  <PackageReference Include="Plugin.LocalNotification" Version="9.2.1-preview04" />
+	  <PackageReference Include="System.Net.Http" Version="4.3.4" />
 	</ItemGroup>
 
 </Project>

@@ -1,0 +1,126 @@
+﻿@using System.Timers
+@using System.Diagnostics
+@using Workoutisten.FitStreak.Data.Models.Workout
+
+@if (ExerciseCategory == ExerciseCategoryEnum.Strength)
+{
+    <MudGrid>
+        <MudItem xs="2" />
+        <MudItem xs="8">
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudTextField @bind-Value="StrengthExerciseSet.Reps" Label="Reps" Variant="Variant.Filled" MaxLength="3" />
+                <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Remove" Variant="Variant.Filled" Color="Color.Warning" OnClick="@( () => Task.Run( () => (StrengthExerciseSet.Reps == null || StrengthExerciseSet.Reps == 0)? StrengthExerciseSet.Reps = 0 : StrengthExerciseSet.Reps--))" />
+                <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" OnClick="@( () => Task.Run( () => (StrengthExerciseSet.Reps == null)? StrengthExerciseSet.Reps = 1 : StrengthExerciseSet.Reps++))" />
+            </MudStack>
+        </MudItem>
+        <MudItem xs="2" />
+        <MudItem xs="2" />
+        <MudItem xs="8">
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudTextField @bind-Value="StrengthExerciseSet.Weight" Label="Weight" Variant="Variant.Filled" Adornment="Adornment.End" AdornmentText="Kg" />
+                <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Remove" Variant="Variant.Filled" Color="Color.Warning" OnClick="@( () => Task.Run( () => ( StrengthExerciseSet.Weight == null || StrengthExerciseSet.Weight == 0)? StrengthExerciseSet.Weight = 0 : StrengthExerciseSet.Weight--))" />
+                <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" OnClick="@( () => Task.Run( () => (StrengthExerciseSet.Weight == null)? StrengthExerciseSet.Weight = 0 : StrengthExerciseSet.Weight++))" />
+            </MudStack>
+        </MudItem>
+        <MudItem xs="2" />
+    </MudGrid>
+}
+else if (ExerciseCategory == ExerciseCategoryEnum.Cardio)
+{
+    <MudGrid>
+        @*<MudItem xs="1" />*@
+        <MudItem xs="12">
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudTextField T="int" Label="h" Variant="Variant.Filled" Value="@_Hours" ValueChanged="@_HoursChanged" Immediate="true"/>
+                :
+                <MudTextField T="int" Label="m" Variant="Variant.Filled" Value="@_Minutes" ValueChanged="@_MinutesChanged" Immediate="true"/>
+                :
+                <MudTextField T="int" Label="s" Variant="Variant.Filled" Value="@_Seconds" ValueChanged="@_SecondsChanged" Immediate="true"/>
+
+                <MudToggleIconButton Toggled="@_IconToggle" ToggledChanged="ToggleTimer" Variant="Variant.Filled" Class="rounded-circle"
+                                 Icon="@Icons.Filled.Timer" Color="Color.Primary"
+                                 ToggledIcon="@Icons.Filled.TimerOff" ToggledColor="Color.Warning" />
+
+            </MudStack>
+        </MudItem>
+        @*<MudItem xs="1" />*@
+        <MudItem xs="2" />
+        <MudItem xs="8">
+            <MudStack Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                <MudTextField @bind-Value="CardioExerciseSet.Distance" Label="Distance" Variant="Variant.Filled" Adornment="Adornment.End" AdornmentText="m" />
+                <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Remove" Variant="Variant.Filled" Color="Color.Warning" OnClick="@( () => Task.Run( () => ( CardioExerciseSet.Distance == null || CardioExerciseSet.Distance == 0)? CardioExerciseSet.Distance = 0 : CardioExerciseSet.Distance--))" />
+                <MudIconButton Class="rounded-circle" Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" OnClick="@( () => Task.Run( () => (CardioExerciseSet.Distance == null)? CardioExerciseSet.Distance = 0 : CardioExerciseSet.Distance++))" />
+            </MudStack>
+        </MudItem>
+        <MudItem xs="2" />
+    </MudGrid>
+}
+
+
+@code {
+    [Parameter]
+    public CardioExerciseSetModel CardioExerciseSet { get; set; }
+
+    [Parameter]
+    public StrengthExerciseSetModel StrengthExerciseSet { get; set; }
+
+    [Parameter]
+    public ExerciseCategoryEnum ExerciseCategory { get; set; }
+
+    [Parameter]
+    public int _Seconds { get; set; } = 0;
+
+    [Parameter]
+    public EventCallback<int> _SecondsChanged { get; set; }
+
+    [Parameter]
+    public int _Minutes { get; set; } = 0;
+
+    [Parameter]
+    public EventCallback<int> _MinutesChanged { get; set; }
+
+    [Parameter]
+    public int _Hours { get; set; } = 0;
+
+    [Parameter]
+    public EventCallback<int> _HoursChanged { get; set; }
+
+    bool _IconToggle { get; set; }
+
+    Timer _DurationTimer { get; set; } = new Timer(1000);
+
+    Stopwatch _Stopwatch { get; set; } = new Stopwatch();
+
+    void ToggleTimer(bool toggle)
+    {
+        _IconToggle = toggle;
+        if (toggle)
+        {
+            _DurationTimer.Elapsed += TimerEvent;
+            _DurationTimer.AutoReset = true;
+            _DurationTimer.Enabled = true;
+            _Stopwatch.Start();
+
+        }
+        else
+        {
+            _DurationTimer.Enabled = false;
+            _Stopwatch.Stop();
+            _Stopwatch.Reset();
+        }
+
+    }
+
+    async void TimerEvent(object source, ElapsedEventArgs args)
+    {
+        await InvokeAsync(() =>
+     {
+         _Seconds = _Stopwatch.Elapsed.Seconds;
+         _Minutes = _Stopwatch.Elapsed.Minutes;
+         _Hours = _Stopwatch.Elapsed.Hours;
+         StateHasChanged();
+     });
+    }
+
+
+}

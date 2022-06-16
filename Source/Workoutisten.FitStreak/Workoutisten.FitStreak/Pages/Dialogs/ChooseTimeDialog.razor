@@ -1,0 +1,31 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudTimePicker PickerVariant="PickerVariant.Static" Rounded="false" @bind-Time="DialogTimeSpan" />
+    </DialogContent>
+    <DialogActions>
+            <MudGrid Class="mb-3">
+                <MudItem xs="2" />
+                <MudItem xs="3">
+                    <FitStreakButton Label="CANCEL" OnClick="Cancel" />
+                </MudItem>
+                <MudItem xs="2" />
+                <MudItem xs="3">
+                    <FitStreakButton Label="SET" OnClick="Submit" />
+                </MudItem>
+            </MudGrid>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public System.TimeSpan? DialogTimeSpan { get; set; }
+
+    void Submit() => MudDialog.Close(DialogResult.Ok<System.TimeSpan>((System.TimeSpan)DialogTimeSpan));
+
+    void Cancel() => MudDialog.Cancel();
+
+}

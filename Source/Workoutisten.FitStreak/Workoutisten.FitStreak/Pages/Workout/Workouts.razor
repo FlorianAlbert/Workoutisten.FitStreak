@@ -1,0 +1,95 @@
+﻿@using Workoutisten.FitStreak.Data.Models.Workout
+@using Workoutisten.FitStreak.Pages.Dialogs
+@using Workoutisten.FitStreak.Shared.PageExclusives.WorkoutsPage
+
+@page "/workouts"
+
+@inject IDialogService _DialogService
+@inject IRestClient _RestClient
+@inject IConverterWrapper _Converter
+@inject ErrorDialogService _ErrorDialogService
+
+<MudGrid>
+    <MudItem xs="10">
+        <SearchBar SearchInput="@SearchInput" />
+    </MudItem>
+    <MudItem xs="2" Class="d-flex align-center justify-center ">
+        <AddButtonRounded ButtonClicked="@AddNewWorkout" />
+    </MudItem>
+</MudGrid>
+
+<MudPaper Class="rounded-xl p-2 my-3" MinHeight="600px">
+    <MudList>
+        @foreach (var workout in UserWorkouts)
+        {
+            <WorkoutListElement Description="@workout.Description" LastTraining="@workout.LastTraining.ToString()" Title="@workout.WorkoutName" WorkoutGuid="@workout.Guid"/>
+        }
+    </MudList>
+</MudPaper>
+
+@code {
+
+    string SearchInput { get; set; }
+
+    List<WorkoutModel> UserWorkouts { get; set; } = new List<WorkoutModel>();
+
+    List<ExerciseModel> UserExercises { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                UserWorkouts = (await Task.WhenAll((await _RestClient.CallControlled(c => c.GetWorkoutsAsync())).Select(workout => _Converter.ToEntity<Workout, WorkoutModel>(workout)))).ToList();
+                UserExercises = (await Task.WhenAll((await _RestClient.CallControlled(c => c.GetExercisesAsync())).Select(exercise => _Converter.ToEntity<Exercise, ExerciseModel>(exercise)))).ToList();
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception e)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
+            StateHasChanged();
+        }
+        base.OnAfterRenderAsync(firstRender);
+    }
+
+    async void AddNewWorkout()
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("UserExercises", UserExercises);
+
+        var options = new DialogOptions
+            {
+                CloseOnEscapeKey = true,
+                CloseButton = true,
+                FullWidth = true,
+            };
+        var DialogReference = _DialogService.Show<AddWorkoutDialog>("New Workout: ", parameters, options);
+
+        var dialogResult = await DialogReference.Result;
+
+        if (!dialogResult.Cancelled)
+        {
+            try
+            {
+                var workout = await _RestClient.CallControlled(async c => await c.CreateWorkoutAsync(await _Converter.ToDto<WorkoutModel, Workout>((WorkoutModel)dialogResult.Data)));
+                UserWorkouts.Add(await _Converter.ToEntity<Workout, WorkoutModel>(workout));
+            }
+            catch (ApiException<ProblemDetails> e)
+            {
+                await _ErrorDialogService.ShowErrorDialog(e.StatusCode.ToString(), e.Result.Detail);
+            }
+            catch (Exception e)
+            {
+                await _ErrorDialogService.ShowErrorDialog();
+            }
+
+        }
+        StateHasChanged();
+
+    }
+}
